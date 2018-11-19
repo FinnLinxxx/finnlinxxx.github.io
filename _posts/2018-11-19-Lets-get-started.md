@@ -35,7 +35,8 @@ https://github.com/Jguer/yay
 ### Spotify
 über yay installiert.
 ```bash
-yay -S spotify
+$ yay -S spotify
+$ sudo pacman -S playerctl
 ```
 
 ### Keymap look-up
