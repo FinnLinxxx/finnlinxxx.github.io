@@ -16,13 +16,13 @@ minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "A PreDoc adventure.""
+title                    : "A PreDoc adventure."
 title_separator          : "-"
 name                     : "Finn Linzer"
 description              : "Blog n remember."
 url                      : https://finnlinxxx.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
-repository               : "finnlinxxx
+repository               : "finnlinxxx"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
