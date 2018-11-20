@@ -48,4 +48,5 @@ $ git config --global credential.helper 'cache --timeout=3600'
 ### Keymap look-up
 ```bash
 $ sudo pacman -S xorg-xev
+$ xev
 ```
