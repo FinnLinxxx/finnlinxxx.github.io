@@ -39,6 +39,12 @@ $ yay -S spotify
 $ sudo pacman -S playerctl
 ```
 
+### Remember Password Git 
+```bash
+$ git config --global credential.helper 'cache --timeout=3600'
+```
+> Remember Credentials for 3600 seconds (1hour)
+
 ### Keymap look-up
 ```bash
 $ sudo pacman -S xorg-xev
