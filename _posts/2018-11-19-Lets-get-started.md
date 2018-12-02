@@ -70,5 +70,6 @@ $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/m
 from website https://github.com/robbyrussell/oh-my-zsh (thats it)
 
 $ vim .zshrc
+ys theme
 https://github.com/chriskempson/base16-shell
 include configuration again
