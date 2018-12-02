@@ -4,6 +4,7 @@ Today I learned how to ... (Remembering stuff is hard work)
 ### Set Intl-US Keyboard Layout
 ```bash
 $ sudo sh -c 'echo "KEYMAP=de-latin1-nodeadkeys" > /etc/vconsole.conf'
+$ export LC_ALL="en_US" (to get Umlaute (debug option))
 ```
 ### ISO Image onto usb stick
 ```bash
