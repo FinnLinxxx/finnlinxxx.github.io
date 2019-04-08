@@ -1,9 +1,14 @@
+---
+graphics: true
+header-includes:
+- \graphicspath{{../assets/images/}}
+---
+
 ## Netzsimulation mit PANDA
 
 ```bash
 $ pandoc -s -V papersize:a4 -o output.pdf 2019-04-08-How_to_use_PANDA.md
 ```
+\includegraphics{newProj.png}
 
-
-![la pander](/assets/images/newProj.png)       
 
