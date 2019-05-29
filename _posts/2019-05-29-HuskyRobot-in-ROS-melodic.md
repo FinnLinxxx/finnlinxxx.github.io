@@ -4,11 +4,13 @@ Manuel from [here](http://wiki.ros.org/Robots/Husky)
 Husky is for kinetic only, melodic is not support native. But we were able to build it by source as stated [here](https://answers.ros.org/question/292964/how-can-we-install-husky-simulator-in-melodic-ditro/).
 Therefore setup workspace with src folder and git clone into it, set LMS SICK kinetic branch which works just fine.
 
+Install
 
-sudo apt install ros-melodic-geographic-msgs
-
-sudo apt install ros-melodic-rqt-robot-steering  
-
+```bash
+$ sudo apt install ros-melodic-geographic-msgs
+$ sudo apt install ros-melodic-rqt-robot-steering  
+```
+Download
 ```bash
 mkdir workspace_husky
 cd workspace_
@@ -28,7 +30,7 @@ catkin_make
 source devel/setup.bash
 export HUSKY_GAZEBO_DESCRIPTION=$(rospack find husky_gazebo)/urdf/description.gazebo.xacro
 ```
-
+Run
 ```bash
 $ roslaunch husky_gazebo husky_empty_world.launch
 $ roslaunch husky_viz view_robot.launch
