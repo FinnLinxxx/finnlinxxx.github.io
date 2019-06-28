@@ -1,3 +1,3 @@
-![Alt Text](/assets/images/image-alignment-580x300.jpg)
+![Animation](/assets/animations/Move.gif)
 
-And some Textoo
+And some mooove
