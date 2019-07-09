@@ -24,7 +24,7 @@ In der Vorbesprechung geht es zuerst um das gemeinsame kennen lernen. Man kann n
 
 * Darlegung Regression anhand von 2 und n-Punkten.
 
-* Darlegung anhand von Brandstötters Arbeit.
+* Darlegung anhand von Brandstötters Arbeit. Siehe dafür im Kollegeblock auf dem Zettel "Regression"
 
 * Darlegung anhand Niemeier (2008) S. 112 Punktbestimmung in der Ebene $$ P_1 und P_2 auf N $$ Die 4 Optionen gegenüber der Gesamtausgleichung.
 
@@ -41,6 +41,8 @@ In der Vorbesprechung geht es zuerst um das gemeinsame kennen lernen. Man kann n
 * Vorstellen: Einschränkungen und Betrachtung von möglichen Beobachtungen (mehr ist besser, aber unwirtschaftlich)
 
 * Für Übung 1 eine Teilspurminimierung, die Objektpunkte gehören nicht zum Datum, weil hypothetisch beweglich.
+
+* Typische zu erwartene qualitätive Beurteilung des Bauwerks (Objekts), Wissen aus der Vorlesung erfragen.
 
 ## Aufgabenstellung
 
@@ -137,3 +139,33 @@ $$
 
 
 ## Nachbesprechung
+
+* Zu Beginn auffordern die Evaluationsbögen auszufüllen (ca. 10 Minuten)
+
+* Vorstellen der eigenheiten aus den bisher gelesenen Berichten
+
+* Lockere Einschätzung des gewonnenen Wissens auf den eigenen Arbeitsalltag.
+
+* Verknüpfung zur Vorlesung gelungen?
+
+* PANDA Video gelungen?
+
+* Was wünscht Ihr euch für die Zukunft?
+
+# Themen
+---
+### Redundanzanteile
+---
+### a
+---
+### a
+---
+### a
+---
+### a
+---
+### a
+---
+### a
+---
+### a
