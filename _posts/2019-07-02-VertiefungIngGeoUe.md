@@ -73,12 +73,13 @@ Die simulierten angenommenen Koordinaten kann aus den angegeben Bereichen im DKM
 
 * In der ersten Hälfte: Erneute Betrachtung des Bauwerks und die Besonderheiten der Ausgleichung und DefoAn
 
-
 * Was muss ich vor der Ausgleichung wissen (Innendienst): Wer hat das gemacht, Erfahrungen erfragen, Feldbuch.
 
-* Woher bekomme ich Näherungskoordinaten
+* Woher bekomme ich Näherungskoordinaten 
 
-* In der zweiten Hälfte: Zeigen in PANDA
+* Auf die 4 Fragen in der Aufgabenstellung eingehen.
+
+* In der zweiten Hälfte: Zeigen in PANDA, Beispiel?!
 
 ---
 ### Zweiter Termin
