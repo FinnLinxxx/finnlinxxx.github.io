@@ -40,7 +40,7 @@ Die simulierten angenommenen Koordinaten kann aus den angegeben Bereichen im DKM
 ---
 ### Zweiter Termin
 
-* Tafelbild, Gaußkurve 1σ, 2σ, 3σ, grober Fehler? Wie Einordnen, heruntergewichten oder rausschmeißen
+* Tafelbild, Gaußkurve 1σ, 2σ, 3σ, grober Fehler? Wie Einordnen, heruntergewichten oder rausschmeißen. Eine Info ist immer noch eine Info, wenn auch weniger Präzise, außer grober Fehler! Bei 100 Beobachtungen ist bei 3σ von einem vermeintlichen Ausreißer sogar auszugehen, das deutlich machen.
 
 * Besprechung der letzen Woche und eingehen aufs Video. Ausgleichen Hz, Vz, D -> AtPA
 
