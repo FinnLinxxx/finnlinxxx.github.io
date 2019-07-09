@@ -6,7 +6,15 @@ Am [Aquädukt Mauer](https://www.google.de/maps/place/Aqu%C3%A4dukt+Mauer/@48.14
 werden, dass die Genauigkeit von 4 Objektpunkten (Z1-Z4) in einem Konfidenzintervall mit unter 2 mm (95% - Sicherheitswahrscheinlichkeit)
 bestimmt werden kann. Das zur Verfügung stehende Instrument ist eine Totalstation [Leica TCRP 1201](http://www.kankou.co.jp/en/kumonos/downloads/Leica_TPS1200+.pdf)
 
-(σR = 0.3 mgon, σS = 2 mm + 2 ppm). 
+(σR = 0.3 mgon, σS = 2 mm + 2 ppm, weitere Einflüsse beachten). 
 
 {% include image.html url="/assets/images/AquM.png" description=" Übersicht des Messobjekts aus Google Maps und die Bereiche der Objektpunkte angedeutet
 " %}
+
+Die möglichen Sichtverbindungen für das Netz sind der Tabelle zu entnehmen
+
+{% include image.html url="/assets/images/sichtverbindungenUe1.png" description="Die möglichen Sichtverbindungen der Standpunkte (1-11) und Objektpunkte (Z1-Z4)
+" %}
+
+Die simulierten angenommenen Koordinaten kann aus den angegeben Bereichen im DKM abgelesen werden.
+
