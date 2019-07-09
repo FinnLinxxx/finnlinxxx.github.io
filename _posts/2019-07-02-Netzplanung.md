@@ -12,3 +12,4 @@ Die ist ein [beispiel]() text
 ![Mauer](/assets/images/AquM.png)
 
 
+{% include image.html url="/assets/images/AquM.png" description="This is Mauer" %}
