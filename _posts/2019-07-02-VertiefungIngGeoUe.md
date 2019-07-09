@@ -1,4 +1,13 @@
-# Netzplanung
+## Vorbesprechung
+* Dies ist ein Bullet Point
+* Dies auch
+
+* das auch
+
+## Wiederholung Ausgleichung
+
+## Netzplanung
+
 
 ## Aufgabenstellung
 
@@ -18,3 +27,10 @@ Die möglichen Sichtverbindungen für das Netz sind der Tabelle zu entnehmen
 
 Die simulierten angenommenen Koordinaten kann aus den angegeben Bereichen im DKM abgelesen werden.
 
+
+
+## Kongruenzprüfung und Lokalisierung
+
+## Strainanalyse
+
+## Nachbesprechung
