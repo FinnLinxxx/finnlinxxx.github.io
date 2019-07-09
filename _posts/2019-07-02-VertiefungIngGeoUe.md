@@ -71,6 +71,9 @@ Die simulierten angenommenen Koordinaten kann aus den angegeben Bereichen im DKM
 ---
 ### Erster Termin
 
+* In der ersten Hälfte: Erneute Betrachtung des Bauwerks und die Besonderheiten der Ausgleichung und DefoAn
+
+* In der zweiten Hälfte: Zeigen in PANDA
 
 ---
 ### Zweiter Termin
