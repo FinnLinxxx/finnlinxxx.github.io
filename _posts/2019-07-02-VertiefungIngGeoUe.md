@@ -65,6 +65,23 @@ Die simulierten angenommenen Koordinaten kann aus den angegeben Bereichen im DKM
 * Tafelbild alle vorrausetzungen: ident. Punktbezeichnung, gleicher Datumsdefekt, gleiche Näherungskoordinaten, aprio ca.= apost, 2 stufige Analyse (Sützpunkte/Objektpunkte.
 
 
+---
+### Bewertung Bericht 2
+
+**4 Punkte** können für die Betrachtung der Ausgleichung erreicht werden (siehe Bewertungsschma Exceltabelle). (max 4) Punkte gibts für folgende Betrachtungen:
+
+* Näherungskoordinaten müssen iteriert werden, damit die Ausgleichung passt.
+
+* Begründung des Modells, der Kongruenz zweier Epochen
+
+* Objektpunkte genauer 2 mm in jeder Epoche
+
+* Stoachstische Betrachtung (Argumentation und letztendliche Festlegung Apriori) begründen.
+
+* Erwähung des mathematischen Modells
+
+Für den Globaltest gibt es **einen Punkt**, wenn dieser in beiden Epochen bei apriori und ca. aposteriori nahe 1 liegt.
+
 ## Strainanalyse
 
 {% include image.html url="/assets/images/schleuseLubifoto.png" description="Das Schleusenwerk in Uelzen, der baulichen Unterschied beider Schleusen ist deutlich zu erkennen.
