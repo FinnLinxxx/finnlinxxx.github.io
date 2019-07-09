@@ -34,4 +34,8 @@ Die simulierten angenommenen Koordinaten kann aus den angegeben Bereichen im DKM
 
 ## Strainanalyse
 
+{% include image.html url="/assets/images/schleuseLubifoto.png" description="Die Schleuse in Uelzen, der baulichen Unterschied beider Schleusen ist deutlich zu erkennen.
+" %}
+
+
 ## Nachbesprechung
