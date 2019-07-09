@@ -1,16 +1,46 @@
+Der Übung Ingenieurgeodäsie Vertiefung wird ein Arbeitsaufwand von 1.5 ETCS zugeschrieben, dies entspricht etwa 2.5std/Woche oder ca. 35 Stunden insgesamt. Die ersten beiden Übungen sind relativ aufwändig, die dritte eher medium.
+
 ## Vorbesprechung
 
 In der Vorbesprechung geht es zuerst um das gemeinsame kennen lernen. Man kann nachfragen wer schon welche Erfahrungen gemacht hat, außerdem kann ich von meinen eigenen Erfahrungen erzählen. Außerdem sollte die Verknüpfung zur Vorlesungen grob erfolgen. Die Folien aus dem TEACHING Ordner können für eine Einordnung herangezogen werden.
 
-* Dies ist ein Bullet Point
-* Dies auch
+* Gruppeneinteilung, maximal 3 Personen in einer Gruppe, besser 2.
+
+* Den Arbeitsaufwand vorstellen (15/15/8 std.)
+
+* Im Rahmen dieser Übung soll der Übergang geschafft werden, von einfachen Betrachtungsweisen zu einem Ingenieurgeodätischem Verständis, wobei Erfahrungen eine wesentliche Rolle spielen (anders als das Anwenden eines einfachen Zahlenwerks).
+
+* Die Übungen so früh wie möglich ausgeben, damit die Stundenten nicht in den Spätsemesterstress kommen.
+
+* Kommunizieren dass Komunikation das wichtigste ist. Immer per Email, häufig im Büro.
+
+* Literaturarbeit vorstellen: Handbuch Ingenieurgeodäsie Welsch/Heunecke/Kuhlmann Auswertung geodätischer Überwachnungsmessungen (2000) (zB. S.197) oder Auswertung geodätischer Überwachnungsmessungen 2. Auflage, Heunecke/Kuhlmann/welsch/Eichhorn/Neuner (2013).
+
+* Den nächsten Termin unbedingt festlegen
+
+* 
 
 ## Wiederholung Ausgleichung
 
 * Darlegung Regression anhand von 2 und n-Punkten.
 
+* Darlegung anhand von Brandstötters Arbeit.
+
+* Darlegung anhand Niemeier (2008) S. 112 Punktbestimmung in der Ebene $$ P_1 und P_2 auf N $$ Die 4 Optionen gegenüber der Gesamtausgleichung.
+
 ## Netzplanung
 
+* Bisher bekannt: Überwachung von Einzelpunkten durch Anzielen der evtl. sich bewegenden Punkte, zum Beispiel auf einer Baustelle (Absacken Ubahn Schacht Bau). Vor allem dann eingesetzt wenn **viele Punkte** während einer Kampagne kontrolliert werden sollen. Oder die Überwachung der eignen Station anhand von fest vermarkten Punkten, zum Beispiel auf Staudamm. Dies ist vor allem dann zu empfehlen, wenn die **Genauigkeit** eines Einzelpunktes (Standpunktes) entscheidend ist.
+
+* Neu: Bestimmten mehrer Punkte am Bauwerk (Objektpunkte, "beweglich") und mehrer Standpunkte (Stützpunkte, "fest")
+
+* Die Netzplanung ermöglicht das Evaluieren einer optimalen Konfiguration, um sowohl genau, als auch wirtschaftlich arbeiten zu können. Neben der Genauigkeit spielt auch die Zuverlässigkeit eine große Rolle. Zuverlässig ist ein Netz dann, wenn (grobe) Fehler aufgedeckt werden können und nicht fälschlicherweise als "wahr" angenommen werden.
+
+* Vorstellen: DKM (online-link)[https://www.wien.gv.at/baugk/public/]. "Messwerkzeug" auswählen.
+
+* Vorstellen: Einschränkungen und Betrachtung von möglichen Beobachtungen (mehr ist besser, aber unwirtschaftlich)
+
+* Für Übung 1 eine Teilspurminimierung, die Objektpunkte gehören nicht zum Datum, weil hypothetisch beweglich.
 
 ## Aufgabenstellung
 
