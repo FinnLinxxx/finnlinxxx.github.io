@@ -1,8 +1,9 @@
 ## Vorbesprechung
+
+In der Vorbesprechung geht es zuerst um das gemeinsame kennen lernen. Man kann nachfragen wer schon welche Erfahrungen gemacht hat, außerdem kann ich von meinen eigenen Erfahrungen erzählen. Außerdem sollte die Verknüpfung zur Vorlesungen grob erfolgen. Die Folien aus dem TEACHING Ordner können für eine Einordnung herangezogen werden.
+
 * Dies ist ein Bullet Point
 * Dies auch
-
-* das auch
 
 ## Wiederholung Ausgleichung
 
