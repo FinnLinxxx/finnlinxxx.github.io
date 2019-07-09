@@ -46,6 +46,8 @@ In der Vorbesprechung geht es zuerst um das gemeinsame kennen lernen. Man kann n
 
 ## Aufgabenstellung
 
+* Zu beginn einer jeden Aufgabenstellung erst einmal die Betrachtung und das Studium des Bauwerks, des Objekts. Dies kann am besten vor Ort (Ortstermin, kosten!) oder auch mit modnernen Mitteln wie Google Maps stattfinden (3D im Innenstadtbereich).
+
 Am [Aquädukt Mauer](https://www.google.de/maps/place/Aqu%C3%A4dukt+Mauer/@48.1467942,16.2804054,217a,35y,332.44h,42.2t/data=!3m1!1e3!4m5!3m4!1s0x476da7a0a0883c2f:0xe9f67ac66c54cf60!8m2!3d48.1483008!4d16.2795108?hl=de), einem historischen Bauwerk im 23. Wiener Bezirk, soll zur Detektion von Veränderungen ein geodätisches Netz derart geplant
 werden, dass die Genauigkeit von 4 Objektpunkten (Z1-Z4) in einem Konfidenzintervall mit unter 2 mm (95% - Sicherheitswahrscheinlichkeit)
 bestimmt werden kann. Das zur Verfügung stehende Instrument ist eine Totalstation [Leica TCRP 1201](http://www.kankou.co.jp/en/kumonos/downloads/Leica_TPS1200+.pdf)
@@ -64,10 +66,11 @@ Die simulierten angenommenen Koordinaten kann aus den angegeben Bereichen im DKM
 
 
 
-## Kongruenzprüfung und Lokalisierung
+## Kongruenzprüfung und Deformationsanalyse
 
 ---
 ### Erster Termin
+
 
 ---
 ### Zweiter Termin
@@ -155,6 +158,19 @@ $$
 # Themen
 ---
 ### Redundanzanteile
+
+* Beobachtungen mit kleinem Redundanzanteil $$ R_i $$ haben einen großen Anteil an der Parameterschätzung (den Unbekannten), daher müssen solche Beobachtungen mit besonderer Aufmerksamkeit durchgeführt werden.
+
+* Beobachtungen mit kleinem $$ R_i $$ sind geometrisch exponiert (meist Außenbereich eines Messnetzes)
+
+* Bei nur einem Schuss auf einen Punkt ider der Redundanzanteil = 0 und Nabla = unendlich.
+
+* Wenn RedAnt. zu klein, dann evtl. doppelt messen (künstliche Kontrolle)
+
+* Handb. Welsch IngGeo S.235, Sehr gut Messungen sind schwerer zu kontrollieren.
+
+* Wenn Winkel- und Streckenmessungen im gleichen Ausgleich, dann RedAnt. nur ähnlich, wenn geometrisch ausgeglichener Einfluss. Dies ist zumeist nicht gegeben, verzichten auf Qualität in der einen Komponente dann theoretisch möglich, meist aber nicht sinnvoll. Aber: Was soll ich Strecken in Interferometergenauigkeit bestimmen, wenn die Winkelmessungen weit schlechter sind.
+
 ---
 ### a
 ---
