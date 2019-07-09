@@ -60,7 +60,11 @@ Die simulierten angenommenen Koordinaten kann aus den angegeben Bereichen im DKM
 
 * Zeigen wie man in PANDA ausgleicht anhand der gemessenen BASIS im Keller mit DefoAn und RV-Strategie.
 
-* Anfangen der Ausgleichung Aquädukt, begleiten der Studenten bis erste erfolgt. Hinweis für Standpunkt 1 geben und erläutern warum.
+* Warum wir von gleichen Näherungskoordianten aus Ausgleichen müssen!
+
+* Siehe Aufgabenstellung. Vorgehen insgesamt: 1. Näherungskoordinaten erzeugen, erst grob, dann durch iteration angepasst 2. Ausgleichen Epoche1 3. Ausgleichen Epoche2 4. Deformationsanalyse (5. Koordinatenvergleich). 
+
+* Anfangen der Ausgleichung Aquädukt, begleiten der Studenten bis erste erfolgt. Hinweis für Standpunkt 1 geben und erläutern warum. 
 
 * Tafelbild alle vorrausetzungen: ident. Punktbezeichnung, gleicher Datumsdefekt, gleiche Näherungskoordinaten, aprio ca.= apost, 2 stufige Analyse (Sützpunkte/Objektpunkte.
 
