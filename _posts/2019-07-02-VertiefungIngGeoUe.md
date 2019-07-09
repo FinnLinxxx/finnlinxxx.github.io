@@ -91,7 +91,14 @@ Für den Globaltest gibt es **einen Punkt**, wenn dieser in beiden Epochen bei a
 Die Durchführung der Strainanalyse ist letztendlich nur das Berechnen eines (eindeutigen) Gleichungssystems. Im 2D-Fall ergeben sich für 3 Punkte 6 Unbekannte. Betrachtet wird u, die Koordinatendifferenz. Eingebracht wird tx,ty als Translation, doch nur damit bekommt man keine (affine) Transformation hierfür berechnet (in Übereinstimmung), erst durch das zusätzlichen Bestimmen der Rotation w, zweier Verzerrungen exx und eyy und einer Scherung exy bzw. eyx wird dies möglich.
 
 $$
-d = x_2 - x_1 = (F-I)x_1 + t = dFx_1 + t
+u = x_2 - x_1 = (F-I)x_1 + t = dFx_1 + t
+$$
+
+$$
+u_i = H_ip = $\left[ \begin{array}{rrrr}
+x_i & y_1 & 0 & y_1 & 1 & 0 \\
+0   & x_i & y_1 & -x_i & 0 & 1  \\
+\end{array}\right] $
 $$
 
 {% include image.html url="/assets/images/schleuseLubifoto.png" description="Das Schleusenwerk in Uelzen, der baulichen Unterschied beider Schleusen ist deutlich zu erkennen.
