@@ -99,13 +99,6 @@ u_i = H_ip = \left[ \begin{array}{rr}
 x_i & y_1 & 0 & y_1 & 1 & 0 \\
 0   & x_i & y_1 & -x_i & 0 & 1  \\
 \end{array}\right]  
-\left ( \begin{array}{cccccc}
-e_xx \\
-e_xy \\
-e_yy \\
-w \\
-t_x \\
-t_y 
 $$
 
 {% include image.html url="/assets/images/schleuseLubifoto.png" description="Das Schleusenwerk in Uelzen, der baulichen Unterschied beider Schleusen ist deutlich zu erkennen.
