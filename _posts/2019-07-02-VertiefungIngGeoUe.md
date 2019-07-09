@@ -7,6 +7,8 @@ In der Vorbesprechung geht es zuerst um das gemeinsame kennen lernen. Man kann n
 
 ## Wiederholung Ausgleichung
 
+* Darlegung Regression anhand von 2 und n-Punkten.
+
 ## Netzplanung
 
 
@@ -32,9 +34,40 @@ Die simulierten angenommenen Koordinaten kann aus den angegeben Bereichen im DKM
 
 ## Kongruenzprüfung und Lokalisierung
 
+---
+### Erster Termin
+
+---
+### Zweiter Termin
+
+* Tafelbild, Gaußkurve 1σ, 2σ, 3σ, grober Fehler? Wie Einordnen, heruntergewichten oder rausschmeißen
+
+* Besprechung der letzen Woche und eingehen aufs Video. Ausgleichen Hz, Vz, D -> AtPA
+
+* Zusammenbringen der theoretischen Standardabweichung σ0 (apriori) mit der Standardabweichung der Gewichtseinheit nach der Ausgleichung S0 (aposteriori). Warum nicht genau 1=1 treffen nötig (overfitting)? 
+
+* Gewichten und Ausgleichen, was machen wir da? (AbsGlied, StdAbw). Ein grober Fehler l_i wird hauptsächlich v_i beeinflussen. Daher betrachten wir die Normierte Verbesserung (NV).
+
+* Beurteilen der Beobachtungen nach der NV (<2.5 nicht erkennbar, 2.5-4 möglich, > 4 Wahrscheinlich).
+
+* Data-Snooping nach Baarda + Kritik
+
+* Beurteilen nach Globaltest, NV, Genauigkeit der ausgeglichenen Punkte.
+
+* Globaltest: apriori ca.= aposteriori, nur wenn 1. Keine groben Fehler (siehe NV) 2. Stochastisches Modell (Erfahrungen, ist anpassen) 3. Funktionales Modell (Für unseren Zweck mit Panda erprobt, sonst durchaus möglich wenn systematik ungenügend)
+
+* Genauigkeiten geben in der Ausgleichung das Ziel vor: wenn klein genug + Globaltest + NV klein. Ggf. mehrere Iterationen nötig.
+
+* Zeigen wie man in PANDA ausgleicht anhand der gemessenen BASIS im Keller mit DefoAn und RV-Strategie.
+
+* Anfangen der Ausgleichung Aquädukt, begleiten der Studenten bis erste erfolgt. Hinweis für Standpunkt 1 geben und erläutern warum.
+
+* Tafelbild alle vorrausetzungen: ident. Punktbezeichnung, gleicher Datumsdefekt, gleiche Näherungskoordinaten, aprio ca.= apost, 2 stufige Analyse (Sützpunkte/Objektpunkte.
+
+
 ## Strainanalyse
 
-{% include image.html url="/assets/images/schleuseLubifoto.png" description="Die Schleuse in Uelzen, der baulichen Unterschied beider Schleusen ist deutlich zu erkennen.
+{% include image.html url="/assets/images/schleuseLubifoto.png" description="Das Schleusenwerk in Uelzen, der baulichen Unterschied beider Schleusen ist deutlich zu erkennen.
 " %}
 
 
