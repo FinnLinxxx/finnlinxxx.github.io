@@ -57,6 +57,16 @@ T-Scan Spezifikation
 Anschluss der T-Scan (an den Computer)
 Scannercontroller starten
 Befehlsliste Scannercontroller
+(als PDF)
+```
+asc
+```
+```
+smo
+```
+```
+smf
+```
 Known-Problems
 Ansätze
 
