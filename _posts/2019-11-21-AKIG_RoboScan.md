@@ -134,7 +134,7 @@ Punktwolke an leverarm hängen (siehe py-skript)
 
 Erzeugen einer Referenzierten Punktwolke
 
-``bash
+```bash
 $ rosrun tf_points_global transform_point2pointcloud _ptcl2_global_frame:=map _ptcl2_local_frame:=lever _ptcl2_input_topic:=/tscan_cloud2 _ptcl2_output_topic:=/tscan_cloud2_global _drop_when_same_position:=false
 ```
 
