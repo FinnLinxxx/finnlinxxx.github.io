@@ -40,7 +40,8 @@ E120 Department für Geodäsie und Geoinformation
 
 ### RoboScan
 
-This is roboscan
+RoboScan ist ein neu zu entwickelndes System bei dem die T-Scan nicht im Tracker-Zusammenhang arbeitet, sondern ihre Pose über einen Roboterarm (UR5) bezieht. 
+
 Zur Verfügung stehen ein:
 
 * [Linux Cheat Sheet](https://github.com/FinnLinxxx/akig/blob/master/ROS_Tutorial/LINUX_Cheat_Sheet.pdf)
@@ -48,3 +49,9 @@ Zur Verfügung stehen ein:
 * [ROS Cheat Sheet](https://github.com/FinnLinxxx/akig/blob/master/ROS_Tutorial/ROS_Cheat_Sheet.pdf)
 
 * [GIT Cheat Sheet](https://github.com/FinnLinxxx/akig/blob/master/ROS_Tutorial/GIT_Cheat_Sheet.png)
+
+
+'''bash'''
+$ cd hello there
+'''
+
