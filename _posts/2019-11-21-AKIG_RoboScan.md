@@ -1,4 +1,4 @@
-# RoboScan
+# AK IG
 
 Für die LVA Ausgewählte Kapitel der Ingenieurgeodäsie (128.033) wird im Wintersemester 2019 die Entwicklung eines eigenen 3D Messsystems untersucht. Sensorik aus dem Bereich der Automation und flächenhaften Erfassung wird im geodätischen Kontext entwickelt.
 
@@ -33,4 +33,11 @@ Kombination von Vorlesungs-, Übungs- und Diskussionseinheiten inklusive selbst�
 [Neuner, Hans-Berndt](https://tiss.tuwien.ac.at/adressbuch/adressbuch/person/277368)
 
 [Linzer, Finn](https://tiss.tuwien.ac.at/adressbuch/adressbuch/person/323432)
+
 E120 Department für Geodäsie und Geoinformation
+
+---
+
+### RoboScan
+
+This is roboscan
