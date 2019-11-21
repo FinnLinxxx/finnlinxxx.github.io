@@ -51,7 +51,54 @@ Zur Verfügung stehen ein:
 * [GIT Cheat Sheet](https://github.com/FinnLinxxx/akig/blob/master/ROS_Tutorial/GIT_Cheat_Sheet.png)
 
 
-```bash
-$ cd hello there
-```
+## Aufnahme Punktwolke T-Scan
+
+T-Scan Spezifikation
+Anschluss der T-Scan (an den Computer)
+Scannercontroller starten
+Befehlsliste Scannercontroller
+Known-Problems
+Ansätze
+
+## Aufnahme Roboterarm Verfahrweg
+
+Sicherheitswarnung
+UR5 Spezifikation
+Inbetriebnahme
+RoboDK Beschreibung und Verbindung
+RoboDK Pfad planen, Achtung!
+Verfahrdaten auslesen und in TXT übertragen
+Ansteuern des Roboarms mit Skript von Thomas, was beachten?
+Leverarm anhängen (wieso geht das später nicht)
+Erzeugen eines Rosbags, Umbenennen
+
+
+## Reproduzieren der Daten als Rosbag
+
+Problemstellung Benennen
+Lösungsansatz vorstellen
+T-Scan Punktwolke in Ros laden, intention
+Punktwolke an leverarm hängen (siehe py-skript)
+
+Erzeugen einer Referenzierten Punktwolke
+Rausschreiben einer Referenzierten Punktwolke 
+Zusammenfassen der pcds zu einer Ascii-Datei
+Öffnen der Punktwolke mit CloudCompare
+
+Bekannte Probleme:
+Ansätze:
+Interpretationsansätze PW
+
+
+---
+
+### Problembeschreibung/Aufgabenstellung
+
+1. Leverarm
+
+2. Zeitsynchro
+
+3. Datenverarbeitung
+
+
 
