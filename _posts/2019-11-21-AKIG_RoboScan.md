@@ -51,7 +51,7 @@ Zur Verfügung stehen ein:
 * [GIT Cheat Sheet](https://github.com/FinnLinxxx/akig/blob/master/ROS_Tutorial/GIT_Cheat_Sheet.png)
 
 
-'''bash'''
+```bash```
 $ cd hello there
-'''
+```
 
