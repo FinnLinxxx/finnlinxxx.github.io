@@ -2,7 +2,7 @@
 
 Für die LVA Ausgewählte Kapitel der Ingenieurgeodäsie (128.033) wird im Wintersemester 2019 die Entwicklung eines eigenen 3D Messsystems untersucht. Sensorik aus dem Bereich der Automation und flächenhaften Erfassung wird im geodätischen Kontext entwickelt.
 
-Weitere Informationen sind dem Beschreibungstext aus TISS zu entnehmen:
+Weitere Informationen sind dem Beschreibungstext in [TISS](https://tiss.tuwien.ac.at/course/courseAnnouncement.xhtml?dswid=8545&dsrid=730&courseNumber=128033&courseSemester=2019W) zu entnehmen:
 
 ### Merkmale
 Semesterwochenstunden: 2.0
@@ -41,3 +41,10 @@ E120 Department für Geodäsie und Geoinformation
 ### RoboScan
 
 This is roboscan
+Zur Verfügung stehen ein:
+
+* [Linux Cheat Sheet](https://github.com/FinnLinxxx/akig/blob/master/ROS_Tutorial/LINUX_Cheat_Sheet.pdf)
+
+* [ROS Cheat Sheet](https://github.com/FinnLinxxx/akig/blob/master/ROS_Tutorial/ROS_Cheat_Sheet.pdf)
+
+* [GIT Cheat Sheet](https://github.com/FinnLinxxx/akig/blob/master/ROS_Tutorial/GIT_Cheat_Sheet.png)
