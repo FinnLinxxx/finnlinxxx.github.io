@@ -26,10 +26,11 @@ Einführung in die proprietäre Software RoboDK (Roboterarm) und Spatial Analyze
 
 ### Prüfungsmodus
 Prüfungsimmanent
-Weitere Informationen
+
 Kombination von Vorlesungs-, Übungs- und Diskussionseinheiten inklusive selbständiger Umsetzung von Konzeptideen (Laserscanner, Lasertracker+T-Scan, MatLab/Python).
 
 ### Vortragende
 [Neuner, Hans-Berndt](https://tiss.tuwien.ac.at/adressbuch/adressbuch/person/277368)
+
 [Linzer, Finn](https://tiss.tuwien.ac.at/adressbuch/adressbuch/person/323432)
 E120 Department für Geodäsie und Geoinformation
