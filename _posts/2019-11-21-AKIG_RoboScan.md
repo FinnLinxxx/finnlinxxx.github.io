@@ -65,6 +65,49 @@ Ansätze
 Sicherheitswarnung
 UR5 Spezifikation
 Inbetriebnahme
+```bash
+$ roscore
+```
+
+```bash
+$ roslaunch igros_ur move_juri.launch joints_file:=/home/finn/workspace_ur/src/igros_ur/trajectories/tscan.txt speed_factor:=0.3
+```
+
+```bash
+$ rosparam set use_sim_time 1
+(warum das?)
+```
+
+```bash
+$ rosrun rviz rviz
+(warum das?)
+```
+
+
+```bash
+$ rosbag play thirdBagRecordSMOequal.bag --clock --loop
+```
+
+```bash
+$ rosrun tf static_transform_publisher 0 0 0 0 0 0 map base_link 300
+```
+
+```bash
+$ rosrun tf static_transform_publisher 0.02 0 0.33 0.4 0 -0.78539816339 tool0 lever 300
+(oder ähnlich)
+```
+
+```bash
+$ 
+```
+
+```bash
+$ 
+```
+
+```bash
+$ 
+```
 RoboDK Beschreibung und Verbindung
 RoboDK Pfad planen, Achtung!
 Verfahrdaten auslesen und in TXT übertragen
@@ -77,11 +120,29 @@ Erzeugen eines Rosbags, Umbenennen
 
 Problemstellung Benennen
 Lösungsansatz vorstellen
+```bash
+$ vim createPtcl.py
+```
+
 T-Scan Punktwolke in Ros laden, intention
+
+```bash
+$ python createPtcl.py
+```
+
 Punktwolke an leverarm hängen (siehe py-skript)
 
 Erzeugen einer Referenzierten Punktwolke
+
+``bash
+$ rosrun tf_points_global transform_point2pointcloud _ptcl2_global_frame:=map _ptcl2_local_frame:=lever _ptcl2_input_topic:=/tscan_cloud2 _ptcl2_output_topic:=/tscan_cloud2_global _drop_when_same_position:=false
+```
+
 Rausschreiben einer Referenzierten Punktwolke 
+```bash
+$ rosrun pcl_ros pointcloud_to_pcd input:=/tscan_cloud2_global
+```
+
 Zusammenfassen der pcds zu einer Ascii-Datei
 Öffnen der Punktwolke mit CloudCompare
 
