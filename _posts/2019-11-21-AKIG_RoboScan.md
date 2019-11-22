@@ -55,7 +55,7 @@ Zur Verfügung stehen ein:
 
 Den [T-Scan Spezifikationen](https://w3.leica-geosystems.com/downloads123/m1/metrology/t-scan/brochures/leica%20t-scan%20brochure_de.pdf) entsprechend können Punkte flächenhaft mit einer Genauigkeit besser 0,1 mm erfasst werden. Für uns wichtig ist, dass die T-Scan vom Tracker unabhängig betrieben werden kann. Der eigentliche Hersteller, der die Sensorik des Zeilenlaserscanners entwickelt, hat nennt sich Steinbichler, diese Firma wurde 2015 von ZEISS übernommen. Für den von uns gedachten Einsatz ist ebenfalls wichtig, dass das zuvor handgehaltene System am Roboterarm mit einem Schnellspanner (örtlich quasi wiederhellstellbar) befestigt werden kann. Das Datenkabel der T-Scan selbst ist nur sehr kurz, ein Verlängerungskabel erhöht die Reichweite. Auf der anderen Seite muss dieses auf der Vorderseite in den SCANNER CONTROLLER (roter Strich zu rotem Strich) gesteckt werden (Aufschrift: SCANNER). Der Probe Anschluss ist für die Kommunikation mit dem LasertrackerController gedacht, ob dieses Kabel für unseren Zweck gebraucht wird ist derzeit nicht bekannt. Auf der Rückseite des SCANNER CONTROLLERS ist das Kabel des LAN- und des Console-Anschlusses an den Betriebs-PC anzuschließen. Ob das Clock/Trigger Kabel zum LasertrackerController hin angeschlossen sein muss, ist nicht bekannt. Insgesamt ist der Aufbau bereits erfolgt (bis auf eventuell das Einstecken der T-Scan selbst), falls dies nicht der Fall ist nehmen sie bitte kontakt auf.
 
-Eine Verknüpfung names Scanner Controller (gelbliches Laptop Symbol) liegt auf dem Desktop, dabei handelt es sich um ein Konsolenprogramm mit dem Namen Teraterm, dieses kann auch über den eigentlichen Pfad (C:\Program Files (x86)\teraterm\ und dann ttermpro.exe) gestartet werden.
+Eine Verknüpfung names Scanner Controller (gelbliches Laptop Symbol) liegt auf dem Desktop, dabei handelt es sich um ein Konsolenprogramm mit dem Namen Teraterm, dieses kann auch über den eigentlichen Pfad `(C:\Program Files (x86)\teraterm\ und dann ttermpro.exe)` gestartet werden.
 Das Konsolenprogram muss gestartet werden bevor der Strom am eigentlichen SCANNER CONTROLLER auf "ein" geschaltet wird. Sollte es zu einem Fehler kommen, z.B. das COM3 nicht gefunden werden kann, empfiehlt sich ein neustart des Computers. Bei funktionierender Kommunikation werden mehrere Ausgabeparameter in der Anzeige ausgegeben, bevor nach etwa 15 Sekunden ein vorwiegend grün leuchtendes Fenster erscheint. In diesem Fenster können nun Befehle an das T-Scan System durch einfache Tastatureingabe übergeben werden. Nach dem erfolgreichen Hochstarten könnte die Befehlskette wie folgt aussehen:
 
 Um das System bzw. die Ausgabedatei auf ASCII-Symbolik umzuschalten
@@ -90,90 +90,142 @@ Hochladen Steinbichler PDF
 `Der folgende Text zum Roboterarm wurde aus der Gruppenarbeit von Jansky, Mikschi, Konturek und Pitsch übernommen`
 
 ### Der Roboter UR5
-Der Industrieroboter UR5 der dänischen Firma Universal Robots hat eine maximale
-Traglast von 5kg. Seine Reichweite beträgt 850mm. Er hat sechs Gelenke, die sich alle um 720°
-bewegen lassen: Das erste „Base“ befindet sich am Fuß des Roboters, gleich darauf folgt die
-„Shoulder“. Der Elbow befindet sich in der Mitte der beiden langen Arme. Vor dem Flansch befinden
-sich drei „Wrist {1,2,3}“-Gelenke, deren Nummerierung auf Seite der Basis beginnt.
->Der Roboter ist per Kabel mit seinem Steuergerät verbunden; drei weitere Kabel führen ans Stromnetz, an einen WLAN-Router im IG-Messnetz und an ein „Tablet“ zum Bedienen des Roboters. Die Notaus-Taste am Tablet muss vor einer Kollision gedrückt werden!
 
-Sicherheitshinweise Achtung, der Roboter kann Geschwindigkeiten von bis zu 1m/s
-erreichen(höhere Geschwindigkeiten wurden deaktiviert). Es ist immer genug Abstand zum Roboter
-einzuhalten. Ebenfalls ist darauf zu achten, dass der Roboter weder Hindernisse (z.B. die Tischplatte)
-noch sich selbst berührt. In diesem Fall bricht er sein Programm ab und ist neu zu initialisieren.
->Am Tablet wird der Roboter eingeschaltet, die Motoren und das System mit dem RoboterBedienprogramm „PolyScope“ fahren hoch. Nach einer Initialisierung sind die Roboterarme zu starten. Dabei knackt es in allem Gelenken und der Roboter bewegt sich dabei um bis zu einem Zentimeter. Erst jetzt hält der Roboter Lasten an ihrer Position. 
+Aufbau
+Der Industrieroboter UR5 der dänischen Firma Universal Robots hat eine maximale Traglast von 5kg.
+Seine Reichweite beträgt 850mm. Er hat sechs Gelenke, die sich alle um 720° bewegen lassen:
+Das erste Gelenk wird „Base“ genannt und befindet sich am Fuß des Roboters.
+Darauf folgen die „Shoulder“ und der Elbow. Vor dem Flansch befinden sich drei „Wrist {1,2,3}“-
+Gelenke, deren Nummerierung auf der Seite der Basis beginnt.
+>Der Roboter ist per Kabel mit seinem Steuergerät verbunden; drei weitere Kabel führen ans
+Stromnetz, an einen WLAN-Router im IG-Messnetz und an ein „Tablet“ zum Bedienen des Roboters.
 
-Roboterflansch Auf dem Flansch ist ein Schnellverschluss montiert, mittels dem verschiedene
-Zielobjekte auf den Roboter montiert werden können. Mögliche Ziele sind:
->- Nest für einen Red Ring Reflector (RRR), eine Kugel mit 1,5“ Durchmesser von Leica
->- Die Leica T-Probe mit einer Spitze zum Messen von Punkten, auch schwer zugängliche an Bauteilen. Die Spitze besteht aus hartem Glas und hat ca. 6mm Durchmesser. 
+Sicherheitshinweise
+Achtung, der Roboter kann Geschwindigkeiten von bis zu 1m/s erreichen (höhere Geschwindigkeiten
+wurden deaktiviert). Es ist immer genug Abstand zum Roboter einzuhalten. Ebenfalls ist darauf zu
+achten, dass der Roboter weder mit Hindernissen (z.B. der Tischplatte) noch mit sich selbst kollidiert.
+In diesem Fall wird das Programm abgebrochen und der Roboter ist neu zu initialisieren.
+Die Notaus-Taste am Tablet muss vor einer Kollision gedrückt werden!
 
-Koordinatensysteme Der Roboter besitzt zwei KOS. Der Ursprung des ersten liegt genau in
-der Mitte jener Fläche, auf der er montiert ist. Das hauptsächlich verwendete KOS ist das des TCP,
-des Tool bzw. Center Points. Es hat seinen Ursprung in der Mitte des Flansches.
->Die Pose (bestehend aus drei Translationen und drei Rotationen) des TCP ist einstellbar. Sofern für die Messung ein Punkt mit konstanter Entfernung zum Flanschmittelpunkt verwendet wird (wie etwa die Spitze der T-Probe) sollte dieser Differenzvektor in Bezug auf die Flanschmitte eingemessen werden. 
+Roboterflansch
+Auf dem Flansch ist ein Schnellverschluss montiert, mittels dem verschiedene Zielobjekte auf den
+Roboter montiert werden können. Mögliche Ziele sind:
+>- Nest für einen Red Ring Reflector (RRR), eine Kugel mit 1,5“ Durchmesser von Leica (siehe
+Fig. 1 – 3). Dabei wird der RRR mittels eines Magneten, der im Nest mit Federn gehalten
+wird, am Nestaufsatz befestigt.
+>- Die Leica T-Probe mit einer Spitze zum Messen von Punkten, auch schwer zugängliche an
+Bauteilen. Die Spitze besteht aus hartem Glas und hat ca. 6mm Durchmesser.
+
+Bedienung
+Der Roboterarm kann entweder mittels des angehängten Tablets oder durch die Software RoboDK
+betrieben werden. Jedoch lassen sich mit dem Tablet nur einfache Bewegungen von Gelenken
+steuern, wohingegen eine simple Programmierung von mehreren Bewegungsabläufen in RoboDK
+realisierbar ist.
+>Am Tablet wird der Roboter eingeschalten, die Motoren und das System mit dem RoboterBedienprogramm „PolyScope“ fahren hoch. Nach einer Initialisierung sind die Roboterarme zu starten. Dabei werden die Bremsen in den Gelenken aktiviert, was zu einem knacken führt und zu einer Bewegung des Roboters um bis zu einem Zentimeter. Erst jetzt hält der Roboter Lasten an ihrer
+Position.
+
+![ccrphoto](https://github.com/FinnLinxxx/akig/blob/master/manual/img/ccrFigure.png)
+
+Koordinatensysteme
+Der Roboter besitzt zwei KOS. Der Ursprung des ersten liegt genau in der Mitte jener Fläche, auf der
+er montiert ist. Das hauptsächlich verwendete Koordinatensystem (KS) ist das des TCP, des ToolCenter Points. Es hat seinen Ursprung in der Mitte des Flansches.
+>Die Position (bestehend aus drei Translationen und drei Rotationen) des TCP ist einstellbar.
+Sofern für die Messung ein Punkt mit konstanter Entfernung zum Flanschmittelpunkt verwendet wird
+(wie etwa die Spitze der T-Probe oder der RRR) sollte dieser Differenzvektor in Bezug auf die
+Flanschmitte eingemessen werden. Durch die Bestimmung dieses Differenzvektors wird der TCP neu
+festgelegt. Zu finden ist diese Funktion am Tablet unter Setup/neuen TCP erstellen. Dort wird
+mehrere Male eine spezielle Vorrichtung (siehe Fig. 4) mit dem RRR angefahren, wobei darauf zu
+achten ist möglichst viele verschiedene Winkelstellungen der Gelenke dafür zu benutzen. Im
+Anschluss muss nur noch die „Set“-Taste gedrückt werden und der neue TCP ist im System
+gespeichert. 
 
 Bei Befestigung eines Werkstückes sollte nach Möglichkeit dessen Schwerpunkt als TCP angegeben
 werden, sodass das Werkstück in allen Positionen und Ausrichtungen am besten gehalten werden
 kann. Das geschieht durch feines Entgegenhalten der Motoren in den Gelenken des Roboters.
 Zu diesem Zweck kann im Einstellungsmenü am Tablet des Roboters eingesehen werden, wie viel
 Strom (in Ampere) jedes Gelenk in Ruhe als auch während der Ausführung eines Programms gerade
-benötigt. 
+benötigt.
 
 ### Simulations- und Bediensoftware „RoboDK“
 
-RoboDK ist ein proprietäres Computerprogramm zur Simulation von Robotern vieler verschiedener
-Hersteller, unter anderem Universal Robots. Das Program ist auf den im Labor befindlichen Computern bereits vorinstalliert, sollte dies nicht der Fall sein bitte Kontakt aufnehmen. 
+RoboDK ist ein proprietäres Computerprogramm zur Simulation von Bewegungen von Robotern
+vieler verschiedener Hersteller, unter anderem Universal Robots. Vorab wurde der Roboter UR5 ins
+Programm geladen, inklusive der beiden Koordinatensysteme (KOS) von Basis und Tool (bzw. Target)
+Center Point (TCP).
+>Verbindungsaufbau Nach derzeitigem Stand der Technik, kann der UR5 bereits direkt von RoboDK aus angesteuert
+werden. Dafür muss eine Verbindung im LAN „IG-Messnetz“ hergestellt werden. Wie in
+nachfolgender Abbildung ersichtlich, ist der UR5 unter der IP-Adresse 192.168.178.5 und dem Port
+(Roboter Anschluss) 50001 erreichbar. Mit einer ping-Anweisung wird die Verbindung überprüft.
+Der Knopf „Get Position“ fragt die aktuelle Position des Roboterarmes ab und stellt sie dar.
 
-Vorab wurde der Roboter UR5 ins Programm geladen,
-inklusive der beiden Koordinatensysteme (KOS) von Basis und Tool (bzw. Target) Center Point (TCP). 
->Verbindungsaufbau Nach derzeitigem Stand der Technik kann der UR5 bereits direkt von RoboDK aus angesteuert werden. Dafür muss eine Verbindung im LAN „IG-Messnetz“ hergestellt werden. Wie in nachfolgender Abbildung ersichtlich, ist der UR5 unter der IPAdresse 192.168.178.5 und dem Port (Roboter Anschluss) 50001 erreichbar. Mit einer pingAnweisung wird die Verbindung überprüft. 
+![robodk](https://github.com/FinnLinxxx/akig/blob/master/manual/img/screenshot_RoboDK.png)
 
-![robodkimg](https://github.com/FinnLinxxx/akig/blob/master/manual/img/screenshot_RoboDK.png)
+Programmoberfläche
+Im linken Balken in der Grafik sind gelistet: Basis, Roboter UR5 und anschließend alle von ihm
+erreichbaren Ziele (samt deren KOS). Darunter befinden sich die ausführbaren Programme mit ihren
+jeweiligen „moves“. Diese bestehen aus einer Abfolge der anzufahrenden Punkte.
+>Ein Doppelklick auf den Roboter UR5 links oben öffnet das UR5 Panel, das die ganze rechte Seite
+einnimmt und vielerlei Eingaben ermöglicht. Speziell interessant ist das unterste Feld mit der
+Überschrift „Achswinkel“. Dort werden die Winkelstellungen aller Gelenke angezeigt. In der bunten
+Zeile darüber kann der Bezug des TCP (bzw. Werkzeugrahmen) zum Basis-KOS als Pose manipuliert
+werden. Eine Pose besteht aus 6 Parametern: 3 für die Lage (Translation in [x,y,z]) und 3 für die
+dortige Orientierung [Rx, Ry, Rz]. Es ist dabei auf die Einheit der Winkel zu achten (Grad oder
+Radiant). Ebenso kann hier die Orientierung des TCP und ob eine Bewegung zu Kollisionen führt
+erprobt werden.
 
-Programmoberfläche Im linken Balken in der Grafik sind gelistet: Basis, Roboter UR5,
-anschließend alle von ihm erreichbaren Ziele (samt deren KOS) und darunter als Fahrprogramme die
-Prüfmuster mit deren vorgegebenen Abfolgen der anzufahrenden Punkte. [BSc-Arbeit Jansky]
+Erstellen von Programmen
+Für einen Bewegungsablauf am Roboter wird in UR5 ein Programm geschrieben, das man auch als
+Endlosschleife laufen lassen kann. Beim Erstellen eines Programmes (in Fig. 5 ist Prog1 zu sehen,
+durch Klicken auf den Button im Menüband) wird zuerst ein Bezugssystem definiert. Optional können
+auch Geschwindigkeitsbeschränkungen für lineare Bewegungen oder für Rotationen festgelegt
+werden.
 
->Ein Doppelklick auf den Roboter UR5 links oben öffnet das UR5 Panel, das die ganze rechte Seite einnimmt und vielerlei Eingaben ermöglicht. Drei KOS sind hier ersichtlich, die oberen beiden wurden bisher immer auf sechsmal 0 belassen. In der untersten bunten Zeile kann der Bezug des TCP (bzw. Werkzeugrahmen) zum BasisKOS als Pose manipuliert werden. Eine Pose besteht aus 6 Parametern: 3 für die Lage (Translation in [x,y,z]) und 3 für die dortige Orientierung [Rx, Ry, Rz]. Es ist dabei auf die Einheit der Winkel zu achten (Grad oder Radiant). Ebenso kann hier die Orientierung des TCP und ein kollisionsfreier Ortswechsel (siehe später) erprobt werden. 
->Der Knopf „Get Position“ fragt RoboDK die aktuelle Position am Roboter ab und stellt sie dar. 
+Erstellen eines Punktes
+Um einen neuen Punkt (target) zu erstellen kann durch Doppelklick auf die UR5-Base das Fenster
+(wie in Fig. 5 auf der rechten Seite zu sehen) zum Verändern von Positionen aufgerufen werden. In
+diesem Fenster können die Winkel der einzelnen Gelenke verändert werden. Diese
+Winkeleinstellungen können anschließend einem Punkt zugeordnet werden (teach actual position),
+wodurch die Position dieses Punktes im Koordinatensystem festgelegt ist.
+Bewegung zu einem Punkt
 
-Erstellen von Programmen Für einen Bewegungsablauf am Roboter wird in UR5 ein Programm
-geschrieben, das man auch als Endlosschleife laufen lassen kann. Beim Erstellen eines Programmes
-(in der Abbildung ist Prog1 zu sehen) wird zuerst ein Bezugssystem definiert. Optional können auch
-Geschwindigkeitsbeschränkungen für lineare Bewegungen oder für Rotationen festgelegt werden.
-
-Bewegung zu einem Punkt RoboDK kennt zwei Arten für das Erreichen eines Punktes. Die
-empfohlene und bisher einzige verwendete Methode ist „movej“ für „movejoints“, ihr Icon ist
-erkennbar am geschwungenen Weg zwischen den Zielen. Dabei werden die Punkte durch gegebene
-Gelenkstellungen beschrieben und der Weg zwischen ihnen als Differenz der Gelenkwinkel gefahren.
+RoboDK kennt zwei Arten für das Erreichen eines Punktes. Die empfohlene und bisher einzige
+verwendete Methode ist „movej“ für „movejoints“, ihr Icon ist erkennbar am geschwungenen Weg
+zwischen den Zielen. Dabei werden die Punkte durch gegebene Gelenkstellungen beschrieben und
+der Weg zwischen ihnen als Differenz der Gelenkwinkel gefahren.
 Die andere Funktion „move“ steht für eine Linearbewegung zum Ziel. Dabei werden die Gelenke so
 bewegt, dass das Werkstück entlang einer Linie bewegt wird. Dies führt zu unterschiedlichen
-Geschwindigkeiten der Gelenke im Laufe des Fahrweges. 
+Geschwindigkeiten der Gelenke im Laufe des Fahrweges.
 
->Um einen Fahrweg zu programmieren, wird zuerst links in der Liste der anzufahrende Punkt ausgewählt und erst dann die Art der Bewegung dorthin eingegeben. 
+>Vor dem Erstellen eines neuen „moves“ müssen die zu verwendeten „targets“ vorab definiert
+worden sein. Sobald ein „target“ verändert wird, müssen auch alle „moves“, die dieses „target“
+verwenden, neu erstellt werden.
 
-Darstellung und Konfigurationen der Punkte Im UR5 Panel sind rechts unten sind die Positionen
-der Gelenke zu sehen (, die auch manuell bewegt werden können). Das Menü „Andere
-Konfigurationen“ zeigt meist zwischen 10 und 36 verschiedene Möglichkeiten an, in welchen Arten
-der Punkt erreicht werden kann. Bei einigen Kombinationen unterscheidet sich nur ein Gelenk um
-360°. Entscheidend ist hier aber, ob der Ellbogen des Roboters über oder unter dem TCP liegt und
-wie die Wrists zueinanderstehen. Für einen Einzelpunkt kommen mehrere Konfigurationen in Frage,
-aber je komplexer die Fahrmuster werden, desto eingeschränkter die Wahlmöglichkeit – vor allem
-dann, wenn die montierte T-Probe den Sichtkontakt zum Lasertracker nicht verlieren darf. 
+Darstellung und Konfigurationen der Punkte
+Im UR5 Panel sind rechts unten sind die Positionen der Gelenke zu sehen (, die auch manuell bewegt
+werden können). Das Menü „Andere Konfigurationen“ zeigt meist zwischen 10 und 36 verschiedene
+Möglichkeiten an, in welchen Arten der Punkt erreicht werden kann. Bei einigen Kombinationen
+unterscheidet sich nur ein Gelenk um 360°. Entscheidend ist hier aber, ob der Ellbogen des Roboters
+über oder unter dem TCP liegt und wie die Wrists zueinanderstehen. Für einen Einzelpunkt kommen
+mehrere Konfigurationen in Frage, aber je komplexer die Fahrmuster werden, desto eingeschränkter
+die Wahlmöglichkeit – vor allem dann, wenn die montierte T-Probe den Sichtkontakt zum
+Lasertracker nicht verlieren darf.
 
->Um die Gelenkstellungen von Punkten aus der Liste links zu sehen, muss auf diese Punkte ein Doppelklick erfolgen. Die Animation des Fahrweges entfällt und es wird die Situation am Ziel gezeigt (mit Gelenkstellungen wie eingegeben).
-Bei einfachem Klick hingegen simuliert RoboDK lediglich das Anfahren der gewünschten Position und Orientierung, meist auf kürzestem Weg. Nicht selten kommt es dabei vor, dass „unmögliche“ Wege entstehen, die nicht gefahren werden können. Der Roboter…
->* fährt zu Positionen unterhalb der Tischplatte oder
->* bewegt seine Gelenke so, dass er sich selbst durchfahren würde.
->Werden Winkelwerte der Punkte nach Erstellen des Programms geändert, so werden sie dort nicht übernommen. Geänderte Punkte sind neu in den Programmablauf zu laden! 
+>Um die Gelenkstellungen von Punkten aus der Liste links zu sehen, muss auf diese Punkte ein
+Doppelklick erfolgen. Die Animation des Fahrweges entfällt und es wird die Situation am Ziel
+angezeigt (mit Gelenkstellungen wie eingegeben). Bei einem einfachen Klick hingegen simuliert
+RoboDK lediglich das Anfahren der gewünschten Position und Orientierung, meist auf kürzestem
+Weg. Nicht selten kommt es dabei vor, dass „unmögliche“ Wege entstehen, die nicht gefahren
+werden können. Der Roboter…
+>• fährt zu Positionen unterhalb der Tischplatte oder
+>• bewegt seine Gelenke so, dass er sich selbst durchfahren würde.
 
-Kollisions-Detektion RoboDK bietet den Vorteil, Kollisionen eines beliebigen Roboterteils mit
+**Kollisions-Detektion** RoboDK bietet den Vorteil, Kollisionen eines beliebigen Roboterteils mit
 anderen Teilen zu detektieren. Ist diese Option eingeschaltet, so leuchtet ein grünes Häkchen vor
 dem Nuklear-Symbol in der oberen Leiste. Bei einer Kollision wird die Animation des Fahrprogramms
-gestoppt und beide kollidierenden Teile werden rot eingefärbt. 
-
->Wenn alle Fahrmuster mit ihren Targets eingestellt und ausreichend in der Simulation getestet wurden, kann mit dem echten Roboter gearbeitet werden. Nach Knopfdruck von „PTP Bewegung ausführen“ leitet RoboDK die Befehle an den UR5 weiter. 
+gestoppt und beide kollidierenden Teile werden rot eingefärbt.
+>Wenn alle Fahrmuster mit ihren Targets eingestellt und ausreichend in der Simulation getestet
+wurden, kann mit dem echten Roboter gearbeitet werden. Nach Knopfdruck von „PTP Bewegung
+ausführen“ leitet RoboDK die Befehle an den UR5 weiter.
 
 ### Inbetriebnahme
 ```bash
