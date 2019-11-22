@@ -117,9 +117,8 @@ wird, am Nestaufsatz befestigt.
 Bauteilen. Die Spitze besteht aus hartem Glas und hat ca. 6mm Durchmesser.
 
 #### Bedienung
-Der Roboterarm kann entweder mittels des angehängten Tablets oder durch die Software RoboDK
-betrieben werden. Jedoch lassen sich mit dem Tablet nur einfache Bewegungen von Gelenken
-steuern, wohingegen eine simple Programmierung von mehreren Bewegungsabläufen in RoboDK
+Der Roboterarm kann entweder mittels des angehängten Tablets, durch die Software RoboDK oder wie später beschrieben wird auch mit ROS betrieben werden. RoboDK nimmt hierbei eine wichtige Rolle ein, indem abzufahrende Pfade im vorfeld geplant und anschließend in ROS genutzt werden können. Mit dem Tablet können nur einfache Bewegungen von Gelenken
+steuern, wohingegen eine Programmierung von mehreren Bewegungsabläufen in RoboDK
 realisierbar ist.
 >Am Tablet wird der Roboter eingeschalten, die Motoren und das System mit dem RoboterBedienprogramm „PolyScope“ fahren hoch. Nach einer Initialisierung sind die Roboterarme zu starten. Dabei werden die Bremsen in den Gelenken aktiviert, was zu einem knacken führt und zu einer Bewegung des Roboters um bis zu einem Zentimeter. Erst jetzt hält der Roboter Lasten an ihrer
 Position.
@@ -202,8 +201,7 @@ worden sein. Sobald ein „target“ verändert wird, müssen auch alle „moves
 verwenden, neu erstellt werden.
 
 #### Darstellung und Konfigurationen der Punkte
-Im UR5 Panel sind rechts unten sind die Positionen der Gelenke zu sehen (, die auch manuell bewegt
-werden können). Das Menü „Andere Konfigurationen“ zeigt meist zwischen 10 und 36 verschiedene
+Durch Doppelklick auf den Roboter im Fenster können im UR5 Panel rechts unten die Positionen der Gelenke eingesehen werden (diese können auch manuell bewegt werden). Das Menü „Andere Konfigurationen“ zeigt meist zwischen 10 und 36 verschiedene
 Möglichkeiten an, in welchen Arten der Punkt erreicht werden kann. Bei einigen Kombinationen
 unterscheidet sich nur ein Gelenk um 360°. Entscheidend ist hier aber, ob der Ellbogen des Roboters
 über oder unter dem TCP liegt und wie die Wrists zueinanderstehen. Für einen Einzelpunkt kommen
@@ -217,7 +215,9 @@ angezeigt (mit Gelenkstellungen wie eingegeben). Bei einem einfachen Klick hinge
 RoboDK lediglich das Anfahren der gewünschten Position und Orientierung, meist auf kürzestem
 Weg. Nicht selten kommt es dabei vor, dass „unmögliche“ Wege entstehen, die nicht gefahren
 werden können. Der Roboter…
+
 >• fährt zu Positionen unterhalb der Tischplatte oder
+
 >• bewegt seine Gelenke so, dass er sich selbst durchfahren würde.
 
 #### Kollisions-Detektion
@@ -229,10 +229,42 @@ gestoppt und beide kollidierenden Teile werden rot eingefärbt.
 wurden, kann mit dem echten Roboter gearbeitet werden. Nach Knopfdruck von „PTP Bewegung
 ausführen“ leitet RoboDK die Befehle an den UR5 weiter.
 
-### Inbetriebnahme
+### Durchführen einer Roboterfahrt in ROS
+
+Die Verbindung zum eigenen Linux-Nutzer kann auf den im Labor befindlichen Computern in ähnlicher Weise über Remote Desktop durchgeführt werden, wie bereits im ROS-Tutorial gezeigt. Dafür muss man sich an einen der Computer anmelden und das Program für die Remote Desktop Umgebung starten, die Verbindungs-IP lautet: `128.130.8.200:4889`, Nutzer und Passwort entsprechen der Domäne. Die virtuelle Linux Umgebung befindet sich im gleichen IP-Adressbereich wie alle anderen Sensoren der Ingenieurgeodäsie, daher können von hier aus auch der Lasertracker oder Roboterarm angesteuert werden. 
+
+Um die Verbindung zu testen, eignet es sich einen Ping auf den eingeschalteten Roboterarm durchzuführen, dieser hat die feste IP 192.168.178.5, öffnen sie also ein Konsolenfenster (Strg + Alt + T, ö.ä.) und führen sie folgenden Befehl aus.
 ```bash
-$ roscore
+$ ping 192.168.178.5
 ```
+Nur wenn eine zufriedenstellende Antwort (latenzy < 100ms) zurück erhalten, kann in den folgenden Schritten eine stabile Verbindung zum Roboter aufgebaut werden.
+
+Sie starten in einem weiteren Konsolenfenster den Roscore auf einem von ihnen gewählten Port mit 5 Ziffern (z.B. 12555)
+```bash
+$ roscore -p 12555
+```
+Damit sich alle weiteren ROS Programme von Ihnen auch auf diesen Port beziehen müssen Sie dies der Linux-Environment mitteilen, alle aktuellen environment Einstellungen können in Linux unter 
+```bash
+$ env
+```
+abgefragt werden, eine ganze Liste voll tut sich dabei auf. Um den aktuellen Port für ihr Linux System zu erfahren können sie die Liste nach bestimmten krtieren mit dem Program `grep` filtern, wir pipen `|` dabei den zuvorigen Listeninhalt und führen das Program `grep` nach einem Suchbegriff hin aus.
+mitteilen, alle aktuellen environment Einstellungen können in Linux unter 
+```bash
+$ env | grep ROS_MASTER_URI
+```
+Ist der daraufhin angezeigte Port nicht ihrer (12555), müssen sie den neuen environment wert an das Linux System übergeben
+```bash
+$ export ROS_MASTER_URI=http://192.168.178.217:12555
+```
+Nun sollte der Wert stimmen. Damit sie nicht jedes Mal wenn sie eine neue Konsole starten diese Umgebungseinstellung tätigen müssen sollte die BASH-Resourcedatei `~/.bashrc` angepasst werden. Diese können sie z.B. mit dem Programm nano bearbeiten.
+```bash
+$ cd ~
+$ nano .bashrc
+```
+Dort können sie in der letzten Zeile `export ROS_MASTER_URI=http://192.168.178.217:12555` hineinschreiben, dann wird dieser Befehl automatisch bei jedem Konsolenstart durchgeführt. An der gleichen Stelle können sie auch den Port ändern, nur müssen sie dann daran denken, dass eine Änderung (warum auch immer) erst dann aktiv wird, wenn sie eine neue Konsole starten.
+
+Arbeiten wir alle auf verschiedenen Ports, kommen sich die ROS Projekte nicht gegenseitig in die quere.
+
 
 ```bash
 $ roslaunch igros_ur move_juri.launch joints_file:=/home/finn/workspace_ur/src/igros_ur/trajectories/tscan.txt speed_factor:=0.3
@@ -262,19 +294,7 @@ $ rosrun tf static_transform_publisher 0.02 0 0.33 0.4 0 -0.78539816339 tool0 le
 (oder ähnlich)
 ```
 
-```bash
-$ 
-```
 
-```bash
-$ 
-```
-
-```bash
-$ 
-```
-RoboDK Beschreibung und Verbindung
-RoboDK Pfad planen, Achtung!
 Verfahrdaten auslesen und in TXT übertragen
 Ansteuern des Roboarms mit Skript von Thomas, was beachten?
 Leverarm anhängen (wieso geht das später nicht)
@@ -283,6 +303,7 @@ Erzeugen eines Rosbags, Umbenennen
 
 ## Reproduzieren der Daten als Rosbag
 
+Wiederherstellen roboterfahrt (rviz) und Zeitbezug!
 Problemstellung Benennen
 Lösungsansatz vorstellen
 ```bash
