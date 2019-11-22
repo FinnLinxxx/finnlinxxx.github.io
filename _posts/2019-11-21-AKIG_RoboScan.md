@@ -55,7 +55,8 @@ Zur Verfügung stehen ein:
 
 Den [T-Scan Spezifikationen](https://w3.leica-geosystems.com/downloads123/m1/metrology/t-scan/brochures/leica%20t-scan%20brochure_de.pdf) entsprechend können Punkte flächenhaft mit einer Genauigkeit besser 0,1 mm erfasst werden. Für uns wichtig ist, dass die T-Scan vom Tracker unabhängig betrieben werden kann. Der eigentliche Hersteller, der die Sensorik des Zeilenlaserscanners entwickelt, hat nennt sich Steinbichler, diese Firma wurde 2015 von ZEISS übernommen. Für den von uns gedachten Einsatz ist ebenfalls wichtig, dass das zuvor handgehaltene System am Roboterarm mit einem Schnellspanner (örtlich quasi wiederhellstellbar) befestigt werden kann. Das Datenkabel der T-Scan selbst ist nur sehr kurz, ein Verlängerungskabel erhöht die Reichweite. Auf der anderen Seite muss dieses auf der Vorderseite in den SCANNER CONTROLLER (roter Strich zu rotem Strich) gesteckt werden (Aufschrift: SCANNER). Der Probe Anschluss ist für die Kommunikation mit dem LasertrackerController gedacht, ob dieses Kabel für unseren Zweck gebraucht wird ist derzeit nicht bekannt. Auf der Rückseite des SCANNER CONTROLLERS ist das Kabel des LAN- und des Console-Anschlusses an den Betriebs-PC anzuschließen. Ob das Clock/Trigger Kabel zum LasertrackerController hin angeschlossen sein muss, ist nicht bekannt. Insgesamt ist der Aufbau bereits erfolgt (bis auf eventuell das Einstecken der T-Scan selbst), falls dies nicht der Fall ist nehmen sie bitte kontakt auf.
 
-Das Programm Scanner Controller (gelbliches Laptop Symbol) liegt auf dem Desktop, diese muss gestartet werden bevor der Strom am eigentlichen SCANNER CONTROLLER auf "ein" geschaltet wird. Es werden mehrere Ausgabeparameter in der Anzeige ausgegeben, bevor nach etwa 15 Sekunden ein vorwiegend grün leuchtendes Fenster erscheint. In diesem Fenster können nun Befehle an das T-Scan System durch einfache Tastatureingabe übergeben werden. Gleich nach dem Start könnte die Befehlskette wie folgt aussehen:
+Eine Verknüpfung names Scanner Controller (gelbliches Laptop Symbol) liegt auf dem Desktop, dabei handelt es sich um ein Konsolenprogramm mit dem Namen Teraterm, dieses kann auch über den eigentlichen Pfad (C:\Program Files (x86)\teraterm\ und dann ttermpro.exe) gestartet werden.
+Das Konsolenprogram muss gestartet werden bevor der Strom am eigentlichen SCANNER CONTROLLER auf "ein" geschaltet wird. Sollte es zu einem Fehler kommen, z.B. das COM3 nicht gefunden werden kann, empfiehlt sich ein neustart des Computers. Bei funktionierender Kommunikation werden mehrere Ausgabeparameter in der Anzeige ausgegeben, bevor nach etwa 15 Sekunden ein vorwiegend grün leuchtendes Fenster erscheint. In diesem Fenster können nun Befehle an das T-Scan System durch einfache Tastatureingabe übergeben werden. Nach dem erfolgreichen Hochstarten könnte die Befehlskette wie folgt aussehen:
 
 Um das System bzw. die Ausgabedatei auf ASCII-Symbolik umzuschalten
 ```
@@ -77,11 +78,14 @@ smf
 
 Die Daten liegen daraufhin im Ordner: `C:\ScannerController` mit dem laufenden Namen SCAN000*.asc vor und können mit einem einfachen Textverarbeitungsprogramm eingsehen werden.
 
-### Known-Problems
+### Known-Problems/Todo
+Hochladen Steinbichler PDF
 
 ### Ansätze
 
 ## Aufnahme Roboterarm Verfahrweg
+
+`Achtung! Der Betrieb des Roboterarms setzt bestimmtes Wissen und stete Vorsicht voraus, da ansonsten Material oder Menschen zu schaden kommen könnten!`
 
 Sicherheitswarnung
 UR5 Spezifikation
