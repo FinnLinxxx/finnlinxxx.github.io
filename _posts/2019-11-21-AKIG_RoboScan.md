@@ -87,8 +87,51 @@ Hochladen Steinbichler PDF
 
 `Achtung! Der Betrieb des Roboterarms setzt bestimmtes Wissen und stete Vorsicht voraus, da ansonsten Material oder Menschen zu schaden kommen könnten!`
 
-Sicherheitswarnung
-UR5 Spezifikation
+`Der folgende Text zum Roboterarm wurde aus der Gruppenarbeit von Jansky, Mikschi, Konturek und Pitsch übernommen`
+
+### Der Roboter UR5
+Der Industrieroboter UR5 der dänischen Firma Universal Robots hat eine maximale
+Traglast von 5kg. Seine Reichweite beträgt 850mm. Er hat sechs Gelenke, die sich alle um 720°
+bewegen lassen: Das erste „Base“ befindet sich am Fuß des Roboters, gleich darauf folgt die
+„Shoulder“. Der Elbow befindet sich in der Mitte der beiden langen Arme. Vor dem Flansch befinden
+sich drei „Wrist {1,2,3}“-Gelenke, deren Nummerierung auf Seite der Basis beginnt.
+>Der Roboter ist per Kabel mit seinem Steuergerät verbunden; drei weitere Kabel führen ans Stromnetz, an einen WLAN-Router im IG-Messnetz und an ein „Tablet“ zum Bedienen des Roboters. Die Notaus-Taste am Tablet muss vor einer Kollision gedrückt werden!
+
+Sicherheitshinweise Achtung, der Roboter kann Geschwindigkeiten von bis zu 1m/s
+erreichen(höhere Geschwindigkeiten wurden deaktiviert). Es ist immer genug Abstand zum Roboter
+einzuhalten. Ebenfalls ist darauf zu achten, dass der Roboter weder Hindernisse (z.B. die Tischplatte)
+noch sich selbst berührt. In diesem Fall bricht er sein Programm ab und ist neu zu initialisieren.
+>Am Tablet wird der Roboter eingeschaltet, die Motoren und das System mit dem RoboterBedienprogramm „PolyScope“ fahren hoch. Nach einer Initialisierung sind die Roboterarme zu starten. Dabei knackt es in allem Gelenken und der Roboter bewegt sich dabei um bis zu einem Zentimeter. Erst jetzt hält der Roboter Lasten an ihrer Position. 
+
+Roboterflansch Auf dem Flansch ist ein Schnellverschluss montiert, mittels dem verschiedene
+Zielobjekte auf den Roboter montiert werden können. Mögliche Ziele sind:
+>- Nest für einen Red Ring Reflector (RRR), eine Kugel mit 1,5“ Durchmesser von Leica
+>- Die Leica T-Probe mit einer Spitze zum Messen von Punkten, auch schwer zugängliche an Bauteilen. Die Spitze besteht aus hartem Glas und hat ca. 6mm Durchmesser. 
+
+Koordinatensysteme Der Roboter besitzt zwei KOS. Der Ursprung des ersten liegt genau in
+der Mitte jener Fläche, auf der er montiert ist. Das hauptsächlich verwendete KOS ist das des TCP,
+des Tool bzw. Center Points. Es hat seinen Ursprung in der Mitte des Flansches.
+>Die Pose (bestehend aus drei Translationen und drei Rotationen) des TCP ist einstellbar. Sofern für die Messung ein Punkt mit konstanter Entfernung zum Flanschmittelpunkt verwendet wird (wie etwa die Spitze der T-Probe) sollte dieser Differenzvektor in Bezug auf die Flanschmitte eingemessen werden. 
+
+Bei Befestigung eines Werkstückes sollte nach Möglichkeit dessen Schwerpunkt als TCP angegeben
+werden, sodass das Werkstück in allen Positionen und Ausrichtungen am besten gehalten werden
+kann. Das geschieht durch feines Entgegenhalten der Motoren in den Gelenken des Roboters.
+Zu diesem Zweck kann im Einstellungsmenü am Tablet des Roboters eingesehen werden, wie viel
+Strom (in Ampere) jedes Gelenk in Ruhe als auch während der Ausführung eines Programms gerade
+benötigt. 
+
+### Simulations- und Bediensoftware „RoboDK“
+
+RoboDK ist ein proprietäres Computerprogramm zur Simulation von Robotern vieler verschiedener
+Hersteller, unter anderem Universal Robots. Das Program ist auf den im Labor befindlichen Computern bereits vorinstalliert, sollte dies nicht der Fall sein bitte Kontakt aufnehmen. 
+
+Vorab wurde der Roboter UR5 ins Programm geladen,
+inklusive der beiden Koordinatensysteme (KOS) von Basis und Tool (bzw. Target) Center Point (TCP). 
+>Verbindungsaufbau Nach derzeitigem Stand der Technik kann der UR5 bereits direkt von RoboDK aus angesteuert werden. Dafür muss eine Verbindung im LAN „IG-Messnetz“ hergestellt werden. Wie in nachfolgender Abbildung ersichtlich, ist der UR5 unter der IPAdresse 192.168.178.5 und dem Port (Roboter Anschluss) 50001 erreichbar. Mit einer pingAnweisung wird die Verbindung überprüft. 
+
+![robodkimg](https://github.com/FinnLinxxx/akig/blob/master/manual/img/screenshot_RoboDK.png)
+
+
 Inbetriebnahme
 ```bash
 $ roscore
