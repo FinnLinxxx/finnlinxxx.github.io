@@ -91,7 +91,7 @@ Hochladen Steinbichler PDF
 
 ### Der Roboter UR5
 
-Aufbau
+#### Aufbau
 Der Industrieroboter UR5 der dänischen Firma Universal Robots hat eine maximale Traglast von 5kg.
 Seine Reichweite beträgt 850mm. Er hat sechs Gelenke, die sich alle um 720° bewegen lassen:
 Das erste Gelenk wird „Base“ genannt und befindet sich am Fuß des Roboters.
@@ -100,14 +100,14 @@ Gelenke, deren Nummerierung auf der Seite der Basis beginnt.
 >Der Roboter ist per Kabel mit seinem Steuergerät verbunden; drei weitere Kabel führen ans
 Stromnetz, an einen WLAN-Router im IG-Messnetz und an ein „Tablet“ zum Bedienen des Roboters.
 
-Sicherheitshinweise
+#### Sicherheitshinweise
 Achtung, der Roboter kann Geschwindigkeiten von bis zu 1m/s erreichen (höhere Geschwindigkeiten
 wurden deaktiviert). Es ist immer genug Abstand zum Roboter einzuhalten. Ebenfalls ist darauf zu
 achten, dass der Roboter weder mit Hindernissen (z.B. der Tischplatte) noch mit sich selbst kollidiert.
 In diesem Fall wird das Programm abgebrochen und der Roboter ist neu zu initialisieren.
 Die Notaus-Taste am Tablet muss vor einer Kollision gedrückt werden!
 
-Roboterflansch
+#### Roboterflansch
 Auf dem Flansch ist ein Schnellverschluss montiert, mittels dem verschiedene Zielobjekte auf den
 Roboter montiert werden können. Mögliche Ziele sind:
 >- Nest für einen Red Ring Reflector (RRR), eine Kugel mit 1,5“ Durchmesser von Leica (siehe
@@ -116,7 +116,7 @@ wird, am Nestaufsatz befestigt.
 >- Die Leica T-Probe mit einer Spitze zum Messen von Punkten, auch schwer zugängliche an
 Bauteilen. Die Spitze besteht aus hartem Glas und hat ca. 6mm Durchmesser.
 
-Bedienung
+#### Bedienung
 Der Roboterarm kann entweder mittels des angehängten Tablets oder durch die Software RoboDK
 betrieben werden. Jedoch lassen sich mit dem Tablet nur einfache Bewegungen von Gelenken
 steuern, wohingegen eine simple Programmierung von mehreren Bewegungsabläufen in RoboDK
@@ -126,7 +126,7 @@ Position.
 
 ![ccrphoto](https://github.com/FinnLinxxx/akig/blob/master/manual/img/ccrFigure.png)
 
-Koordinatensysteme
+#### Koordinatensysteme
 Der Roboter besitzt zwei KOS. Der Ursprung des ersten liegt genau in der Mitte jener Fläche, auf der
 er montiert ist. Das hauptsächlich verwendete Koordinatensystem (KS) ist das des TCP, des ToolCenter Points. Es hat seinen Ursprung in der Mitte des Flansches.
 >Die Position (bestehend aus drei Translationen und drei Rotationen) des TCP ist einstellbar.
@@ -152,7 +152,8 @@ RoboDK ist ein proprietäres Computerprogramm zur Simulation von Bewegungen von 
 vieler verschiedener Hersteller, unter anderem Universal Robots. Vorab wurde der Roboter UR5 ins
 Programm geladen, inklusive der beiden Koordinatensysteme (KOS) von Basis und Tool (bzw. Target)
 Center Point (TCP).
->Verbindungsaufbau Nach derzeitigem Stand der Technik, kann der UR5 bereits direkt von RoboDK aus angesteuert
+#### Verbindungsaufbau 
+Nach derzeitigem Stand der Technik, kann der UR5 bereits direkt von RoboDK aus angesteuert
 werden. Dafür muss eine Verbindung im LAN „IG-Messnetz“ hergestellt werden. Wie in
 nachfolgender Abbildung ersichtlich, ist der UR5 unter der IP-Adresse 192.168.178.5 und dem Port
 (Roboter Anschluss) 50001 erreichbar. Mit einer ping-Anweisung wird die Verbindung überprüft.
@@ -160,7 +161,7 @@ Der Knopf „Get Position“ fragt die aktuelle Position des Roboterarmes ab und
 
 ![robodk](https://github.com/FinnLinxxx/akig/blob/master/manual/img/screenshot_RoboDK.png)
 
-Programmoberfläche
+#### Programmoberfläche
 Im linken Balken in der Grafik sind gelistet: Basis, Roboter UR5 und anschließend alle von ihm
 erreichbaren Ziele (samt deren KOS). Darunter befinden sich die ausführbaren Programme mit ihren
 jeweiligen „moves“. Diese bestehen aus einer Abfolge der anzufahrenden Punkte.
@@ -173,21 +174,21 @@ dortige Orientierung [Rx, Ry, Rz]. Es ist dabei auf die Einheit der Winkel zu ac
 Radiant). Ebenso kann hier die Orientierung des TCP und ob eine Bewegung zu Kollisionen führt
 erprobt werden.
 
-Erstellen von Programmen
+#### Erstellen von Programmen
 Für einen Bewegungsablauf am Roboter wird in UR5 ein Programm geschrieben, das man auch als
 Endlosschleife laufen lassen kann. Beim Erstellen eines Programmes (in Fig. 5 ist Prog1 zu sehen,
 durch Klicken auf den Button im Menüband) wird zuerst ein Bezugssystem definiert. Optional können
 auch Geschwindigkeitsbeschränkungen für lineare Bewegungen oder für Rotationen festgelegt
 werden.
 
-Erstellen eines Punktes
+#### Erstellen eines Punktes
 Um einen neuen Punkt (target) zu erstellen kann durch Doppelklick auf die UR5-Base das Fenster
 (wie in Fig. 5 auf der rechten Seite zu sehen) zum Verändern von Positionen aufgerufen werden. In
 diesem Fenster können die Winkel der einzelnen Gelenke verändert werden. Diese
 Winkeleinstellungen können anschließend einem Punkt zugeordnet werden (teach actual position),
 wodurch die Position dieses Punktes im Koordinatensystem festgelegt ist.
-Bewegung zu einem Punkt
 
+#### Bewegung zu einem Punkt
 RoboDK kennt zwei Arten für das Erreichen eines Punktes. Die empfohlene und bisher einzige
 verwendete Methode ist „movej“ für „movejoints“, ihr Icon ist erkennbar am geschwungenen Weg
 zwischen den Zielen. Dabei werden die Punkte durch gegebene Gelenkstellungen beschrieben und
@@ -200,7 +201,7 @@ Geschwindigkeiten der Gelenke im Laufe des Fahrweges.
 worden sein. Sobald ein „target“ verändert wird, müssen auch alle „moves“, die dieses „target“
 verwenden, neu erstellt werden.
 
-Darstellung und Konfigurationen der Punkte
+#### Darstellung und Konfigurationen der Punkte
 Im UR5 Panel sind rechts unten sind die Positionen der Gelenke zu sehen (, die auch manuell bewegt
 werden können). Das Menü „Andere Konfigurationen“ zeigt meist zwischen 10 und 36 verschiedene
 Möglichkeiten an, in welchen Arten der Punkt erreicht werden kann. Bei einigen Kombinationen
@@ -219,7 +220,8 @@ werden können. Der Roboter…
 >• fährt zu Positionen unterhalb der Tischplatte oder
 >• bewegt seine Gelenke so, dass er sich selbst durchfahren würde.
 
-**Kollisions-Detektion** RoboDK bietet den Vorteil, Kollisionen eines beliebigen Roboterteils mit
+#### Kollisions-Detektion
+RoboDK bietet den Vorteil, Kollisionen eines beliebigen Roboterteils mit
 anderen Teilen zu detektieren. Ist diese Option eingeschaltet, so leuchtet ein grünes Häkchen vor
 dem Nuklear-Symbol in der oberen Leiste. Bei einer Kollision wird die Animation des Fahrprogramms
 gestoppt und beide kollidierenden Teile werden rot eingefärbt.
