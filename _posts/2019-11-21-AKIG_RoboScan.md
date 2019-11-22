@@ -265,6 +265,19 @@ Dort können sie in der letzten Zeile `export ROS_MASTER_URI=http://192.168.178.
 
 Arbeiten wir alle auf verschiedenen Ports, kommen sich die ROS Projekte nicht gegenseitig in die quere.
 
+Die für die Robotearmsteuerung benötigten Programme wurden von mir in ROS bereits kompiliert und somit für alle anderen auf den System auch ausführbar. Das Entwickeln und Aufbauen von ROS-Treibern zur Steuerung des Roboterarms oder des Lasertrackers sind zwar auch Teil der Arbeit der Ingenieurgeodäsie, jedoch würde dies den Rahmen der LVA übersteigen, daher nutzen wir die bisher erzeugte Infrastruktur. Wenn sich jemand von euch dafür interessiert, dann sprecht mich einfach darauf an. 
+
+Ähnlich wie bei dem Export des Ports, sagen wir dem eigenen Linux-System wo es den Treiber für den Roboterarm finden kann, damit wir diesen benutzen können. Dafür können wir abermals in jeder neuen Konsole das Setup "sourcen"
+```bash
+$ source /home/flinzer/Workspace/devel/setup.bash
+```
+oder eben diesen Befehl (analog zum Port) in die `.bashrc` schreiben. Hierfür die Datei erneut öffnen und den Befehl dort hinschreiben, sodass er automatisch bei jedem Konsolenstart ausgeführt wird. Das ganze sieht dann zum Beispiel so aus:
+```
+...
+export ROS_MASTER_URI=http://192.168.178.217:12555
+source /home/flinzer/Workspace/devel/setup.bash
+...
+```
 
 ```bash
 $ roslaunch igros_ur move_juri.launch joints_file:=/home/finn/workspace_ur/src/igros_ur/trajectories/tscan.txt speed_factor:=0.3
