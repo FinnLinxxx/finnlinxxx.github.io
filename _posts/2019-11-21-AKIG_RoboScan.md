@@ -295,46 +295,54 @@ $ roslaunch igros_ur move_juri.launch joints_file:=/home/myname/trajectories.txt
 ```
 Der Speedfaktor gibt in Prozent an wie schnell sich der Roboter gegenüber der Maximalgeschwindigkeit bewegen soll. Vor allem bei ersten Tests, sollte die Geschwindigkeit nicht zu hoch gewählt werden.
 
-Anhängen base an MAP
+Das Skript wird vor dem eigentlichen Verfahren anfragen, ob dies jetzt gewünscht ist (y/n). An dieser Stelle kann y ausgewält werden, um zu Verfahren oder es kann auf die weitere Interaktion mit dem Skript verzichtet werden, Winkelstelldaten und alles weitere werden jetzt schon an das ROS System übergeben.
+Siehe:
+```bash
+$ rostopic list
+```
+
+Wichtig ist noch in einer weiteren Konsole das Anhängen des Roboterarmsystems (base_link) an das übergeordnete System (map). 
+
 ```bash
 $ rosrun tf static_transform_publisher 0 0 0 0 0 0 map base_link 300
 ```
 
-Auf der anderen Seite anhängen Leverarm
+Sowie das anhängen des Leverarms an den tool0-Flansch
 ```bash
 $ rosrun tf static_transform_publisher 0.02 0 0.33 0.4 0 -0.78539816339 tool0 lever 300
 (oder ähnlich)
 ```
 
+Mit rviz lässt sich das ganze visualiseren, hierbei müssen die TFs visualisiert werden, wenn noch nicht hinzugefügt sind können diese mit Add->TF->Ok eingebunden werden. TFs, wie z.B. forearm_link, wrist_1_link, lever, etc. sollten dann entsprechend ihrer tatsächlichen aktuellen Pose angezeigt werden.
 ```bash
 $ rosrun rviz rviz
-(warum das?)
 ```
 
 
+Soll nun die aktuelle Situation oder eine bestimmte Messfahrt (sobald mal das proceed mit y bestätigt) als rosbag aufgenommen werden kann dies mit folgenden Befehl ausgeführt werden. Ist die Messfahrt beedendet bzw. möchte man die Aufnahme beenden kann dies durch drücken von Strg+C in der gleichen Konsole erfolgen.
 
 ```bash
 $ rosbag record -a
 ```
 
+Es können mehrere Rosbags aufgenommen werden, diese erhalten als Namen jeweils den Zeitpunkt der Aufnahme, es lohnt sich jedoch immer die namen zu verändern, damit man die einzelnen Rosbags besser auseinanderhalten kann. Das Rosbag wird an der Stelle gespeichert, an der man den record Befehl von oben ausgeführt hat. Umbenennen geht in Linux mit dem mv (move) Befehl z.B.
+```bash
+$ mv 2019-11-19-19-56-09.bag mybag.bag
+```
 
-Wieder abspielen
+
+Um nun das Rosbag erneut abzuspielen lohnt es sich alle Prozesse, bis auf den roscore zu beenden (Strg+C) oder zu schließen.
+Anschließend muss das Zeitsystem auf ein Simuliertes umgestellt werden. Zu beachten ist, dass wenn man nachher doch wieder eine neue 
+
 ```bash
 $ rosparam set use_sim_time 1
 (warum das?)
 ```
 
+Abspielen der Rosbag
 ```bash
-$ rosbag play thirdBagRecordSMOequal.bag --clock --loop
+$ rosbag play thisisa.bag --clock --loop
 ```
-
-
-
-
-Verfahrdaten auslesen und in TXT übertragen
-Ansteuern des Roboarms mit Skript von Thomas, was beachten?
-Leverarm anhängen (wieso geht das später nicht)
-Erzeugen eines Rosbags, Umbenennen
 
 
 ## Reproduzieren der Daten als Rosbag
@@ -366,7 +374,16 @@ $ rosrun pcl_ros pointcloud_to_pcd input:=/tscan_cloud2_global
 ```
 
 Zusammenfassen der pcds zu einer Ascii-Datei
-Öffnen der Punktwolke mit CloudCompare
+
+```bash
+$ printf '%s\n\n' "$(tail -n +30 *.pcd)" > ptcl_as_ascii.txt
+```
+
+Öffnen der Punktwolke mit CloudCompare zB.:
+
+```bash
+$ cloudcompare.CloudCompare ptcl_as_ascii.txt
+```
 
 Bekannte Probleme:
 Ansätze:
