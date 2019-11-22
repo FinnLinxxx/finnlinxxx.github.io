@@ -53,10 +53,10 @@ Zur Verfügung stehen ein:
 
 ## Aufnahme Punktwolke T-Scan
 
-T-Scan Spezifikation
+Zu beachten sind die [T-Scan Spezifikationen](https://w3.leica-geosystems.com/downloads123/m1/metrology/t-scan/brochures/leica%20t-scan%20brochure_de.pdf)m
 Anschluss der T-Scan (an den Computer)
-Scannercontroller starten
-Befehlsliste Scannercontroller
+Das Programm ScannerController liegt auf dem Desktop, diese muss gestartet werden bevor der Strom am eigentlichen Controller auf "ein" geschaltet wird. Es werden mehrere Ausgabeparameter in der Anzeige ausgegeben, bevor nach etwa 15 Sekunden 
+Befehlsliste ScannerController
 (als PDF)
 ```
 asc
