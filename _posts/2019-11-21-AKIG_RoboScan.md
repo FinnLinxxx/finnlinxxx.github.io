@@ -229,14 +229,14 @@ gestoppt und beide kollidierenden Teile werden rot eingefärbt.
 wurden, kann mit dem echten Roboter gearbeitet werden. Nach Knopfdruck von „PTP Bewegung
 ausführen“ leitet RoboDK die Befehle an den UR5 weiter.
 
-### Durchführen einer Roboterfahrt in ROS
+#### Erzeugen einer TXT Roboterarm Bewegungsdatei
 
 Vor dem eigentlichen Ansteuern des Roboterarms muss eine Textdatei erstellt werden, in der die Bewegungsabläufe sequenziell eingespeichert vorliegen. Eine einzelne Reihe beschreibt eindeutig die jeweils anzusteuernde Winkelposition aller 6 Schrittmotoren bzw. die anzufahrende Pose. Mehrere Reihen untereinander beschreiben eine Robotermessfahrt von Pose zu Pose. Diese Datei kann mit Hilfe von RoboDK erzeugt werden, da der Verfahrweg zwischen den Posen ohnehin dort auf Validität geprüft werden beziehen wir auch gleich die anzufahrenden Winkelpositionen darauß.
 `Keine Roboterfahrt darf durchgeführt werden, wenn die Machbarkeit nicht zuvor in RoboDK auf mögliche Kollisionen geprüft worden ist!`
 
-Wie eine solche Textdatei mit Hilfe von RoboDK erzeugt werden kann, habe ich einen einem kurzen Screencast auf TUWEL [hochgeladen](https://tuwel.tuwien.ac.at/mod/resource/view.php?id=712117) ([link zum TUWEL Kurs](https://tuwel.tuwien.ac.at/course/view.php?id=20221))
+Wie eine solche Textdatei mit Hilfe von RoboDK erzeugt werden kann, habe ich einen einem Screencast auf TUWEL [hochgeladen](https://tuwel.tuwien.ac.at/mod/resource/view.php?id=712117) ([link zum TUWEL Kurs](https://tuwel.tuwien.ac.at/course/view.php?id=20221)). Es ist durchaus möglich die oben benannte Verbindung zum Roboterarm in RoboDK aufzubauen, den Arm per Freedrive zu verschieben um anschleßend die aktuelle Position zu erfragen und in RoboDK anzuzeigen, um diese dann als Target abzuspeichern. Dies kann den Prozess zum Aufbau einer eigenen TXT Datei beschleunigen. Zu beachten ist, dass bei dem Verfahrweg auch die aufgesetzte T-Scan mit bedacht werden muss.
 
-
+### Durchführen einer Roboterfahrt in ROS
 
 Die Verbindung zum eigenen Linux-Nutzer kann auf den im Labor befindlichen Computern in ähnlicher Weise über Remote Desktop durchgeführt werden, wie bereits im ROS-Tutorial gezeigt. Dafür muss man sich an einen der Computer anmelden und das Program für die Remote Desktop Umgebung starten, die Verbindungs-IP lautet: `128.130.8.200:4889`, Nutzer und Passwort entsprechen der Domäne. Die virtuelle Linux Umgebung befindet sich im gleichen IP-Adressbereich wie alle anderen Sensoren der Ingenieurgeodäsie, daher können von hier aus auch der Lasertracker oder Roboterarm angesteuert werden. 
 
@@ -288,12 +288,12 @@ source /home/flinzer/Workspace/devel/setup.bash
 ...
 ```
 
-Anschließend sind wir in der Lage den einprogrammierten Bewegungsablauf an den Roboterarm zu übergeben und diesen kontrolliert ablaufen zu lassen.
-
+Anschließend sind wir in der Lage den einprogrammierten Bewegungsablauf an den Roboterarm zu übergeben und diesen kontrolliert ablaufen zu lassen. Übergebt eure eigene TXT Bewegungsdatei an das Skript, die TXT Datei muss irgendwo in eurem Verzeichnis `myname` abgelegt werden, z.B.:
 
 ```bash
-$ roslaunch igros_ur move_juri.launch joints_file:=/home/finn/workspace_ur/src/igros_ur/trajectories/tscan.txt speed_factor:=0.3
+$ roslaunch igros_ur move_juri.launch joints_file:=/home/myname/trajectories.txt speed_factor:=0.3
 ```
+Der Speedfaktor gibt in Prozent an wie schnell sich der Roboter gegenüber der Maximalgeschwindigkeit bewegen soll. Vor allem bei ersten Tests, sollte die Geschwindigkeit nicht zu hoch gewählt werden.
 
 Anhängen base an MAP
 ```bash
