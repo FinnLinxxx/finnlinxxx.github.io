@@ -131,8 +131,51 @@ inklusive der beiden Koordinatensysteme (KOS) von Basis und Tool (bzw. Target) C
 
 ![robodkimg](https://github.com/FinnLinxxx/akig/blob/master/manual/img/screenshot_RoboDK.png)
 
+Programmoberfläche Im linken Balken in der Grafik sind gelistet: Basis, Roboter UR5,
+anschließend alle von ihm erreichbaren Ziele (samt deren KOS) und darunter als Fahrprogramme die
+Prüfmuster mit deren vorgegebenen Abfolgen der anzufahrenden Punkte. [BSc-Arbeit Jansky]
 
-Inbetriebnahme
+>Ein Doppelklick auf den Roboter UR5 links oben öffnet das UR5 Panel, das die ganze rechte Seite einnimmt und vielerlei Eingaben ermöglicht. Drei KOS sind hier ersichtlich, die oberen beiden wurden bisher immer auf sechsmal 0 belassen. In der untersten bunten Zeile kann der Bezug des TCP (bzw. Werkzeugrahmen) zum BasisKOS als Pose manipuliert werden. Eine Pose besteht aus 6 Parametern: 3 für die Lage (Translation in [x,y,z]) und 3 für die dortige Orientierung [Rx, Ry, Rz]. Es ist dabei auf die Einheit der Winkel zu achten (Grad oder Radiant). Ebenso kann hier die Orientierung des TCP und ein kollisionsfreier Ortswechsel (siehe später) erprobt werden. 
+>Der Knopf „Get Position“ fragt RoboDK die aktuelle Position am Roboter ab und stellt sie dar. 
+
+Erstellen von Programmen Für einen Bewegungsablauf am Roboter wird in UR5 ein Programm
+geschrieben, das man auch als Endlosschleife laufen lassen kann. Beim Erstellen eines Programmes
+(in der Abbildung ist Prog1 zu sehen) wird zuerst ein Bezugssystem definiert. Optional können auch
+Geschwindigkeitsbeschränkungen für lineare Bewegungen oder für Rotationen festgelegt werden.
+
+Bewegung zu einem Punkt RoboDK kennt zwei Arten für das Erreichen eines Punktes. Die
+empfohlene und bisher einzige verwendete Methode ist „movej“ für „movejoints“, ihr Icon ist
+erkennbar am geschwungenen Weg zwischen den Zielen. Dabei werden die Punkte durch gegebene
+Gelenkstellungen beschrieben und der Weg zwischen ihnen als Differenz der Gelenkwinkel gefahren.
+Die andere Funktion „move“ steht für eine Linearbewegung zum Ziel. Dabei werden die Gelenke so
+bewegt, dass das Werkstück entlang einer Linie bewegt wird. Dies führt zu unterschiedlichen
+Geschwindigkeiten der Gelenke im Laufe des Fahrweges. 
+
+>Um einen Fahrweg zu programmieren, wird zuerst links in der Liste der anzufahrende Punkt ausgewählt und erst dann die Art der Bewegung dorthin eingegeben. 
+
+Darstellung und Konfigurationen der Punkte Im UR5 Panel sind rechts unten sind die Positionen
+der Gelenke zu sehen (, die auch manuell bewegt werden können). Das Menü „Andere
+Konfigurationen“ zeigt meist zwischen 10 und 36 verschiedene Möglichkeiten an, in welchen Arten
+der Punkt erreicht werden kann. Bei einigen Kombinationen unterscheidet sich nur ein Gelenk um
+360°. Entscheidend ist hier aber, ob der Ellbogen des Roboters über oder unter dem TCP liegt und
+wie die Wrists zueinanderstehen. Für einen Einzelpunkt kommen mehrere Konfigurationen in Frage,
+aber je komplexer die Fahrmuster werden, desto eingeschränkter die Wahlmöglichkeit – vor allem
+dann, wenn die montierte T-Probe den Sichtkontakt zum Lasertracker nicht verlieren darf. 
+
+>Um die Gelenkstellungen von Punkten aus der Liste links zu sehen, muss auf diese Punkte ein Doppelklick erfolgen. Die Animation des Fahrweges entfällt und es wird die Situation am Ziel gezeigt (mit Gelenkstellungen wie eingegeben).
+Bei einfachem Klick hingegen simuliert RoboDK lediglich das Anfahren der gewünschten Position und Orientierung, meist auf kürzestem Weg. Nicht selten kommt es dabei vor, dass „unmögliche“ Wege entstehen, die nicht gefahren werden können. Der Roboter…
+>* fährt zu Positionen unterhalb der Tischplatte oder
+>* bewegt seine Gelenke so, dass er sich selbst durchfahren würde.
+>Werden Winkelwerte der Punkte nach Erstellen des Programms geändert, so werden sie dort nicht übernommen. Geänderte Punkte sind neu in den Programmablauf zu laden! 
+
+Kollisions-Detektion RoboDK bietet den Vorteil, Kollisionen eines beliebigen Roboterteils mit
+anderen Teilen zu detektieren. Ist diese Option eingeschaltet, so leuchtet ein grünes Häkchen vor
+dem Nuklear-Symbol in der oberen Leiste. Bei einer Kollision wird die Animation des Fahrprogramms
+gestoppt und beide kollidierenden Teile werden rot eingefärbt. 
+
+>Wenn alle Fahrmuster mit ihren Targets eingestellt und ausreichend in der Simulation getestet wurden, kann mit dem echten Roboter gearbeitet werden. Nach Knopfdruck von „PTP Bewegung ausführen“ leitet RoboDK die Befehle an den UR5 weiter. 
+
+### Inbetriebnahme
 ```bash
 $ roscore
 ```
