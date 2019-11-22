@@ -231,6 +231,13 @@ ausführen“ leitet RoboDK die Befehle an den UR5 weiter.
 
 ### Durchführen einer Roboterfahrt in ROS
 
+Vor dem eigentlichen Ansteuern des Roboterarms muss eine Textdatei erstellt werden, in der die Bewegungsabläufe sequenziell eingespeichert vorliegen. Eine einzelne Reihe beschreibt eindeutig die jeweils anzusteuernde Winkelposition aller 6 Schrittmotoren bzw. die anzufahrende Pose. Mehrere Reihen untereinander beschreiben eine Robotermessfahrt von Pose zu Pose. Diese Datei kann mit Hilfe von RoboDK erzeugt werden, da der Verfahrweg zwischen den Posen ohnehin dort auf Validität geprüft werden beziehen wir auch gleich die anzufahrenden Winkelpositionen darauß.
+`Keine Roboterfahrt darf durchgeführt werden, wenn die Machbarkeit nicht zuvor in RoboDK auf mögliche Kollisionen geprüft worden ist!`
+
+Wie eine solche Textdatei mit Hilfe von RoboDK erzeugt werden kann, habe ich einen einem kurzen Screencast auf TUWEL [hochgeladen](https://tuwel.tuwien.ac.at/mod/resource/view.php?id=712117) ([link zum TUWEL Kurs](https://tuwel.tuwien.ac.at/course/view.php?id=20221))
+
+
+
 Die Verbindung zum eigenen Linux-Nutzer kann auf den im Labor befindlichen Computern in ähnlicher Weise über Remote Desktop durchgeführt werden, wie bereits im ROS-Tutorial gezeigt. Dafür muss man sich an einen der Computer anmelden und das Program für die Remote Desktop Umgebung starten, die Verbindungs-IP lautet: `128.130.8.200:4889`, Nutzer und Passwort entsprechen der Domäne. Die virtuelle Linux Umgebung befindet sich im gleichen IP-Adressbereich wie alle anderen Sensoren der Ingenieurgeodäsie, daher können von hier aus auch der Lasertracker oder Roboterarm angesteuert werden. 
 
 Um die Verbindung zu testen, eignet es sich einen Ping auf den eingeschalteten Roboterarm durchzuführen, dieser hat die feste IP 192.168.178.5, öffnen sie also ein Konsolenfenster (Strg + Alt + T, ö.ä.) und führen sie folgenden Befehl aus.
@@ -267,11 +274,13 @@ Arbeiten wir alle auf verschiedenen Ports, kommen sich die ROS Projekte nicht ge
 
 Die für die Robotearmsteuerung benötigten Programme wurden von mir in ROS bereits kompiliert und somit für alle anderen auf den System auch ausführbar. Das Entwickeln und Aufbauen von ROS-Treibern zur Steuerung des Roboterarms oder des Lasertrackers sind zwar auch Teil der Arbeit der Ingenieurgeodäsie, jedoch würde dies den Rahmen der LVA übersteigen, daher nutzen wir die bisher erzeugte Infrastruktur. Wenn sich jemand von euch dafür interessiert, dann sprecht mich einfach darauf an. 
 
-Ähnlich wie bei dem Export des Ports, sagen wir dem eigenen Linux-System wo es den Treiber für den Roboterarm finden kann, damit wir diesen benutzen können. Dafür können wir abermals in jeder neuen Konsole das Setup "sourcen"
+Ähnlich wie bei dem Export des Ports, sagen wir dem eigenen Linux-System wo es den Treiber für den Roboterarm finden kann, damit wir diesen benutzen können. Dieser befindet sich unter meinem Benutzernamen `flinzer` daher ist es wichtig, dass ihr genau diesen Pfad wählt. Damit das klappt könnten wir abermals in jeder neuen Konsole das Setup "sourcen"
 ```bash
 $ source /home/flinzer/Workspace/devel/setup.bash
 ```
 oder eben diesen Befehl (analog zum Port) in die `.bashrc` schreiben. Hierfür die Datei erneut öffnen und den Befehl dort hinschreiben, sodass er automatisch bei jedem Konsolenstart ausgeführt wird. Das ganze sieht dann zum Beispiel so aus:
+
+
 ```
 ...
 export ROS_MASTER_URI=http://192.168.178.217:12555
@@ -279,13 +288,22 @@ source /home/flinzer/Workspace/devel/setup.bash
 ...
 ```
 
+Anschließend sind wir in der Lage den einprogrammierten Bewegungsablauf an den Roboterarm zu übergeben und diesen kontrolliert ablaufen zu lassen.
+
+
 ```bash
 $ roslaunch igros_ur move_juri.launch joints_file:=/home/finn/workspace_ur/src/igros_ur/trajectories/tscan.txt speed_factor:=0.3
 ```
 
+Anhängen base an MAP
 ```bash
-$ rosparam set use_sim_time 1
-(warum das?)
+$ rosrun tf static_transform_publisher 0 0 0 0 0 0 map base_link 300
+```
+
+Auf der anderen Seite anhängen Leverarm
+```bash
+$ rosrun tf static_transform_publisher 0.02 0 0.33 0.4 0 -0.78539816339 tool0 lever 300
+(oder ähnlich)
 ```
 
 ```bash
@@ -294,18 +312,23 @@ $ rosrun rviz rviz
 ```
 
 
+
+```bash
+$ rosbag record -a
+```
+
+
+Wieder abspielen
+```bash
+$ rosparam set use_sim_time 1
+(warum das?)
+```
+
 ```bash
 $ rosbag play thirdBagRecordSMOequal.bag --clock --loop
 ```
 
-```bash
-$ rosrun tf static_transform_publisher 0 0 0 0 0 0 map base_link 300
-```
 
-```bash
-$ rosrun tf static_transform_publisher 0.02 0 0.33 0.4 0 -0.78539816339 tool0 lever 300
-(oder ähnlich)
-```
 
 
 Verfahrdaten auslesen und in TXT übertragen
