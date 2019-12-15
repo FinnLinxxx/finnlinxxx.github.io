@@ -53,23 +53,24 @@ Die zwei Daten die ich dafür in das Matlab Skript eingeladen habe sehen wie fol
 6 6148.232 4113.892 -616.878   1.237    0.090  -2.486
 
 Ergebnis:
-
-   -0.0036 - rx
+  -0.0036 - rx
    
-    0.0053 - ry
+   0.0053 - ry
     
-    0.6108 - rz
+   0.6108 - rz
     
-    6.0950 - dx
+   6.0950 - dx
     
-    4.4852 - dy
+   4.4852 - dy
     
-   -0.6136 - dz
+  -0.6136 - dz
    
-    0.0162 - lever_dx
+   0.0162 - lever_dx
     
-   -0.0040 - lever_dy
+  -0.0040 - lever_dy
    
-    0.3692 - lever_dz
-    
-    `Zu beachten sind die gewählten Koordinatensysteme`, sozeigt beispiel
+   0.3692 - lever_dz
+  
+ `Zu beachten sind die gewählten Koordinatensysteme!` so zeigt zum Beispiel bei den hier gewählten Daten die HZ=0 Achse des Lasertrackers nicht in Richtung der Y-Achse (Herrstellerdefinition), sondern in Richtung X-Achse. Die angegebene Verdrehung des UR_base-Systems von 0.6108 Radiant ist plausibel, zeigt die Y-Achse nun wie vom Hersteller angegeben in Richtung des Kabelausgangs am Sockel des UR selbst. Für die vollständige integrität des Systems ist dies wichtig, denn nun sind auch die Berechnungen zum tool0 hin über die DH-Parameter und das DH-Skript (forward_kinematic.py) plausibel.
+ 
+ 
