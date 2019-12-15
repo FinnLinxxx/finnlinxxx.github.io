@@ -52,4 +52,24 @@ Die zwei Daten die ich dafür in das Matlab Skript eingeladen habe sehen wie fol
 
 6 6148.232 4113.892 -616.878   1.237    0.090  -2.486
 
+Ergebnis:
 
+   -0.0036 - rx
+   
+    0.0053 - ry
+    
+    0.6108 - rz
+    
+    6.0950 - dx
+    
+    4.4852 - dy
+    
+   -0.6136 - dz
+   
+    0.0162 - lever_dx
+    
+   -0.0040 - lever_dy
+   
+    0.3692 - lever_dz
+    
+    `Zu beachten sind die gewählten Koordinatensysteme`, sozeigt beispiel
