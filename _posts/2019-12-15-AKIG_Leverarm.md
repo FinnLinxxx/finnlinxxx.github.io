@@ -87,8 +87,9 @@ $ rosrun rviz rviz
 Aus der Ausgleichung wissen wir die Beziehung map zu base_link
 ```bash
 $ rosrun tf static_transform_publisher 6.0950 4.4852 -0.6136 0.6108 0.0053 -0.0036 map base_link 300
-(definition beachten! static_transform_publisher x y z yaw pitch roll frame_id child_frame_id  period)
 ```
+(definition beachten! static_transform_publisher x y z yaw pitch roll frame_id child_frame_id  period)
+
 Aus dem Skript `forward_kinematic.py` oder von ROS selbst wissen wir die Pose tool0 (gegenüber base_link)
 z.b. `0.14190628 -0.33053733  0.26661017 -0.42212532  0.5597224  -0.71310662  0.85309395  0.51136504 -0.10361716  0.30666094 -0.65208637 -0.69335592`
 
@@ -100,7 +101,7 @@ Die ersten 3 Werte sind X,Y,Z von tool0 gegenüber base_link, die weiteren 9 Wer
 ans =
 
     2.0303   -0.3117   -2.3869
-`
+```
 
 ```bash
 $ rosrun tf static_transform_publisher 0.142 -0.3305 0.2666 2.0303 -0.3117 -2.3869 base_link tool0_calc 300
