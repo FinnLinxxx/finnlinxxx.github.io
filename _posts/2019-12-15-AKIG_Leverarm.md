@@ -4,7 +4,7 @@
 Zuerst kann als grobe Näherung für den Leverarm folgende Werte genutzt werden
 
 ```bash
-$ rosrun tf static_transform_publisher 0.0162 -0.0040 0.3692 -1.032 -0.814 -1.748 tool0 tscan_pose_neaherung 300
+$ rosrun tf static_transform_publisher 0.0162 -0.0040 0.3692 -1.032 -0.814 -1.748 tool0_calc tscan_pose_neaherung 300
 ```
 Mit der Annahme, dass das Koordinatensystem wie folgend dargestellt liegt.
 ![coordsysur5flansch](https://github.com/FinnLinxxx/akig/blob/master/manual/img/coordSysUr5_flansch.png)
@@ -109,4 +109,26 @@ $ rosrun tf static_transform_publisher 0.142 -0.3305 0.2666 2.0303 -0.3117 -2.38
 (eventuell in matlab noch die Genauigkeit mit format longg erhöhen)
 
 
+Wenn wir jetzt also den Leverarm (Näherung) anbringen, sollte auch dieser plausibel dargestellt werden.
+```bash
+$ rosrun tf static_transform_publisher 0.0162 -0.0040 0.3692 -1.032 -0.814 -1.748 tool0_calc tscan_pose_neaherung 300
+```
+
+Auf diesen Frame (tscan_pose_neaherung) können wir nun mit einem Skript aus dem AKIG Ordner die dort aufgenommene Scanline der T-Scan (T-Scan Zentrisch) anbringen und darstellen. 
+
+Innerhalb dieser Skripte ist die Variable filename_scan entsprechend anzupassen, eventuell auch die Variable die den parent_frame angibt.
+
+(siehe /akig/source/global_tscan_ptcl/publishSingleTScanCenter/publishSinglePtcl.py)
+```bash
+$ cd akig/source/global_tscan_ptcl/publishSingleTScanCenter
+$ ./publishSinglePtcl.py
+```
+
+Beim zweiten Skript kann auf das TF Map die LT-Zentrische Punktwolke (unsere Referenz) gemappt werden.
+```bash
+$ cd akig/source/global_tscan_ptcl/publishSingleLTCenter
+$ ./publishSinglePtclLTCenter_matlab.py 
+```
+
+Die beiden Punktwolken sollten in rviz näherungsweise übereinander liegen.
 
