@@ -73,4 +73,21 @@ Ergebnis:
   
  `Zu beachten sind die gewählten Koordinatensysteme!` so zeigt zum Beispiel bei den hier gewählten Daten die HZ=0 Achse des Lasertrackers nicht in Richtung der Y-Achse (Herrstellerdefinition), sondern in Richtung X-Achse. Die angegebene Verdrehung des UR_base-Systems von 0.6108 Radiant ist plausibel, zeigt die Y-Achse nun wie vom Hersteller angegeben in Richtung des Kabelausgangs am Sockel des UR selbst. Für die vollständige integrität des Systems ist dies wichtig, denn nun sind auch die Berechnungen zum tool0 hin über die DH-Parameter und das DH-Skript (forward_kinematic.py) plausibel.
  
+ ## Transformation
  
+ Um den Roscore zu starten (eventuell Port mit angeben über das -p argument)
+ ```bash
+ $ roscore
+ ```
+
+Nun rviz starten und dort den "ADD" Button klicken, TF auswählen
+```bash
+$ rosrun rviz rviz
+```
+Aus der Ausgleichung wissen wir die Beziehung map zu base_link
+```bash
+$ rosrun tf static_transform_publisher 6.0950 4.4852 -0.6136 0.6108 0.0053 -0.0036 map base_link 300
+(definition beachten! static_transform_publisher x y z yaw pitch roll frame_id child_frame_id  period)
+```
+Aus dem Skript `forward_kinematic.py` oder von ROS selbst wissen wir die Pose tool0
+z.b. `0.14190628 -0.33053733  0.26661017 -0.42212532  0.5597224  -0.71310662  0.85309395  0.51136504 -0.10361716  0.30666094 -0.65208637 -0.69335592`
