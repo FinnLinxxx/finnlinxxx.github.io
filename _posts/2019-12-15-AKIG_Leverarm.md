@@ -4,7 +4,7 @@
 Zuerst kann als grobe Näherung für den Leverarm folgende Werte genutzt werden
 
 ```bash
-$ rosrun tf static_transform_publisher 0.014 -0.006 0.373 -1.032 -0.814 -1.748 tool0 tscan_pose_neaherung 300
+$ rosrun tf static_transform_publisher 0.0162 -0.0040 0.3692 -1.032 -0.814 -1.748 tool0 tscan_pose_neaherung 300
 ```
 Mit der Annahme, dass das Koordinatensystem wie folgend dargestellt liegt.
 ![coordsysur5flansch](https://github.com/FinnLinxxx/akig/blob/master/manual/img/coordSysUr5_flansch.png)
