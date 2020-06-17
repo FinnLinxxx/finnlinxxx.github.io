@@ -28,7 +28,7 @@ dt = 10*60 % Zeitintervall zwischen Messungen in Sekunden (zB. 600 Sekunden für
 ```matlab
 Fs = 1/dt; %sampling frequency(Hz)
 T = 1/Fs;             % Sampling period  
-L = length(datarow);             % Length of signal
+L = length(datarow);  % Length of signal
 t = (0:L-1)*T;        % Time vector
 Y = fft(datarow);
 
@@ -50,3 +50,6 @@ FFT suggeriert einen Anteil bei 0.0000117 Hz was etwa 85470 Sekunden
 also 1424 Minuten oder fast einem Tag entsprechen würde. Ist ein solcher Peak zu finden, lässt sich dieser einfach erklären, 
 da beispielweise Temperaturmessungen natürlich mit dem Tagesverlauf hin- und her schwanken. 
 Für andere Einflüsse müssen bei aufdecken ebendieser durch die FFT ebenfalls Interpretationen gefunden werden.
+
+### Matlab Dokumentation
+siehe auch: https://de.mathworks.com/help/matlab/ref/fft.html
