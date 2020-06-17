@@ -51,5 +51,7 @@ also 1424 Minuten oder fast einem Tag entsprechen würde. Ist ein solcher Peak z
 da beispielweise Temperaturmessungen natürlich mit dem Tagesverlauf hin- und her schwanken. 
 Für andere Einflüsse müssen bei aufdecken ebendieser durch die FFT ebenfalls Interpretationen gefunden werden.
 
+Wir können nur solche Frequenzeinflüsse messen die der halben Gesamt-Messzeit entspricht. Um einen Tagesabhängigen Einfluss zu ermitteln (~1/0.000017) muss demnach mindestens zwei Tage, besser mehr gemessen werden.
+
 ### Matlab Dokumentation
 siehe auch: https://de.mathworks.com/help/matlab/ref/fft.html
