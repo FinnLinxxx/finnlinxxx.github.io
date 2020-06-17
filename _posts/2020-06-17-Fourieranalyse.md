@@ -53,5 +53,7 @@ Für andere Einflüsse müssen bei aufdecken ebendieser durch die FFT ebenfalls 
 
 Wir können nur solche Frequenzeinflüsse messen die der halben Gesamt-Messzeit entspricht. Um einen Tagesabhängigen Einfluss zu ermitteln (~1/0.000017) muss demnach mindestens zwei Tage, besser mehr gemessen werden.
 
+Außerdem können maximal Frequenzen ermittelt werden die die halbe Messfrequenz haben (Nyquist-Frequenz). Nehmen wir an wir messen eine größe mit 1000Hz (1000/2), können maximal Frequenzen mit 500Hz festgestellt werden. Nehmen wir an wir messen alle 600 Sekunden, dann entspräche das einer Hertz-Zahl von (1/600) 0.001667 Hz, es können also maximal Frequenzen mit (0.001667/2) 0.00083350 Hz aufgedeckt werden. Die entspräche der doppelten Zeit zwischen zwei Messzeitpunkten, bei 1000Hz eben 0.002 (500 Hz) Sekunden, bei 1/600 Hz (0.001667 Hz) eben 1200 (0.0008333 Hz) Sekunden.
+
 ### Matlab Dokumentation
 siehe auch: https://de.mathworks.com/help/matlab/ref/fft.html
