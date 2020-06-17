@@ -1,0 +1,20 @@
+# Einfache Fourieranalyse mit Octave/Matlab
+
+Eine einfache Datenreihe muss vorliegen, die Datenpunkte müssen einem einzigen Kontext entsprechen (zB. Temperaturmessung) und 
+vom zeitlichen Abstand her Äquidistant gemessen worden sein oder bereits dahingehend umgerechnet vorliegen.
+
+Zunächst muss diese Datenreihe von systematischen Anteilen befreit werden, zb.: durch Reduktion nach Mittelwert und Trend.
+
+`datarow` sei die Datenreihe (mit n Daten)
+
+```matlab
+p = polyfit(1:length(datarow),datarow,1);
+```
+
+Anbringen des Mittelwertes (p(2)) und anbringen des Trend (p(1)).
+```matlab
+datarow = datarow - p(2); 
+for i = 1:length(datarow)   
+  datarow(i) = datarow(i) - i * p(1);
+end
+```
