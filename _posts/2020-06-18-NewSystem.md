@@ -65,25 +65,27 @@ add aliases to bashrc
 
 ```bash
 # Network-Data Mount/uMount
-alias fl='sudo mount -t cifs //GEO/Home/staff/flinzer /shares/finn/home -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/home'
+alias fl='sudo mount -t cifs //GEO/Home/staff/flinzer /shares/finn/home -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/home'
 alias ufl='cd ~; sudo umount /shares/finn/home'
 
-alias ig='sudo mount -t cifs //GEO/IG /shares/finn/IG -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/IG'
+alias ig='sudo mount -t cifs //GEO/IG /shares/finn/IG -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/IG'
 alias uig='cd ~; sudo umount /shares/finn/IG'
 
-alias te='sudo mount -t cifs //GEO/TEACHING /shares/finn/teaching -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/teaching'
+alias te='sudo mount -t cifs //GEO/TEACHING /shares/finn/teaching -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/teaching'
 alias ute='cd ~; sudo umount /shares/finn/teaching'
 
-alias so='sudo mount -t cifs //GEO/software /shares/finn/software -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/software'
+alias so='sudo mount -t cifs //GEO/software /shares/finn/software -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/software'
 alias uso='cd ~; sudo umount /shares/finn/software'
 
-alias ex='sudo mount -t cifs //GEO/EXCHANGE /shares/finn/exchange -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/exchange'
+alias ex='sudo mount -t cifs //GEO/EXCHANGE /shares/finn/exchange -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/exchange'
 alias uex='cd ~; sudo umount /shares/finn/exchange'
 
-alias co='sudo mount -t cifs //GEO/COMMON /shares/finn/common -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/common'
+alias co='sudo mount -t cifs //GEO/COMMON /shares/finn/common -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/common'
 alias uco='cd ~; sudo umount /shares/finn/common'
 
 alias flhelp='echo -e "\$fl - flinzer (H:)\n\$ig - ENGINEERING GEODESY (I:)\n\$te - TEACHING (T:)\n\$so - SOFTWARE (S:)\n\$ex - EXCHANGE (X:)\n\$co - COMMON (Q:)"'
+
+
 ```
 
 create folders 
