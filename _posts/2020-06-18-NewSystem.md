@@ -5,7 +5,7 @@ certificate is required, `MSCHAPv2 (no EAP)`, username for me is flinzer@tuwien.
 
 
 ```bash
-$ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted xrdp
+$ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted xrdp nfs-common cifs-utils
 ```
 You may be able to recover more programs if you scan through your old bash_history
 
@@ -45,3 +45,48 @@ sudo usermod -aG lpadmin finn
 sudo usermod -aG sambashare finn
 sudo usermod -aG xrdp finn
 ```
+
+--- 
+base 16 follow installation guildeline for bash 
+https://github.com/chriskempson/base16-shell
+and for vim
+https://github.com/chriskempson/base16-vim
+
+--- 
+samba shares access
+
+add aliases to bashrc
+
+```bash
+# Network-Data Mount/uMount
+alias fl='sudo mount -t cifs //GEO/Home/staff/flinzer /shares/finn/home -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/home'
+alias ufl='cd ~; sudo umount /shares/finn/home'
+
+alias ig='sudo mount -t cifs //GEO/IG /shares/finn/IG -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/IG'
+alias uig='cd ~; sudo umount /shares/finn/IG'
+
+alias te='sudo mount -t cifs //GEO/TEACHING /shares/finn/teaching -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/teaching'
+alias ute='cd ~; sudo umount /shares/finn/teaching'
+
+alias so='sudo mount -t cifs //GEO/software /shares/finn/software -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/software'
+alias uso='cd ~; sudo umount /shares/finn/software'
+
+alias ex='sudo mount -t cifs //GEO/EXCHANGE /shares/finn/exchange -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/exchange'
+alias uex='cd ~; sudo umount /shares/finn/exchange'
+
+alias co='sudo mount -t cifs //GEO/COMMON /shares/finn/common -o username=flinzer,uid=1001,gid=1001; cd /shares/finn/common'
+alias uco='cd ~; sudo umount /shares/finn/common'
+
+alias flhelp='echo -e "\$fl - flinzer (H:)\n\$ig - ENGINEERING GEODESY (I:)\n\$te - TEACHING (T:)\n\$so - SOFTWARE (S:)\n\$ex - EXCHANGE (X:)\n\$co - COMMON (Q:)"'
+```
+
+create folders 
+```bash
+$ sudo mkdir -p /shares/finn/home
+$ sudo mkdir /shares/finn/IG
+$ sudo mkdir /shares/finn/teaching
+$ sudo mkdir /shares/finn/software
+$ sudo mkdir /shares/finn/exchange
+$ sudo mkdir /shares/finn/common
+```
+It does work with DHCP at Freihaus, it may not work properly at Gusshaus.
