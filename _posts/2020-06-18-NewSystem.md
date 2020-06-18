@@ -1,5 +1,11 @@
 # After Ubuntu 20.04 installation
 
+First things first
+```bash
+$ sudo apt update
+$ sudo apt upgrade
+```
+
 Login into `tunet`-wifi, with `WPA & WPA2 Enterprise`, `Tunneled TLS`, leave the following fields empty and choose No CA 
 certificate is required, `MSCHAPv2 (no EAP)`, username for me is flinzer@tuwien.ac.at, my password starts with: ig...
 
@@ -90,3 +96,7 @@ $ sudo mkdir /shares/finn/exchange
 $ sudo mkdir /shares/finn/common
 ```
 It does work with DHCP at Freihaus, it may not work properly at Gusshaus.
+
+---
+ros
+
