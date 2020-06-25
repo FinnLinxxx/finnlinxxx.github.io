@@ -11,7 +11,7 @@ certificate is required, `MSCHAPv2 (no EAP)`, username for me is flinzer@tuwien.
 
 
 ```bash
-$ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted xrdp nfs-common cifs-utils cloudcompare
+$ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted xrdp nfs-common cifs-utils cloudcompare suckless-tools openssh-server
 ```
 You may be able to recover more programs if you scan through your old bash_history
 
