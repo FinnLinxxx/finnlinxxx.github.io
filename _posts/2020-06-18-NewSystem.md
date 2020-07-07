@@ -24,6 +24,11 @@ HISTSIZE=
 HISTFILESIZE=
 ```
 
+Damit git nicht jedes mal nach dem Passwort fragt, sondern nur alle 3600 Sekunden (1 Stunde)
+```bash
+$ git config --global credential.helper 'cache --timeout=3600'
+```
+
 Generate a Public-SSH-Key:
 ```bash
 $ ssh-keygen -t rsa -b 4096 -C "finn.linzer@tuwien.ac.at"
