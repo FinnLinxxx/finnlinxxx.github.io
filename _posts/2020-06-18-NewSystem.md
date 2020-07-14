@@ -105,5 +105,40 @@ $ sudo mkdir /shares/finn/common
 It does work with DHCP at Freihaus, it may not work properly at Gusshaus.
 
 ---
+
+
+--- 
+Jag3D bzw Java14 installation
+
+Den aktuellen Release für JAG3D kann man von Github laden (linux Version):
+https://github.com/loesler/applied-geodesy/releases
+
+Die Zip habe ich in einen extra anglegten ordner unter /Programs/JAG3D entpackt (GUI extract).
+
+```bash
+$ mkdir ~/Programs/JAG3D
+```
+
+
+die darin befindliche .jar kann mit Java 14 geöffnet werden, hierfür müssen wir das System noch Javamäßig updaten:
+( https://computingforgeeks.com/install-oracle-java-openjdk-14-on-ubuntu-debian-linux/ )
+
+```bash
+$ sudo apt update
+$ sudo add-apt-repository ppa:linuxuprising/java
+$ sudo apt -y install oracle-java14-installer
+$ sudo apt -y install oracle-java14-set-default
+$ java -version
+```
+
+Die Java-Version sollte jetzt 14 lauten.
+
+Starten von JAG3D dann mit
+```bash
+$ java -jar /home/finn/Programs/JAG3D/jag3d.jar
+```
+oder besser gleich als alias `alias jag3d='java -jar /home/finn/Programs/JAG3D/jag3d.jar'` in die bashrc.
+
+---
 ros
 
