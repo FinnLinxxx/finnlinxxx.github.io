@@ -140,5 +140,15 @@ $ java -jar /home/finn/Programs/JAG3D/jag3d.jar
 oder besser gleich als alias `alias jag3d='java -jar /home/finn/Programs/JAG3D/jag3d.jar'` in die bashrc.
 
 ---
+Matlab
+
+Nach einem Telefonat mit der GEO-IT wurde meinem Account eine persönliche Matlab Lizenz zugewiesen, die durch einloggen im Account abgerufen werden kann.
+Die Installation erfolgt dann nach (online) Anleitung.
+
+Damit Matlab das GTK Module findet habe ich nocht den Path dahin in die .bashrc geschrieben
+`export GTK_PATH=/usr/lib/x86_64-linux-gnu/gtk-2.0` 
+
+
+---
 ros
 
