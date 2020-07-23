@@ -11,7 +11,7 @@ certificate is required, `MSCHAPv2 (no EAP)`, username for me is flinzer@tuwien.
 
 
 ```bash
-$ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted xrdp nfs-common cifs-utils cloudcompare suckless-tools openssh-server python3-pip codeblocks
+$ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted xrdp nfs-common cifs-utils cloudcompare suckless-tools openssh-server python3-pip codeblocks wireshark cmatrix libcanberra-gtk-module libcanberra-gtk3-module libreoffice libreoffice-l10n-de libreoffice-help-de 
 ```
 You may be able to recover more programs if you scan through your old bash_history
 
@@ -147,6 +147,9 @@ Die Installation erfolgt dann nach (online) Anleitung.
 
 Damit Matlab das GTK Module findet habe ich nocht den Path dahin in die .bashrc geschrieben
 `export GTK_PATH=/usr/lib/x86_64-linux-gnu/gtk-2.0` 
+
+Außerdem sollte man die Keyboard shortcuts von `emacs` auf windows umstellen (strg+c, strg+v, usw.). Dafür unter Preferences>>Keyboard>>Shortcuts oben bei `active settings` im drop Menü auswählen.
+https://de.mathworks.com/help/matlab/matlab_env/keyboard-shortcuts.html
 
 
 ---
