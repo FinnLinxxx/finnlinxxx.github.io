@@ -15,6 +15,9 @@ $ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive lib
 ```
 You may be able to recover more programs if you scan through your old bash_history
 
+Install mysql-workbench from .deb as stated under https://askubuntu.com/questions/1230752/mysql-workbench-not-supporting-with-ubuntu-20-04-lts
+Maybe mysql-workbench is available via apt, maybe not.
+
 Log-in in chromium into google Account
 
 Go into .bashrc and remove numbers from HISTSIZE AND HISTFILESIZE to gain infinite bash_history.
