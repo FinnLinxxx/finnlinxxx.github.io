@@ -1,5 +1,7 @@
 # After Ubuntu 20.04 installation
 
+Log 13.08.2020: Had a little accident Ubuntu-Database wise. Had to reinstall first week of August again. Things went kind of flawless
+
 First things first
 ```bash
 $ sudo apt update
@@ -11,8 +13,15 @@ certificate is required, `MSCHAPv2 (no EAP)`, username for me is flinzer@tuwien.
 
 
 ```bash
-$ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted xrdp nfs-common cifs-utils cloudcompare suckless-tools openssh-server python3-pip codeblocks wireshark cmatrix libcanberra-gtk-module libcanberra-gtk3-module libreoffice libreoffice-l10n-de libreoffice-help-de mysql-server
+$ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted xrdp nfs-common cifs-utils cloudcompare suckless-tools openssh-server python3-pip codeblocks wireshark cmatrix libcanberra-gtk-module libcanberra-gtk3-module libreoffice libreoffice-l10n-de libreoffice-help-de mysql-server 
 ```
+
+Try to install mysql-workbench-community with apt, otherwise download mysql-workbench .deb from Website and install with:
+
+```bash
+$ sudo apt install ./mysql-workbench-community_8.0.21-1ubuntu20.04_amd64.deb
+```
+
 You may be able to recover more programs if you scan through your old bash_history
 
 Install mysql-workbench from .deb as stated under https://askubuntu.com/questions/1230752/mysql-workbench-not-supporting-with-ubuntu-20-04-lts
@@ -154,7 +163,24 @@ Damit Matlab das GTK Module findet habe ich nocht den Path dahin in die .bashrc 
 Außerdem sollte man die Keyboard shortcuts von `emacs` auf windows umstellen (strg+c, strg+v, usw.). Dafür unter Preferences>>Keyboard>>Shortcuts oben bei `active settings` im drop Menü auswählen.
 https://de.mathworks.com/help/matlab/matlab_env/keyboard-shortcuts.html
 
+Nach dem ersten Runter und wieder hoch fahren gibt es Lizenzprobleme:
+
+(siehe: https://de.mathworks.com/matlabcentral/answers/99067-why-do-i-receive-license-manager-error-9)
+The activation client is located here:
+
+/usr/local/MATLAB/R20XXx/bin/activate_matlab.sh
+
+*Once you have launched the MATLAB activation client:
+*Select "Activate automatically using the internet."
+*Log into your MathWorks account.
+*Select the correct license.
+*The username field should auto-populate with the correct user name. Leave it as is.
+*Confirm the activation information.
+*Click "finish" to complete the activation process.
+*Restart MATLAB.
 
 ---
 ros
+
+Installed Flawless over Website guide.
 
