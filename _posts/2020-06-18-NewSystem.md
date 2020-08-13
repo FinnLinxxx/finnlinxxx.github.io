@@ -190,3 +190,18 @@ ssh
 Damit ich auf dem ROS-Master zb. mich über ssh von meinem Laptop aus einloggen kann, muss ich mich in der sshd_config des gegenüberliegenden Systems eintragen.
 Diese Datei ist zu finden unter /etc/ssh/sshd_config. Dort dann hinter AllowUsers die Namen eingeben.
 
+---
+
+jupyter Notebook
+
+As seen here https://stackoverflow.com/questions/20360293/how-to-get-ipython-notebook-to-run-python-3
+```bash
+$ sudo pip3 install ipython[all]
+```
+
+then: 
+```bash
+$ ipython3 notebook
+```
+
+
