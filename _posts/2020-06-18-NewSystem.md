@@ -184,3 +184,9 @@ ros
 
 Installed Flawless over Website guide.
 
+---
+ssh
+
+Damit ich auf dem ROS-Master zb. mich über ssh von meinem Laptop aus einloggen kann, muss ich mich in der sshd_config des gegenüberliegenden Systems eintragen.
+Diese Datei ist zu finden unter /etc/ssh/sshd_config. Dort dann hinter AllowUsers die Namen eingeben.
+
