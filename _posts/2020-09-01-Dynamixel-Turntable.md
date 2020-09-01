@@ -1,6 +1,6 @@
 # Setup
 
-Für den Betrieb wurden folgende Dinge angeschaft:
+Für den Betrieb wurden folgende Dinge angeschafft:
 
 https://emanual.robotis.com/docs/en/dxl/x/xm540-w270/#drive-mode
 
@@ -12,8 +12,7 @@ Die Stromversorgung (12V) kann extern angeschlossen werden, indem man die Spannu
 ist aber in jedem Fall der Power-Hub, da hierfür nicht extra Kabelführungen gelegt werden müssen.
 https://emanual.robotis.com/docs/en/parts/interface/u2d2_power_hub/
 
-Die Stromversorgung erfolgt über ein eigenes Netzteil, welches am besten genug Ampere (5 A) haben sollte. Hier das Kabel abisolieren und an das U2D2 Power Hub Board
-schrauben.
+Die Stromversorgung erfolgt über ein eigenes Netzteil, welches am besten genug Ampere (5 A) haben sollte. Hier das Kabel abisolieren und an das U2D2 Power Hub Board schrauben.
 (https://www.amazon.de/gp/product/B07PGLXK4X/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&psc=1)
 
 Die Inbetriebnahme ist dann recht unkompliziert, schnell und einfach in diesem Video und in den oberen Links aufgezeigt:
@@ -38,7 +37,8 @@ Die Dynamixel-SDK dann über ROS installieren.
 $ sudo apt install ros-noetic-dynamixel-sdk
 ```
 
-Die Workbench Dinge werden selbst komipliert (weil akutell kein ROS Package zur Verfügung stand). Die Examples und alles weitere was da steht hab ich nicht kompiliert.
+Die Workbench Dinge werden selbst kompiliert (weil akutell kein ROS Package zur Verfügung stand). 
+Die Examples und alles weitere was da steht hab ich nicht extra mit cmake und make kompiliert, diese sind Teil des Packages.
 
 ```bash
 $ cd ~
@@ -79,6 +79,7 @@ Auf diese Datei muss man nun im Launch-File verweisen
 ```bash
 $ vim ~/catkin_ws/src/dynamixel-workbench/dynamixel_workbench_controllers/launch/dynamixel_controllers.launch
 ```
+Manchmal kann es passieren (zb nach einem Neustart), dass das Modul nicht mehr unter /dev/ttyUSB0, sondern zb /dev/ttyUSB1 angemeldet wird. Dann entweder Computer neu starten, oder das in der Launch-Datei anpassen.
 
 # Probebetrieb
 
