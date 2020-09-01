@@ -93,8 +93,9 @@ $ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
 id: 1
 addr_name: 'Goal_Position'
 value: 4000"
-
+```
 Als Antwort bekommt man `comm_result: True`, wenn das ganze erfolgreich war - der Motor dreht sich.
+
 
 Neben `Goal_Position` gibt es noch viele weitere Optionen, Einstellungen am Dynamixel zu setzen, welche dass sind kann unter
 ```bash
@@ -102,6 +103,9 @@ $ cd ~/catkin_ws/src/dynamixel-workbench-msgs/dynamixel_workbench_msgs/msg
 $ vim XMExt.msg
 ```
 Nachgeschaut werden, dass XMExt für unseren Dynamixel gilt, kann hier (http://wiki.ros.org/dynamixel_workbench_msgs) entnommen werden.
+
+Eine Übersicht, was was macht (Geschwindkeits-Einheit, etc.) erhält man unter
+https://emanual.robotis.com/docs/en/dxl/x/xm540-w270/
 
 WICHTIG!
 
@@ -113,5 +117,31 @@ $ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
 id: 1
 addr_name: 'Torque_Enable'
 value: 0"
+```
+
+# Beispiel
+```bash
+$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
+id: 1
+addr_name: 'Torque_Enable'
+value: 0"
+```
+```bash
+$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
+id: 1
+addr_name: 'Profile_Acceleration'
+value: 5"
+```
+```bash
+$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
+id: 1
+addr_name: 'Profile_Velocity'
+value: 10"
+```
+```bash
+$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
+id: 1
+addr_name: 'Torque_Enable'
+value: 1"
 ```
 
