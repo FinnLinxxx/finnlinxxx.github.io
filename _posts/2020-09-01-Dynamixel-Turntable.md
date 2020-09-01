@@ -63,7 +63,9 @@ Unter
 $ cd ~/catkin_ws/src/dynamixel-workbench/dynamixel_workbench_controllers/config
 ```
 liegt eine Yaml die das Setup beschreibt, wir haben nur 1. statt 2 Dynamixel-Motoren, daher eine eigene Hinzufügen die
-textmäßig so aussehen kann
+textmäßig so aussehen kann:
+Wichtig ist hier die ID und der Name des "Gelenks", in diesem Fall: "Turn"
+
 `$ vim one.yaml`
 ```vim
 # You can find control table of Dynamixel on emanual (http://emanual.robotis.com/#control-table)
@@ -79,6 +81,11 @@ $ vim ~/catkin_ws/src/dynamixel-workbench/dynamixel_workbench_controllers/launch
 ```
 
 # Probebetrieb
+
+Wir starten die soeben bearbeitete Launch-Datei:
+```bash
+$ roslaunch dynamixel_workbench_controllers dynamixel_controllers.launch
+```
 
 Jetzt sollte man den Dynamixel mit folgendem Befehl drehen können.
 ```bash
@@ -120,6 +127,13 @@ value: 0"
 ```
 
 # Beispiel
+
+```bash
+$ roscore
+$ roslaunch dynamixel_workbench_controllers dynamixel_controllers.launch
+```
+
+
 ```bash
 $ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
 id: 1
