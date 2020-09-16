@@ -1,6 +1,9 @@
 # After Ubuntu 20.04 installation
 
 Log 13.08.2020: Had a little accident Ubuntu-Database wise. Had to reinstall first week of August again. Things went kind of flawless
+Log 16.09.2020: Had to reinstall, because of Ubuntu 18 and melodic standarization (self-set) for ROS and ROSIA Project. Had to remove cloudcompare and  mysql-server from list below. Was able to install `$ sudo apt install mysql-server` afterwards. To install Cloudcompare use snap `snap install cloudcompare`. `mysql-workbench` konnte ich auch über apt isntallieren.
+
+
 
 First things first
 ```bash
@@ -163,7 +166,7 @@ Damit Matlab das GTK Module findet habe ich nocht den Path dahin in die .bashrc 
 Außerdem sollte man die Keyboard shortcuts von `emacs` auf windows umstellen (strg+c, strg+v, usw.). Dafür unter Preferences>>Keyboard>>Shortcuts oben bei `active settings` im drop Menü auswählen.
 https://de.mathworks.com/help/matlab/matlab_env/keyboard-shortcuts.html
 
-Nach dem ersten Runter und wieder hoch fahren gibt es Lizenzprobleme:
+Nach dem ersten Runter und wieder hoch fahren gibt es Lizenzprobleme, wahrscheinlich weil ich mit sudo installiert habe.
 
 (siehe: https://de.mathworks.com/matlabcentral/answers/99067-why-do-i-receive-license-manager-error-9)
 The activation client is located here:
