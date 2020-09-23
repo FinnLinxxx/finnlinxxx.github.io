@@ -90,17 +90,11 @@ $ roslaunch dynamixel_workbench_controllers dynamixel_controllers.launch
 
 Jetzt sollte man den Dynamixel mit folgendem Befehl drehen können.
 ```bash
-$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
-id: 1
-addr_name: 'Goal_Position'
-value: 0"
+$ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Goal_Position', value: 0}"
 ```
 Und dann zb.
 ```bash
-$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
-id: 1
-addr_name: 'Goal_Position'
-value: 4000"
+$ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Goal_Position', value: 4000}"
 ```
 Als Antwort bekommt man `comm_result: True`, wenn das ganze erfolgreich war - der Motor dreht sich.
 
@@ -121,10 +115,7 @@ Einige Einstellungen können nur gesetzt werden, wenn der Drehmoment (Torge) abg
 ab (0) und wieder ein (1) geschaltet.
 
 ```bash
-$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
-id: 1
-addr_name: 'Torque_Enable'
-value: 0"
+$ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 0}"
 ```
 
 # Beispiel
@@ -136,27 +127,45 @@ $ roslaunch dynamixel_workbench_controllers dynamixel_controllers.launch
 
 
 ```bash
-$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
-id: 1
-addr_name: 'Torque_Enable'
-value: 0"
+$ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 0}"
+$ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Profile_Acceleration', value: 5}"
+$ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Profile_Velocity', value: 10}"
+$ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 1}"
 ```
+
+
+# Remote Roscore
+
+Bevor der Dynamixel Betrieben wird ist immer `$ dynamixel_setup` auszuführen, da ansonsten der Dynamixel mit zu hoher Geschwindigkeit verfährt! Aspekte zur Arbeitssicherheit können unten nachgelesen werden.
+
+` vim .bashrc --> 
+
+export SPEED_DYN_SAFETY_IS=OFF
+alias dynamixel_setup='rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 0}"; rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Profile_Acceleration', value: 5}"; rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Profile_Velocity', value: 10}"; rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 1}"; export SPEED_DYN_SAFETY_IS=ON'
+
+
+Um .bashrc auch über ssh direkt zu sourcen 
 ```bash
-$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
-id: 1
-addr_name: 'Profile_Acceleration'
-value: 5"
+if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+fi
+
+in die
+$ nano ~/.bash_profile
+schreiben
 ```
-```bash
-$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
-id: 1
-addr_name: 'Profile_Velocity'
-value: 10"
-```
-```bash
-$ rosservice call /dynamixel_workbench/dynamixel_command "command: ''
-id: 1
-addr_name: 'Torque_Enable'
-value: 1"
-```
+(https://stackoverflow.com/questions/820517/bashrc-at-ssh-login)
+
+
+Um den Dynamixel von einem anderen Roscore aus steuern zu können, als dem der auf dem Tinkerboard selber laufen könnte sind folgend beschriebene Befehle notwendig. Diese beziehen sich auf den Zustand des Tinkerboards nach dem Neustart. Ein Neustart kann auch während des Betriebs über ssh erzwungen werden (`$ sudo shutdown -r now`).
+Das Tinkerboard hat im Geo-Sensornetz DHCP die feste IP `192.168.178.43`, daher ist es nicht notwendig eine zuzuweisen. ssh über `$ ssh tinker@192.168.178.43`. 
+Es kann sich zusätzlich lohnen das Tinkerboard mit dem Namen `tinker` unter `sudo vim /etc/hosts` auf dem eigenen Laptop mit der passenden IP einzutragen. Das Passwort ist denkbar einfach, es fängt mit t an. Wenn man möchte, dass das Tinkerboard unabhängig betrieben wird, sollte man sich über vnc verbinden und dort in der GUI die Konsole starten und Befehle dort ausführen. Vor allem Programme in der Konsole sind zur Laufzeit nicht mehr davon abhängig ob der eigene PC noch läuft. Wenn man über ssh verbindet wird nur wenn man die bash_profile angepasst hat (siehe oben) die .bashrc geladen. Neben dem Export der ROS_MASTER_URI `export ROS_MASTER_URI=http://flinzer:11311` auf beiden Kommunikationsseiten (flinzer muss dafür auf dem Tinkerboard ebenfalls unter /etc/hosts eingetragen sein oder eben einen anderen Namen), muss auch die ROS_IP gesetzt werden. Beim Tinkerboard mit `export ROS_IP=192.168.178.43`, was auch in der .bashrc gesourced wird, nur wenn das bash_profile gesetzt ist, ist das gesichert! Beim flinzer Laptop mit `export ROS_IP=192.168.178.100`, auch dies steht besser in der .bashrc. Ist die ROS_IP nicht gesetzt hat man den Umstand, dass man die Topics zwar sehen kann, aber keine Daten ausgetauscht werden.
+
+Jetzt kann man auf dem Tinkerboard `$ roslaunch dynamixel_workbench_controllers dynamixel_controllers.launch` zum Laufen bringen und die Daten werden auf dem benannten ROS_MASTER bereitsgestellt und auch die Befehle können durchgeführt werden.
+
+# Arbeitssicherheit
+
+Eine Besonderheit die die Sicherheit betrifft habe ich wie folgt eingebaut: Und zwar muss ja wie geschrieben `$ dynamixel_setup` auf dem Tinkerboard ausgeführt werden, um die Geschwindigkeit zu setzten (effekt siehe alias oben). Ich setze in die .bashrc ein Befehl der `$ dynamixel_setup` selbstständig ausführt nach dem ersten setzen der .bashrc (zum Beispiel nach einem Neustart), dafür führe ich `$ dynamixel_setup` aus und setze in die bash `$ env` eine Variable die das anzeigt.
+
+
 
