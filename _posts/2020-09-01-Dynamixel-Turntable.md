@@ -124,27 +124,19 @@ $ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, ad
 $ roscore
 $ roslaunch dynamixel_workbench_controllers dynamixel_controllers.launch
 ```
-
-
 ```bash
 $ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 0}"
 $ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Profile_Acceleration', value: 5}"
 $ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Profile_Velocity', value: 10}"
 $ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 1}"
 ```
-
+```bash
+$ rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Goal_Position', value: 0}"
+```
 
 # Remote Roscore
 
-Bevor der Dynamixel Betrieben wird ist immer `$ dynamixel_setup` auszuführen, da ansonsten der Dynamixel mit zu hoher Geschwindigkeit verfährt! Aspekte zur Arbeitssicherheit können unten nachgelesen werden.
-
-` vim .bashrc --> 
-
-export SPEED_DYN_SAFETY_IS=OFF
-alias dynamixel_setup='rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 0}"; rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Profile_Acceleration', value: 5}"; rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Profile_Velocity', value: 10}"; rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 1}"; export SPEED_DYN_SAFETY_IS=ON'
-
-
-Um .bashrc auch über ssh direkt zu sourcen 
+Um über die .bashrc die ros-environemt zu setzen und eben auch über ssh direkt zu sourcen 
 ```bash
 if [ -f ~/.bashrc ]; then
   . ~/.bashrc
@@ -165,7 +157,17 @@ Jetzt kann man auf dem Tinkerboard `$ roslaunch dynamixel_workbench_controllers 
 
 # Arbeitssicherheit
 
-Eine Besonderheit die die Sicherheit betrifft habe ich wie folgt eingebaut: Und zwar muss ja wie geschrieben `$ dynamixel_setup` auf dem Tinkerboard ausgeführt werden, um die Geschwindigkeit zu setzten (effekt siehe alias oben). Ich setze in die .bashrc ein Befehl der `$ dynamixel_setup` selbstständig ausführt nach dem ersten setzen der .bashrc (zum Beispiel nach einem Neustart), dafür führe ich `$ dynamixel_setup` aus und setze in die bash `$ env` eine Variable die das anzeigt.
+Eine Besonderheit die die Sicherheit betrifft habe ich wie folgt eingebaut: Und zwar muss ja wie geschrieben `$ dynamixel_setup` auf dem Tinkerboard ausgeführt werden, um die Geschwindigkeit zu setzten (effekt siehe alias oben). Ich setze in die .bashrc ein Befehl der `$ dynamixel_setup` selbstständig ausführt nach dem ersten setzen der .bashrc (zum Beispiel nach einem Neustart), dafür führe ich `$ dynamixel_setup` aus und setze in die bash `$ env` eine Variable die das anzeigt `SPEED_DYN_SAFETY_IS=ON/OFF`. Ob und wie sie gesetzt ist kann man abfragen über `$  env | grep SPEED`.
 
+Bevor der Dynamixel Betrieben wird ist immer `$ dynamixel_setup` auszuführen, da ansonsten der Dynamixel mit zu hoher Geschwindigkeit verfährt! Aspekte zur Arbeitssicherheit können unten nachgelesen werden.
 
+ vim .bashrc --> 
+```bash
+$ vim .bashrc
+
+export SPEED_DYN_SAFETY_IS=OFF
+alias dynamixel_setup='rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 0}"; rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Profile_Acceleration', value: 5}"; rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Profile_Velocity', value: 10}"; rosservice call /dynamixel_workbench/dynamixel_command "{command: '',id: 1, addr_name: 'Torque_Enable', value: 1}"; export SPEED_DYN_SAFETY_IS=ON'
+```
+
+Nur wenn `$ dynamixel_setup` gelaufen ist in der aktuellen Instanz wird SPEED_DYN_SAFETY_IS=ON sein, und nur dann kann man später das passende python Programm starten.
 
