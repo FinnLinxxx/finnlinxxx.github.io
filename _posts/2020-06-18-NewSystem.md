@@ -21,7 +21,7 @@ $ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive lib
 
 Later in ROS Zusammenhang
 ```bash
-$ sudo apt install ros-melodic-pcl-* ros-melodic-husky-navigation ros-melodic-husky-* ros-melodic-lms1xx ros-melodic-geographic-msgs ros-melodic-rqt-robot-steering ros-melodic-joint-trajectory-controller ros-melodic-moveit ros-melodic-dynamixel-workbench 
+$ sudo apt install ros-melodic-pcl-* ros-melodic-husky-navigation ros-melodic-husky-* ros-melodic-lms1xx ros-melodic-geographic-msgs ros-melodic-rqt-robot-steering ros-melodic-joint-trajectory-controller ros-melodic-moveit ros-melodic-dynamixel-workbench pcl-tools
 ```
 
 Try to install mysql-workbench-community with apt, otherwise download mysql-workbench .deb from Website and install with:
