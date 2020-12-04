@@ -19,10 +19,16 @@ certificate is required, `MSCHAPv2 (no EAP)`, username for me is flinzer@tuwien.
 $ sudo apt install chromium-browser vlc vim terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted xrdp nfs-common cifs-utils cloudcompare suckless-tools openssh-server python3-pip codeblocks wireshark cmatrix libcanberra-gtk-module libcanberra-gtk3-module libreoffice libreoffice-l10n-de libreoffice-help-de mysql-server 
 ```
 
-Later in ROS Zusammenhang
+Später in ROS Zusammenhang
 ```bash
 $ sudo apt install ros-melodic-pcl-* ros-melodic-husky-navigation ros-melodic-husky-* ros-melodic-lms1xx ros-melodic-geographic-msgs ros-melodic-rqt-robot-steering ros-melodic-joint-trajectory-controller ros-melodic-moveit ros-melodic-dynamixel-workbench pcl-tools
 ```
+
+Außerdem interessant:
+ - gazebo
+ - base16
+ - Prusa Slicer
+ - spotify
 
 Try to install mysql-workbench-community with apt, otherwise download mysql-workbench .deb from Website and install with:
 
