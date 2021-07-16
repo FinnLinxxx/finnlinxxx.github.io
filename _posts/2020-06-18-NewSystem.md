@@ -117,8 +117,83 @@ sudo usermod -aG xrdp finn
 ```
 
 --- 
+samba shares access
+
+add aliases to bashrc
+
+```bash
+# Network-Data Mount/uMount
+alias fl='sudo mount -t cifs //GEO/Home/staff/flinzer /shares/finn/home -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/home'
+alias ufl='cd ~; sudo umount /shares/finn/home'
+
+alias ig='sudo mount -t cifs //GEO/IG /shares/finn/IG -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/IG'
+alias uig='cd ~; sudo umount /shares/finn/IG'
+
+alias te='sudo mount -t cifs //GEO/TEACHING /shares/finn/teaching -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/teaching'
+alias ute='cd ~; sudo umount /shares/finn/teaching'
+
+alias so='sudo mount -t cifs //GEO/software /shares/finn/software -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/software'
+alias uso='cd ~; sudo umount /shares/finn/software'
+
+alias ex='sudo mount -t cifs //GEO/EXCHANGE /shares/finn/exchange -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/exchange'
+alias uex='cd ~; sudo umount /shares/finn/exchange'
+
+alias co='sudo mount -t cifs //GEO/COMMON /shares/finn/common -o username=flinzer,uid=finn,gid=finn; cd /shares/finn/common'
+alias uco='cd ~; sudo umount /shares/finn/common'
+
+alias flhelp='echo -e "\$fl - flinzer (H:)\n\$ig - ENGINEERING GEODESY (I:)\n\$te - TEACHING (T:)\n\$so - SOFTWARE (S:)\n\$ex - EXCHANGE (X:)\n\$co - COMMON (Q:)"'
 
 
+```
+
+create folders 
+```bash
+$ sudo mkdir -p /shares/finn/home
+$ sudo mkdir /shares/finn/IG
+$ sudo mkdir /shares/finn/teaching
+$ sudo mkdir /shares/finn/software
+$ sudo mkdir /shares/finn/exchange
+$ sudo mkdir /shares/finn/common
+```
+It does work with DHCP at Freihaus, it may not work properly at Gusshaus.
+
+---
+
+
+--- 
+Jag3D bzw Java14 installation
+
+Den aktuellen Release für JAG3D kann man von Github laden (linux Version):
+https://github.com/loesler/applied-geodesy/releases
+
+Die Zip habe ich in einen extra anglegten ordner unter /Programs/JAG3D entpackt (GUI extract).
+
+```bash
+$ mkdir ~/Programs/JAG3D
+```
+
+
+die darin befindliche .jar kann mit Java 14 geöffnet werden, hierfür müssen wir das System noch Javamäßig updaten:
+( https://computingforgeeks.com/install-oracle-java-openjdk-14-on-ubuntu-debian-linux/ )
+
+```bash
+$ sudo apt update
+$ sudo add-apt-repository ppa:linuxuprising/java
+$ sudo apt update
+$ sudo apt -y install oracle-java16-installer
+$ sudo apt -y install oracle-java16-set-default
+$ java -version
+```
+
+Die Java-Version sollte jetzt 16 lauten.
+
+Starten von JAG3D dann mit
+```bash
+$ java -jar /home/finn/Programs/JAG3D/jag3d.jar
+```
+oder besser gleich als alias `alias jag3d='java -jar /home/finn/Programs/JAG3D/jag3d.jar'` in die bashrc.
+
+---
 
 
 
@@ -276,6 +351,7 @@ die darin befindliche .jar kann mit Java 14 geöffnet werden, hierfür müssen w
 ```bash
 $ sudo apt update
 $ sudo add-apt-repository ppa:linuxuprising/java
+$ sudo apt update
 $ sudo apt -y install oracle-java14-installer
 $ sudo apt -y install oracle-java14-set-default
 $ java -version
