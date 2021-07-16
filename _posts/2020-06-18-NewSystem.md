@@ -194,6 +194,62 @@ $ java -jar /home/finn/Programs/JAG3D/jag3d.jar
 oder besser gleich als alias `alias jag3d='java -jar /home/finn/Programs/JAG3D/jag3d.jar'` in die bashrc.
 
 ---
+Matlab
+
+Nach einem Telefonat mit der GEO-IT wurde meinem Account eine persönliche Matlab Lizenz zugewiesen, die durch einloggen im Account abgerufen werden kann.
+Die Installation erfolgt dann nach (online) Anleitung.
+
+Damit Matlab das GTK Module findet habe ich nocht den Path dahin in die .bashrc geschrieben
+`export GTK_PATH=/usr/lib/x86_64-linux-gnu/gtk-2.0` 
+
+Außerdem sollte man die Keyboard shortcuts von `emacs` auf windows umstellen (strg+c, strg+v, usw.). Dafür unter Preferences>>Keyboard>>Shortcuts oben bei `active settings` im drop Menü auswählen.
+https://de.mathworks.com/help/matlab/matlab_env/keyboard-shortcuts.html
+
+Nach dem ersten Runter und wieder hoch fahren gibt es Lizenzprobleme, wahrscheinlich weil ich mit sudo installiert habe.
+
+(siehe: https://de.mathworks.com/matlabcentral/answers/99067-why-do-i-receive-license-manager-error-9)
+The activation client is located here:
+
+/usr/local/MATLAB/R20XXx/bin/activate_matlab.sh
+
+*Once you have launched the MATLAB activation client:
+*Select "Activate automatically using the internet."
+*Log into your MathWorks account.
+*Select the correct license.
+*The username field should auto-populate with the correct user name. Leave it as is.
+*Confirm the activation information.
+*Click "finish" to complete the activation process.
+*Restart MATLAB.
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
