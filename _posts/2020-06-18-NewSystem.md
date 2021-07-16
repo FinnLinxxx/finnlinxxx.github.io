@@ -228,6 +228,15 @@ ros
 Noetic installed Flawless over Website guide.
 http://wiki.ros.org/noetic/Installation/Ubuntu
 
+Furthermore
+```bash
+$ sudo apt install ros-noetic-pcl-* ros-noetic-lms1xx ros-noetic-geographic-msgs ros-noetic-rqt-robot-steering ros-noetic-joint-trajectory-controller ros-noetic-moveit pcl-tools ros-tf2-msgs ros-noetic-tf2-sensor-msgs
+
+( dynamixel-workbench is only for melodic
+https://github.com/husky/husky
+
+ros-noetic-husky-navigation ros-noetic-husky-* ros-noetic-lms1xx ros-noetic-geographic-msgs ros-noetic-rqt-robot-steering ros-noetic-joint-trajectory-controller ros-noetic-moveit ros-noetic-dynamixel-workbench pcl-tools
+```
 ---
 
 
