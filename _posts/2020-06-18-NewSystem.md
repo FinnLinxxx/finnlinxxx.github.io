@@ -46,6 +46,78 @@ $ sudo systemctl restart xrdp
 $ sudo systemctl status xrdp
 ```
 
+Login into `tunet`-wifi, with `WPA & WPA2 Enterprise`, `Tunneled TLS`, leave the following fields empty and choose No CA 
+certificate is required, `MSCHAPv2 (no EAP)`, username for me is flinzer@tuwien.ac.at, my password starts with: ig...
+
+
+Install mysql-workbench from .deb as stated under https://askubuntu.com/questions/1230752/mysql-workbench-not-supporting-with-ubuntu-20-04-lts
+Maybe mysql-workbench is available via apt, maybe not, otherwise download from oracle website, login data in keepassx...
+```bash
+$ sudo apt install ./mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
+```
+
+CloudCompare über snap installieren.
+```bash
+$ snap install cloudcompare
+```
+
+
+Go into .bashrc and remove numbers from HISTSIZE AND HISTFILESIZE to gain infinite bash_history.
+```bash
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=
+HISTFILESIZE=
+```
+
+Damit git nicht jedes mal nach dem Passwort fragt, sondern nur alle 3600 Sekunden (1 Stunde)
+```bash
+$ git config --global credential.helper 'cache --timeout=3600'
+```
+---
+
+jupyter Notebook
+
+As seen here https://stackoverflow.com/questions/20360293/how-to-get-ipython-notebook-to-run-python-3
+```bash
+$ sudo pip3 install ipython[all]
+```
+
+then: 
+```bash
+$ ipython3 notebook
+```
+---
+Außerdem interessant:
+ - gazebo
+ - base16
+ - Prusa Slicer
+ - spotify
+
+---
+Generate a Public-SSH-Key:
+```bash
+$ ssh-keygen -t rsa -b 4096 -C "finn.linzer@tuwien.ac.at"
+``` 
+and send the public part to the geo-it. A password is to be chosen and to save inside my keepass.
+
+--- 
+--
+Invite user into groups
+```bash
+(sudo usermod -aG tty dialout cdrom audio video users lpadmin sambashare xrdp docker finn)
+sudo usermod -aG tty finn
+sudo usermod -aG dialout finn
+sudo usermod -aG cdrom finn
+sudo usermod -aG audio finn
+sudo usermod -aG video finn
+sudo usermod -aG users finn
+sudo usermod -aG lpadmin finn
+sudo usermod -aG sambashare finn
+sudo usermod -aG xrdp finn
+```
+
+--- 
+
 
 
 
