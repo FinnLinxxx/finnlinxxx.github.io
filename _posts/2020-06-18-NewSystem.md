@@ -1,3 +1,55 @@
+# After Ubuntu 20.04 installation (16.07.2021)
+
+Upgrade to Ubuntu 20.04 mainly because of ROS2 related work and the possibility to integrate UR5-Robot into ROS Noetic as well so ROSIA is able to run.
+
+First things first
+```bash
+$ sudo apt update
+$ sudo apt upgrade
+```
+
+Then we are able to install the chosen browser. Login-Procedure... `$ sudo apt install git vim keepassx` and TIL_Howto/setupsystem...
+
+I dont want unattended updates, so `$ sudo vim /etc/apt/apt.conf.d/20auto-upgrades` and add
+
+```bash
+APT::Periodic::Update-Package-Lists "0";
+APT::Periodic::Download-Upgradeable-Packages "0";
+APT::Periodic::AutocleanInterval "0";
+APT::Periodic::Unattended-Upgrade "0";
+```
+
+Some usefull packages
+
+```bash
+$ sudo apt install vlc terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted nfs-common cifs-utils suckless-tools openssh-server python3-pip codeblocks wireshark cmatrix libreoffice libreoffice-l10n-de libreoffice-help-de mysql-server 
+```
+And remote desktop support
+```bash
+$ sudo apt install xrdp
+$ sudo systemctl status xrdp
+$ sudo adduser xrdp ssl-cert
+$ sudo ufw allow from 192.168.2.0/24 to any port 3389
+$ sudo ufw reload
+$ sudo ufw status
+$ sudo vim /etc/xrdp/startwm.sh
+(zwei UNSET Werte setzen, so dass es so ausschaut:
+...
+fi
+unset DBUS_SESSION_BUS_ADDRESS
+unset XDG_RUNTIME_DIR
+
+test -x /etc/X11/Xsession && exec /etc/X11/Xsession
+exec /bin/sh /etc/X11/Xsession
+
+$ sudo systemctl restart xrdp
+$ sudo systemctl status xrdp
+```
+
+
+
+
+
 # After Ubuntu 20.04 installation
 
 Log 13.08.2020: Had a little accident Ubuntu-Database wise. Had to reinstall first week of August again. Things went kind of flawless
