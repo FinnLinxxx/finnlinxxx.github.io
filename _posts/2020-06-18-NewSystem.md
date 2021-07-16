@@ -223,7 +223,12 @@ The activation client is located here:
 
 ---
 
+ros
 
+Noetic installed Flawless over Website guide.
+http://wiki.ros.org/noetic/Installation/Ubuntu
+
+---
 
 
 
