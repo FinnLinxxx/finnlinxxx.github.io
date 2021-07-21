@@ -31,7 +31,14 @@ Die MS50/MS60 Punktwolke abspeichern im "ASCII cloud" Format, Benennen nach eine
 Die ms50 Dateien nun in den ms50 Ordner, die tscan dateien (.pcd) in den tscan Ordner. Nun kann in Jupyter-Notebook das ganze Berechnet werden, was aufgrund der Punktwolkegröße etwas dauern kann.
 
 
-
+Wichtig ist, dass ich in den Zeilen 
+```python
+    for element_in_nn_yield in overshot_nn_yield[:,2]:
+        if (element_in_nn_yield > (0.00000157*5)): #Hz und V zusammenaddiert (dist) 
+            del_i.append(i)
+        i = i + 1
+```
+die maximal Zulässige Winkelabweichung erhöht habe (um 5 oder so). Weil wir näher dran stehen musst dieser geöffnet werden, da wir ansonsten zu wenig Punktpaare zurück bekommen.
 
 
 
