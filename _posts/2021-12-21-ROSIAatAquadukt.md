@@ -4,7 +4,7 @@ Für ROSIA im Außeneinsatz gelten andere Regeln für die Punktaufnahme und die 
 Zum Einsatz kommt das Leica Tachymeter, doch statt über geocom, wird dieses über das normale Captivate Programm am Display bedient. 
 Für die Erfassung mit dem Lasertracker wird für die Netzmessung, als auch für die Punktwolkenaufnahme SA verwendet. 
 
-Deswegen wird ROSIA in dienem Zusammenhang umbenannt in NORIA (Not a R Incidence Angle).
+Deswegen wird ROSIA in dienem Zusammenhang umbenannt in NORIA (Not a Ros Incidence Angle).
 
 Gemessen werden wie gehabt Netzpunkte und Punktwolken. Jedoch nicht mehr streng am Modell entlang, im Bezug auf einen einzelnen Einfallswinkel (IA) die im Labor 
 gegenüber einer modellhaften Ebene aufgemacht wird. Sondern im direkt am Objekt, Punkthaft wird der Einfallswinkel ermittelt und mit ähnlichen Zusammen betrachtet.
@@ -26,4 +26,12 @@ Dann `$ rosrun igros_rosia transf_scans2pcd /home/finn/PWS_Aquadukt/alles_190721
 Für die .pts die vom Tachymeter kommt (.sdb zu .pts Transform über Matlab-Converter) `$ rosrun igros_rosia transf_scans2pcd /home/finn/PWS_Aquadukt/alles_190721/Messdaten_files/pts/`
 Die entstandenen .pcds in den pcd Ordner tun. Hier müssen diese nun zunächst zurechtgeschnitten werden, zb. mit Cloudcompare).
 Aber vorher noch eine visuelle Kontrolle in CloudCompare, ob die Transformation auch wirklich zusammenpasst.
+Hier nun die T-Scan und MS50/MS60 Punktwolke zusammen so zuschneiden, dass nur überlappende Bereiche übrig bleiben.
+Die MS50/MS60 Punktwolke abspeichern im "ASCII cloud" Format, Benennen nach einem passenden Dummynamen, zb. "ms50_p1.0_gon.pcd" (obwohl als ascii-Format exportiert, muss die .pcd Endung erhalten bleiben), in den Save-Setting, Coord.-Prec.: 8, Scal.-Prec.:6, space, [ASC] point, color, SF(s), normal, und keine Häkchen setzen. Anschließend mit selben Einstellungen aber mit dem DummyNamen "tscan_p1.0_gon.pcd" die T-Scan Punktwolke exportieren. Das für weitere Bereiche unter hochzählen des Dummynamens weiter machen. 
+Die ms50 Dateien nun in den ms50 Ordner, die tscan dateien (.pcd) in den tscan Ordner. Nun kann in Jupyter-Notebook das ganze Berechnet werden, was aufgrund der Punktwolkegröße etwas dauern kann.
+
+
+
+
+
 
