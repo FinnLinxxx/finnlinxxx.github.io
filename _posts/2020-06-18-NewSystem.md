@@ -22,7 +22,7 @@ APT::Periodic::Unattended-Upgrade "0";
 Some usefull packages
 
 ```bash
-$ sudo apt install vlc terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted nfs-common cifs-utils suckless-tools openssh-server python3-pip codeblocks wireshark cmatrix libreoffice libreoffice-l10n-de libreoffice-help-de mysql-server 
+$ sudo apt install vlc terminator krdc blender kdenlive librecad gimp feh htop octave obs-studio obs-plugins cmake git scrot keepassx gparted nfs-common cifs-utils suckless-tools openssh-server python3-pip codeblocks wireshark cmatrix libreoffice libreoffice-l10n-de libreoffice-help-de mysql-server nmap
 ```
 And remote desktop support
 ```bash
@@ -230,7 +230,24 @@ http://wiki.ros.org/noetic/Installation/Ubuntu
 
 Furthermore
 ```bash
-$ sudo apt install ros-noetic-pcl-* ros-noetic-lms1xx ros-noetic-geographic-msgs ros-noetic-rqt-robot-steering ros-noetic-joint-trajectory-controller ros-noetic-moveit pcl-tools ros-tf2-msgs ros-noetic-tf2-sensor-msgs
+$ sudo apt install ros-noetic-pcl-* ros-noetic-lms1xx ros-noetic-geographic-msgs ros-noetic-rqt-robot-steering ros-noetic-joint-trajectory-controller ros-noetic-moveit pcl-tools ros-tf2-msgs ros-noetic-tf2-sensor-msgs``` 
+
+Für Dynamixel-Workbench (tested successfully)
+```bash
+$ cd ~
+$ mkdir workspace_dynamixel
+$ cd workspace_dynamixel
+$ mkdir src
+$ cd src
+$ git clone https://github.com/ROBOTIS-GIT/dynamixel-workbench.git
+$ git clone https://github.com/ROBOTIS-GIT/dynamixel-workbench-msgs.git
+$ git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git
+(jeweils bei den drei Packages $ git checkout noetic-devel)
+$ cd /home/finn/workspace_dynamixel
+$ catkin_make
+(und dann den Ordner in .bashrc sourcen zb)
+```
+
 
 ( dynamixel-workbench is only for melodic )
 ( https://github.com/husky/husky not for melodic yet, local build)
