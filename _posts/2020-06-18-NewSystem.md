@@ -194,6 +194,22 @@ $ java -jar /home/finn/Programs/JAG3D/jag3d.jar
 oder besser gleich als alias `alias jag3d='java -jar /home/finn/Programs/JAG3D/jag3d.jar'` in die bashrc.
 
 ---
+octave 
+```bash
+$ sudo apt install liboctave-dev
+```
+
+```octave
+$
+>> pkg install -forge matgeom
+>> pkg load matgeom
+>> pkg install -forge io
+>> pkg load io
+>> pkg install -forge statistics
+>> pkg load statistics
+```
+
+---
 Matlab
 
 Nach einem Telefonat mit der GEO-IT wurde meinem Account eine persönliche Matlab Lizenz zugewiesen, die durch einloggen im Account abgerufen werden kann.
