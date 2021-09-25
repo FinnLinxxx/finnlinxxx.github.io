@@ -146,11 +146,51 @@ $ sudo shutdown -r now
 
 --- 
 
-Jetzt mit dem neuen Benutzer anmelden und msql installieren:
+Jetzt mit dem neuen Benutzer anmelden und mysql installieren:
 
 ```bash
 $ sudo apt install mysql-server
 ```
 (Für weitere Infos siehe [hier](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04-de)) und im Keypassfile von flinzer
 
+MySQL Worbench ist für arm grade nicht verfügbar.
 
+```bash
+$ sudo apt-get install python3-pip
+$ sudo apt install python3-dev libmysqlclient-dev
+$ sudo pip3 install mysqlclient
+$ sudo pip3 install mysql-connector
+```
+
+```bash
+sudo apt-get install phpmyadmin
+(enter, enter, enter), passwort setzen und merken!
+``` 
+```bash
+$ sudo -H vim /etc/apache2/apache2.conf
+(add this line somewhere)
+Include /etc/phpmyadmin/apache.conf
+$ sudo service apache2 restart
+(Jetzt kann phpmyadmin über den Browser über 'http://localhost/phpmyadmin' abgerufen werden
+```
+
+Jetzt evtl. noch einen Benutzer anpassen bzw. für diesen ein Passwort vergeben, nicht root verwenden!
+```mysql
+$ sudo mysql
+ALTER USER 'igscan'@'localhost' IDENTIFIED BY 'newpassword';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+
+
+
+
+
+
+
+
+
+
+
+---
