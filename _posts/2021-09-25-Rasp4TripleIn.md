@@ -177,6 +177,7 @@ $ sudo service apache2 restart
 Jetzt evtl. noch einen Benutzer anpassen bzw. für diesen ein Passwort vergeben, nicht root verwenden!
 ```mysql
 $ sudo mysql
+CREATE USER 'igscan'@'localhost' IDENTIFIED BY 'password';
 ALTER USER 'igscan'@'localhost' IDENTIFIED BY 'newpassword';
 FLUSH PRIVILEGES;
 EXIT;
