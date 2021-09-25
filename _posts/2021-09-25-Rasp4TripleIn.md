@@ -184,10 +184,33 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
+```mysql
+$ sudo mysql
+CREATE DATABASE triple_in;
+USE triple_in;
+SHOW DATABASES;
+```
 
+`CREATE TABLE device_2921 (epoch INT UNSIGNED, unixtime_ros BIGINT, element_type VARCHAR(20), a0 FLOAT, a1 FLOAT, a2 FLOAT, a3 FLOAT, a4 FLOAT, a5 FLOAT, a6 FLOAT, a7 FLOAT, a8 FLOAT, a9 FLOAT, a10 FLOAT, a11 FLOAT, a12 FLOAT, a13 FLOAT, a14 FLOAT, a15 FLOAT, a16 FLOAT, a17 FLOAT, a18 FLOAT, a19 FLOAT, a20 FLOAT, a21 FLOAT, a22 FLOAT, a23 FLOAT, a24 FLOAT, a...`
 
+(Für den vollständigen aufbau bis a999 siehe gitlab triplein projekt)
 
+```bash
+$ git clone https://git.geo.tuwien.ac.at/finnlinxxx/igros_triplein.git
+```
 
+Hier jetzt anpassen.
+```bash
+$ cd /home/igscan/igros_triplein/scripts/SQL
+$ vim SQL_intensities.py
+UDP_IP = "192.168.0.115" (zeile 36)
+...connection = mysql.connector.connect(...credentials anpassen...) (zeile 75)
+```
+
+Und Go:
+```bash
+$ python3 SQL_intensities.py 2921
+```
 
 
 
