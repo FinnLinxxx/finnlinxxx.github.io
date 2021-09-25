@@ -158,8 +158,8 @@ MySQL Worbench ist für arm grade nicht verfügbar.
 ```bash
 $ sudo apt-get install python3-pip
 $ sudo apt install python3-dev libmysqlclient-dev
-$ sudo pip3 install mysqlclient
-$ sudo pip3 install mysql-connector
+$ sudo pip3 install mysql-connector-python
+$ sudo pip3 install numpy
 ```
 
 ```bash
