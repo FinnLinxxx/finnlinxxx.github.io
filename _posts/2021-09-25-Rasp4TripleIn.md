@@ -178,6 +178,7 @@ Jetzt evtl. noch einen Benutzer anpassen bzw. für diesen ein Passwort vergeben,
 ```mysql
 $ sudo mysql
 CREATE USER 'igscan'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON * . * TO 'igscan'@'localhost';
 ALTER USER 'igscan'@'localhost' IDENTIFIED BY 'newpassword';
 FLUSH PRIVILEGES;
 EXIT;
