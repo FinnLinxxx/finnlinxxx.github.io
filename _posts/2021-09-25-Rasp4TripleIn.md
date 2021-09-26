@@ -213,7 +213,12 @@ $ python3 SQL_intensities.py 2921
 ```
 
 
+---
+Yagmail
 
+```bash
+$ sudo pip3 install yagmail[all]
+```
 
 
 
