@@ -218,7 +218,17 @@ Yagmail
 
 ```bash
 $ sudo pip3 install yagmail[all]
+$ sudo pip3 install keyrings.alt
 ```
+
+```python3
+import yagmail
+yagmail.register('flinzer.igscan@gmail.com', 'daspasswortauskeyfile')
+yagmail.SMTP('flinzer.igscan@gmail.com').send('finn.linzer@gmail.com', 'subject', 'This is the body')
+```
+
+
+
 
 
 
