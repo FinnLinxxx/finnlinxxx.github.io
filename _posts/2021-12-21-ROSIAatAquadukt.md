@@ -12,22 +12,33 @@ gegenüber einer modellhaften Ebene aufgemacht wird. Sondern im direkt am Objekt
 ### Daten Vorbereitung
 
 * In SA: Die Netzpunkte wurden wie gehabt über das Laser Tracker Interface aufgemessen. Die Punktwolken wurden in Verbindung mit TScanCollect über das Leica T-Scan
+
 Interface (in SA) erfasst. Vor dem Export wird zunächst ein Lasertracker-Frame erzeugt (Construct >> Frames >> On Instrument >> Base (select LT, Name: LT_Frame)) >> 
 Make Working...>> Transform->Orientation: ZYX Euler Angles Rz: -1.570796327 -> Update. Dann einen TLS-Frame erzeugen (gleiche Prozedur, gleiche Verdrehung eingeben).
+
 Nun die T-Scan Punktwolken exportieren: File >> Export >> Point Clouds (die richtigen auswählen)...Bei "include point labelling" auf "NO".
+
 Für die Transformationsparameter die für die Umwandlung ins PCD Format benötigt werden ($ rosrun igros_rosia rosia_tf.launch) können nun die richtigen Werte 
 aus SA ausgelesen werden. Hierfür unter den Frames in SA den TLS (Tachy) Frame als "make Working" setzen, anschließend auf den LT-Frame in der gleichen Leiste einmal
+
 klicken und die Werte unten in der Report Bar auslesen (Translation, Rotation...), diese Werte in Radiant und Meter umgerechnet in das Launch-File eintragen 
 (static_transform_publisher für lt2ms50) . Die Reihenfolge im Launch-file betrachten! `xT yT zT zR yR xR [m, rad]`.
+
 Ist der Export der TScanPW abgeschlossen die .txt auf den ROS/Linux Computer zur Berechnung bringen (USB, Netzplatte).
+
 Hier muss die Datei mit zb. vim geöffnet werden, denn es sind noch Header Zeilen darin enthalten die herausgelöscht werden müssen.
 In vim nach "\/\" suchen (datei mit n durchgehen).
+
 Dann `$ rosrun igros_rosia transf_scans2pcd /home/finn/PWS_Aquadukt/alles_190721/Messdaten_files/txt/ _ptcl_global_frame:=leica_ms50 _ptcl_local_frame:=lasertracker`
+
 Für die .pts die vom Tachymeter kommt (.sdb zu .pts Transform über Matlab-Converter) `$ rosrun igros_rosia transf_scans2pcd /home/finn/PWS_Aquadukt/alles_190721/Messdaten_files/pts/`
+
 Die entstandenen .pcds in den pcd Ordner tun. Hier müssen diese nun zunächst zurechtgeschnitten werden, zb. mit Cloudcompare).
 Aber vorher noch eine visuelle Kontrolle in CloudCompare, ob die Transformation auch wirklich zusammenpasst.
+
 Hier nun die T-Scan und MS50/MS60 Punktwolke zusammen so zuschneiden, dass nur überlappende Bereiche übrig bleiben.
 Die MS50/MS60 Punktwolke abspeichern im "ASCII cloud" Format, Benennen nach einem passenden Dummynamen, zb. "ms50_p1.0_gon.pcd" (obwohl als ascii-Format exportiert, muss die .pcd Endung erhalten bleiben), in den Save-Setting, Coord.-Prec.: 8, Scal.-Prec.:6, space, [ASC] point, color, SF(s), normal, und keine Häkchen setzen. Anschließend mit selben Einstellungen aber mit dem DummyNamen "tscan_p1.0_gon.pcd" die T-Scan Punktwolke exportieren. Das für weitere Bereiche unter hochzählen des Dummynamens weiter machen. 
+
 Die ms50 Dateien nun in den ms50 Ordner, die tscan dateien (.pcd) in den tscan Ordner. Nun kann in Jupyter-Notebook das ganze Berechnet werden, was aufgrund der Punktwolkegröße etwas dauern kann.
 
 
