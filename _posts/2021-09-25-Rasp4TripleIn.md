@@ -174,7 +174,9 @@ $ sudo service apache2 restart
 (Jetzt kann phpmyadmin über den Browser über 'http://localhost/phpmyadmin' abgerufen werden
 ```
 
-Jetzt evtl. noch einen Benutzer anpassen bzw. für diesen ein Passwort vergeben, nicht root verwenden!
+Jetzt evtl. noch einen Benutzer anpassen bzw. für diesen ein Passwort vergeben, zur Bearbeitung nicht root verwenden!
+Wir benutzen nur hier jetzt root (indem wir uns mit nur einmal hier mit `$ sudo mysql` als solchen anmelden ´SELECT CURRENT_USER();´). An root wurde kein Passwort 
+vergeben, dies ist die einzige Möglichkeit sich als root anzumelden.
 ```mysql
 $ sudo mysql
 CREATE USER 'igscan'@'localhost' IDENTIFIED BY 'password';
