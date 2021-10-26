@@ -11,12 +11,9 @@ gegenüber einer modellhaften Ebene aufgemacht wird. Sondern im direkt am Objekt
 
 ### Daten Vorbereitung
 
-* In SA: Die Netzpunkte wurden wie gehabt über das Laser Tracker Interface aufgemessen. Die Punktwolken wurden in Verbindung mit TScanCollect über das Leica T-Scan
+* In SA: Die Netzpunkte wurden wie gehabt über das Laser Tracker Interface aufgemessen. Die Punktwolken wurden in Verbindung mit TScanCollect über das Leica T-Scan Interface (in SA) erfasst. Vor dem Export wird zunächst ein Lasertracker-Frame erzeugt (Construct >> Frames >> On Instrument >> Base (select LT, Name: LT_Frame)) >> Make Working...>> Transform->Orientation: ZYX Euler Angles Rz: -1.570796327 -> Update. Dann einen TLS-Frame erzeugen (gleiche Prozedur, gleiche Verdrehung eingeben).
 
-Interface (in SA) erfasst. Vor dem Export wird zunächst ein Lasertracker-Frame erzeugt (Construct >> Frames >> On Instrument >> Base (select LT, Name: LT_Frame)) >> 
-Make Working...>> Transform->Orientation: ZYX Euler Angles Rz: -1.570796327 -> Update. Dann einen TLS-Frame erzeugen (gleiche Prozedur, gleiche Verdrehung eingeben).
-
-Nun die T-Scan Punktwolken exportieren: File >> Export >> Point Clouds (die richtigen auswählen)...Bei "include point labelling" auf "NO".
+* Nun die T-Scan Punktwolken exportieren: File >> Export >> Point Clouds (die richtigen auswählen)...Bei "include point labelling" auf "NO".
 
 Für die Transformationsparameter die für die Umwandlung ins PCD Format benötigt werden ($ rosrun igros_rosia rosia_tf.launch) können nun die richtigen Werte 
 aus SA ausgelesen werden. Hierfür unter den Frames in SA den TLS (Tachy) Frame als "make Working" setzen, anschließend auf den LT-Frame in der gleichen Leiste einmal
