@@ -22,7 +22,7 @@ aus SA ausgelesen werden. Hierfür unter den Frames in SA den TLS (Tachy) Frame 
 Ist der Export der TScanPW abgeschlossen die .txt auf den ROS/Linux Computer zur Berechnung bringen (USB, Netzplatte).
 
 Hier muss die Datei mit zb. vim geöffnet werden, denn es sind noch Header Zeilen bzw. Störungen darin enthalten die herausgelöscht werden müssen.
-In vim nach "/\/" suchen (datei mit n durchgehen und mit :wq speichern).
+In vim nach "\/\/" suchen (datei mit n durchgehen und mit :wq speichern).
 
 ```bash
 $ cd /home/finn/workspace_rosia/src/igros_rosia/launch
