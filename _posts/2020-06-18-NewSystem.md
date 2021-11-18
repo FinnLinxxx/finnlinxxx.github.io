@@ -205,8 +205,10 @@ $
 >> pkg load matgeom
 >> pkg install -forge io
 >> pkg load io
->> pkg install -forge statistics
->> pkg load statistics
+>> pkg install -forge struct
+>> pkg load struct
+>> pkg install -forge optim
+>> pkg load optim
 ```
 
 ---
