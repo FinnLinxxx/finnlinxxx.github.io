@@ -265,5 +265,7 @@ $ mysql -u root -p
 ```bash
 $ mysql -u root -p triple_in_example < /home/flinzer/tripleinsql.sql
 ```
+Quelle: https://www.mysqltutorial.org/mysql-copy-database/
+und https://github.com/drud/ddev/issues/1902
 
 ---
