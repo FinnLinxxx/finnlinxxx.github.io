@@ -230,9 +230,40 @@ yagmail.SMTP('flinzer.igscan@gmail.com').send('finn.linzer@gmail.com', 'subject'
 ```
 
 
+# Mysql (dump)
 
+Um die Datenbank auf dem Raspberry-Pi in eine einzige Datei zu laden:
+```bash
+(auf dem Raspberry-pi)
+$ mysqldump -u root -p triple_in > /home/igscan/sqldump/tripleinsql.sql
+```
 
+Wenn vpn aufgebaut und 997 der Port zum SSH ist.
+```bash
+(noch auf dem flinzer Computer)
+$ cd
+$ scp -P 997 igscan@10.120.3.52:/home/igscan/sqldump/tripleinsql.sql .
+(von hier an auf dem ROS-Master weiter)
+$ scp finn@192.168.178.100:/home/finn/tripleinsql.sql .
+```
 
+Folgende Befehle sind nach der Übertragung auf dem ROS-Master durchzuführen:
 
+Im sql Textfile muss noch ein Format geändert werden, damit es für die neuste mysql Version lesbar wird (Bug).
+```bash
+$ sed -i tripleinsql.sql -e 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g'
+```
+
+Erzeugen einer neuen Datenbank, wo die SQL eingeladen werden soll. Ich hab bisher immer eine andere genutzt, da dies funktioniert hat und ich die Integrität der anderen nicht gefährden wollte.
+```bash
+$ mysql -u root -p
+> CREATE DATABASE `triple_in_example`;
+> USE `triple_in_example`;
+> EXIT
+```
+
+```bash
+$ mysql -u root -p triple_in_example < /home/flinzer/tripleinsql.sql
+```
 
 ---
