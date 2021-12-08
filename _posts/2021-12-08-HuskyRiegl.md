@@ -43,15 +43,10 @@ $ git pull origin husky_kf_nav
 $ cd ~/workspace_husky
 $ rm -rf build/ devel/
 $ source /opt/ros/noetic/setup.bash 
-$ vim ~/workspace_husky/src/igros_husky/CMakeLists.txt
-(folgende Zeile auskommentieren)
-add_service_files(
-  FILES
-  GetPointCloud.srv
-  GetPose.srv
-  GetScanPoses.srv
-#  SetPose.srv
-)
+$ cd ~/workspace_husky/src/igros_husky
+$ vim CMakeLists.txt
+(aus SetPose.srv SetPosition.srv machen, ist evtl nicht mehr notwendig weil bereits teil eines vorherigen commits)
+$ cd ~/workspace_husky
 $ catkin_make
 ```
 
