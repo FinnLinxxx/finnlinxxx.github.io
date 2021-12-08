@@ -30,7 +30,8 @@ $ pip install -r requirements.txt
 $ cd ~/ws_vz
 $ rm -rf install/ build/ log/
 $ colcon build
-``
+```
+
 Durchführen, dann war das Package gebuildet, außerdem für den workspace_husky die Packages 
 ```bash
 $ cd ~/workspace_husky/src/husky
