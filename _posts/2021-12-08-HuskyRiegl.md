@@ -20,34 +20,13 @@ $ cd ~/ros2_galactic/src/ros-visualization/rqt/rqt_gui_cpp
 $ touch CATKIN_IGNORE
 ```
 
-TU IG HUSKY PACKAGES:
-/workspace_husky
-
-RIEGL PACKAGES:
-```bash
-$ cd
-$ mkdir workspace_rieglROS2
-(aus dem .zip Download folgend die Dateien und Ordner ablegen)
-~/workspace_rieglROS2/src/librdb
-~/workspace_rieglROS2/src/riconnect
-~/workspace_rieglROS2/src/riegl_vz
-~/workspace_rieglROS2/src/riegl_vz_interfaces
-~/workspace_rieglROS2/src/vzi_services
-~/workspace_rieglROS2/src/README.md
-~/workspace_rieglROS2/src/requirements.txt
-```
-
-Requirements installieren:
-```bash
-$ cd workspace_rieglROS2/src/
-$ pip install -r requirements.txt
-```
-
 Weil das Package für den Riegl noch nicht im git ordentlich aufbereitet ist, hab ich den gesamten Workspace von Max gezogen (als zip, diese liegt wiederum im git). Ich hab den ordner im home Verzeichnis ausgepackt und musste noch:
 ```bash
 $ mv workspace_vz/ ws_vz
 $ cd ~/ws_vz/src/igros_husky
 $ touch CATKIN_IGNORE
+$ cd ~/ws_vz/src/
+$ pip install -r requirements.txt
 $ cd ~/ws_vz
 $ rm -rf install/ build/ log/
 $ colcon build
@@ -75,7 +54,7 @@ add_service_files(
 $ catkin_make
 ```
 
-Nun builden wir die Bridge mit allen benötigten packages (ROS1 und ROS2)
+Nun builden wir die Bridge mit allen benötigten packages (ROS1 und ROS2), darauf achten dass nicht zuvor schon irgendwas ROS mäßiges gesourced wurde!
 ```bash
 $ source /opt/ros/noetic/setup.bash 
 $ source ws_vz/install/local_setup.bash 
