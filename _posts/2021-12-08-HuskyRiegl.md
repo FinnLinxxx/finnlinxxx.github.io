@@ -43,7 +43,46 @@ $ cd workspace_rieglROS2/src/
 $ pip install -r requirements.txt
 ```
 
+Weil das Package für den Riegl noch nicht im git ordentlich aufbereitet ist, hab ich den gesamten Workspace von Max gezogen (als zip, diese liegt wiederum im git). Ich hab den ordner im home Verzeichnis ausgepackt und musste noch:
+```bash
+$ mv workspace_vz/ ws_vz
+$ cd ~/ws_vz/src/igros_husky
+$ touch CATKIN_IGNORE
+$ cd ~/ws_vz
+$ rm -rf install/ build/ log/
+$ colcon build
+``
+Durchführen, dann war das Package gebuildet, außerdem für den workspace_husky die Packages 
+```bash
+$ cd ~/workspace_husky/src/husky
+$ git checkout noetic-devel
+$ git pull origin noetic-devel
+$ cd ~/workspace_husky/src/igros_husky
+$ git checkout husky_kf_nav
+$ git pull origin husky_kf_nav
+$ cd ~/workspace_husky
+$ rm -rf build/ devel/
+$ source /opt/ros/noetic/setup.bash 
+$ vim ~/workspace_husky/src/igros_husky/CMakeLists.txt
+(folgende Zeile auskommentieren)
+add_service_files(
+  FILES
+  GetPointCloud.srv
+  GetPose.srv
+  GetScanPoses.srv
+#  SetPose.srv
+)
+$ catkin_make
+```
 
+Nun builden wir die Bridge mit allen benötigten packages (ROS1 und ROS2)
+```bash
+$ source /opt/ros/noetic/setup.bash 
+$ source ws_vz/install/local_setup.bash 
+$ source workspace_husky/devel/setup.bash 
+$ cd ros2_galactic/
+$ colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure
+```
 
 
 TODO: Format
