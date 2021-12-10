@@ -54,8 +54,8 @@ Nun builden wir die Bridge mit allen benötigten packages (ROS1 und ROS2), darau
 ```bash
 $ source /opt/ros/noetic/setup.bash 
 $ source ~/ros2_galactic/install/local_setup.bash
-$ source ws_vz/install/local_setup.bash 
-$ source workspace_husky/devel/setup.bash 
+$ source ~/ws_vz/install/local_setup.bash 
+$ source ~/workspace_husky/devel/setup.bash 
 $ cd ros2_galactic/
 $ colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure
 ```
@@ -66,6 +66,22 @@ $ cd ~/ws_vz/src/
 $ git clone https://github.com/ros/diagnostics.git
 $ cd ~/ws_vz
 $ rm -rf build/ install/ log/
+(diagnostic_updater muss noch bearbeitet werden, wegen einem Konflikts um das Topic /diagnostics (im riegl package wird dieses Topic auch vergeben), daher ändern wir den output Topic-Name zu /riegl_diagnostics)
+$ cd ~/ws_vz/src/diagnostics/diagnostic_updater/diagnostic_updater
+$ vim \_diagnostic\_updater.py
+```
+Wir ändern folgend den code (etwa zeile 233)
+```python3
+    def __init__(self, node, period=1.0):
+        """Construct an updater class."""
+        DiagnosticTaskVector.__init__(self)
+        self.node = node
+        self.publisher = self.node.create_publisher(DiagnosticArray, '/riegl_diagnostics', 1)
+```
+
+Jetzt können wir builden
+```bash
+$ cd ~/ws_vz
 $ colcon build
 ```
 
@@ -95,6 +111,9 @@ Riegl Befehel
 $ ros2 launch riegl_vz std_launch.py
 $ ros2 service call /scan std_srvs/srv/Trigger
 $ ros2 service call /get_sopv riegl_vz_interfaces/srv/GetPose
+```
+
+
 
 
 TODO: Format
