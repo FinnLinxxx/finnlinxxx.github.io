@@ -60,6 +60,42 @@ $ cd ros2_galactic/
 $ colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure
 ```
 
+Ließ sich nicht gleich starten, wir brauchen noch den diagnostic Update
+´´´bash
+$ cd ~/ws_vz/src/
+$ git clone https://github.com/ros/diagnostics.git
+$ cd ~/ws_vz
+$ rm -rf build/ install/ log/
+$ colcon build
+```
+
+Riegl Config File (params.yaml):
+```bash
+$ cd ~/ws_vz/install/riegl_vz/share/riegl_vz/config
+```
+das sieht dann zb. so aus:
+```yaml
+riegl_vz_node:
+  ros__parameters:
+    hostname: "10.0.2.1"
+    ssh_user: "user"
+    ssh_password: "user"
+    working_dir: "/home/finn/riegl_working_dir"
+    project_name: "211130_135251"
+    storage_media: 0
+    meas_program: 3
+    scan_pattern: [30.0,130.0,0.04,0.0,360.0,0.5]
+    scan_publish: False
+    scan_publish_filter: ""
+    scan_publish_lod: 0
+    scan_register: True
+```
+Riegl Befehel
+```bash
+$ ros2 launch riegl_vz std_launch.py
+$ ros2 service call /scan std_srvs/srv/Trigger
+$ ros2 service call /get_sopv riegl_vz_interfaces/srv/GetPose
+
 
 TODO: Format
 Code Review - Notizen:
