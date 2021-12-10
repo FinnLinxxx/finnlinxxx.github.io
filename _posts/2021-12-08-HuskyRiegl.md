@@ -53,6 +53,7 @@ $ catkin_make
 Nun builden wir die Bridge mit allen benötigten packages (ROS1 und ROS2), darauf achten dass nicht zuvor schon irgendwas ROS mäßiges gesourced wurde!
 ```bash
 $ source /opt/ros/noetic/setup.bash 
+$ source ~/ros2_galactic/install/local_setup.bash
 $ source ws_vz/install/local_setup.bash 
 $ source workspace_husky/devel/setup.bash 
 $ cd ros2_galactic/
