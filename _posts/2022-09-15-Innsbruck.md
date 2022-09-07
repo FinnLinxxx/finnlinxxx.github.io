@@ -35,17 +35,17 @@ $ roslaunch xsens_mti_driver display.launch
 
 Die Control war irgendwie sehr komisch. Unter `igros@husky-onboard:/opt/ros/melodic/share/husky_control/config` wurde die `teleop_logitech.yaml` von irgendjemanden verändert. Ich hab sie wieder auf den Urzustand zurückgesetzt (https://github.com/husky/husky/blob/melodic-devel/husky_control/config/teleop_logitech.yaml) (melodic-devel branch, weil der Husky im September 2022 noch auf melodic läuft). Steuerung jetzt wieder über R1 und L1, sowie dem linken Joystick.
 
-finn@flinzer -> IP: 192.168.188.177
+finn@flinzer -> IP: 192.168.188.177 oder WLAN-IP: 192.168.188.207 (einfach mit flinzer einloggen husky-wifi)
 igros@husky-onboard -> IP: 192.168.188.1
 
 Für beide die jeweiligen Computer eintragen: \
 `finn@flinzer:~$ sudo vim /etc/hosts` -> `192.168.188.1   husky-onboard` \
 und \
-`igros@husky-onboard:~$ sudo vim /etc/hosts` -> `192.168.188.177 flinzer` 
+`igros@husky-onboard:~$ sudo vim /etc/hosts` -> `192.168.188.207 flinzer` 
 
 Für jedes eingeloggte Terminal muss für: \
 `finn@flinzer:~$ export ROS_MASTER_URI=http://192.168.188.1:11311` \
-`finn@flinzer:~$ export ROS_IP=192.168.188.177` \
+`finn@flinzer:~$ export ROS_IP=192.168.188.207` \
 und für \
 `igros@husky-onboard:~$ export ROS_MASTER_URI=http://192.168.188.1:11311` \
 `igros@husky-onboard:~$ export ROS_IP=192.168.188.1` \
