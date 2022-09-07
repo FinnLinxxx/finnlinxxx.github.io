@@ -95,6 +95,7 @@ $ roslaunch husky_navigation gmapping_demo.launch
 `flinzer`-laptop: gmapping mit rviz visualisieren
 ```bash
 $ roslaunch husky_viz view_robot.launch
+(in rviz uncheck: Sensing/Odometrie, check: navigation, uncheck: global&local costmap)
 ```
 
 
