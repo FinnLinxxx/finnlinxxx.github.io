@@ -62,3 +62,35 @@ ascii_aus_sa.txt
 4   537.582579   -6320.914070   123.711399
 ...
 ```
+
+Jetzt Matlab öffnen (ur_lt_matlab projekt auf Github): apply_trafo_leverarm.m und data_add-leverarm-to-RF/data_trafo_TTH2.m
+
+Wichtig: - Das ganze wurde unter Windows verwendet (unter Linux würde es auch gehen, allerdings müsste man dann alle Pfade anpassen, ist easy).
+                - apply_trafo_leverarm.m müsste sich problemlos durchführen lassen (mit den derzeit benannten und vorhandenen Daten)
+                - data_trafo_TTH2.m enthält wie in der readme beschrieben ist die Daten (hier juri_RIGHT.txt und lt_RIGHT.txt, das RIGHT bezieht sich auf die Messung damals die auf das rechte Prisma der T-Scan gezielt hatte). 
+                - Schau dir die Datenformate von juri_RIGHT.txt und lt_RIGHT.txt, genau so brauchen wir dies auch. Die lt Daten bekommen wir über SA und die Roboter (juri) Daten aus der MP_Server.py Programm (auch im Anhang) wie wir es auch in AKIG verwendet hatten. 
+
+191117_pose.txt und ascii_aus_sa.txt mit in den data_add-leverarm-to-RF Ordner legen und im Skript data_trafo_TTH2.m entsprechend benennen.
+In der Zeile MV = [4 156 80]x1e-03; müssen die Näherungswerte angegeben werden, diese hier passen gut für die T-Probe [siehe Foto].
+
+Evtl. in den Zeilen 79 von data_trafo_TTH2.m (Cll_R) noch die A-Priori Werte ändern, sodass der Globaltest aufgeht (der Wert liegt so bei 0.65 oder 0.2 mm Genauigkeit).
+
+Das sollte jetzt durchrattern und am Ende sollten da 9 Werte stehen (>> adj.x und adj.stdX für Standardabweichungen).
+Die ersten drei: Orientung/Verdrehung LT zu UR
+Die zweiten drei: Translation LT zu UR
+Die dritten drei: Translation UR-Flansch zu Rubinkugel (in diesem Fall).
+
+---
+
+Diese Werte bringen wir nun in SA an.
+Construct >> Frames >> On Instrument >> Base (Name: UR_Frame, dieser liegt nun exakt im LT_Frame).
+Dann drauf rechtsklick >> Properties >> Make Working (dann) >> Transform zb.
+  (Cartesian XYZ) 471.400000  -6668.700000  -635.300000  (ZYX Euler Angles) -1.6169   0.0041    0.0040 (aus dem Matlab Skript, wenn man es genauer haben will muss man in Matlab mehr Nachkommastellen ausgeben)  >> Update
+  
+  Der neue Frame sollte nun plausibel in SA visualisert sein (Z- nach oben zeigend).
+  
+  --- 
+  
+  Jetzt zum Robotertablet gehen [siehe Fotostrecke]
+  
+  
