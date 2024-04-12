@@ -82,6 +82,7 @@ bpy.ops.object.mode_set(mode='EDIT')
 bpy.ops.mesh.select_all(action='SELECT')
 bpy.ops.uv.smart_project()
 bpy.ops.object.mode_set(mode='OBJECT')
+time.sleep(10)
 
 # Alle Materialien durchgehen und das Bild zuweisen
 obj = bpy.context.object
