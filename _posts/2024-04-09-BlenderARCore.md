@@ -36,8 +36,11 @@ In die Render Properties wechseln und Cycles Enginge auswählen.
 
 ### Code
 
+```python
 import bpy
 import os
+import time
+
 
 # Remove any existing cameras or lights
 for obj in bpy.data.objects:
@@ -52,6 +55,7 @@ output_image_name = "myUVFile.png"
 
 # Import .obj
 bpy.ops.import_scene.obj(filepath=model_path)
+time.sleep(1)  # Pausiert das Skript für 1 Sekunde
 
 
 # Alle Mesh-Objekte auswählen und zusammenführen
@@ -59,6 +63,8 @@ bpy.ops.object.select_all(action='DESELECT')
 bpy.ops.object.select_by_type(type='MESH')
 bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
 bpy.ops.object.join()
+time.sleep(5)  # Pausiert das Skript für 1 Sekunde
+
 
 # Erstellt ein neues Bild für die UV Map
 image_name = "myUV"
@@ -66,6 +72,7 @@ bpy.ops.image.new(name=image_name, width=1024, height=1024, color=(0, 0, 0, 1))
 image = bpy.data.images[image_name]
 image.file_format = 'PNG'
 image.filepath_raw = os.path.join(output_path, output_image_name)
+time.sleep(1)  # Pausiert das Skript für 1 Sekunde
 
 # Wählt das aktive Objekt
 obj = bpy.context.active_object
@@ -81,16 +88,22 @@ obj = bpy.context.object
 for mat_slot in obj.material_slots:
     mat = mat_slot.material
     if mat.use_nodes:
+        for node in mat.node_tree.nodes:
+            if node.type == 'TEX_IMAGE':
+                mat.node_tree.nodes.remove(node)  # Entferne vorhandene Image Texture Nodes
+        
         bsdf = mat.node_tree.nodes.get('Principled BSDF')
         if bsdf:
             tex_image = mat.node_tree.nodes.new('ShaderNodeTexImage')
             tex_image.image = image
             #mat.node_tree.links.new(bsdf.inputs['Base Color'], tex_image.outputs['Color'])
-            
+time.sleep(1)  # Pausiert das Skript für 1 Sekunde
+  
 # Sonne hinzufügen
 bpy.ops.object.light_add(type='SUN', align='WORLD', location=(0, 0, 10))
 sun = bpy.context.object
 sun.data.energy = 10
+time.sleep(1)  # Pausiert das Skript für 1 Sekunde
 
 # Rendereinstellungen für das Baking
 bpy.context.scene.render.engine = 'CYCLES'
@@ -103,10 +116,14 @@ bpy.context.view_layer.objects.active = obj
 
 # Bake durchführen
 bpy.ops.object.bake('INVOKE_DEFAULT', type='DIFFUSE', pass_filter={'COLOR'})
+time.sleep(30)  # Pausiert das Skript für 1 Sekunde
 
 # UV Map als Bild speichern
+image = bpy.data.images[image_name]
 image.filepath_raw = os.path.join(output_path, output_image_name)
 image.file_format = 'PNG'
 image.save()
 
 print("Baking completed and UV Map saved as", output_image_name)
+
+```
