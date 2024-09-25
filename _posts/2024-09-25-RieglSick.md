@@ -26,7 +26,7 @@ $ ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 map laser_link
 Für die Riegl VZ Integration in ROS2:
 https://github.com/riegllms/ros-riegl-vz
 mit frame-name: riegl_vz_socs
-Die riegl.rdb-2.4.3-py3-none-linux_x86_64.whl Wheel bekommt man von der Riegl Webseite, oder ich habe sie mir selber per Email geschickt am 25.09.2024 um 14:18 (betreff: wheel riegl rdb whl
+Die riegl.rdb-2.4.3-py3-none-linux_x86_64.whl Wheel bekommt man von der Riegl Webseite, oder ich habe sie mir selber per Email (tu mail) geschickt am 25.09.2024 um 14:18 (betreff: wheel riegl rdb whl
 ).
 
 ```bash
