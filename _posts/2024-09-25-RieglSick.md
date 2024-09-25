@@ -4,10 +4,11 @@ Ich bin auf der InnoTrans und integriere diese Systeme (ROS2).
 https://github.com/clearpathrobotics/lms1xx
 see also: https://docs.clearpathrobotics.com/docs/robots/accessories/sensors/lidar_2d/sick_lms111/
 
-```bash
-```
 
-```txt
+
+```bash
+$ source /opt/ros/galactic/setup.bash
+$ source ~/my_workspace/install/setup.bash
 $ vim ~/my_workspace/src/LMS1xx/configlms_111.yaml
     host: 192.168.188.50
     ...
@@ -27,6 +28,17 @@ https://github.com/riegllms/ros-riegl-vz
 mit frame-name: riegl_vz_socs
 Die riegl.rdb-2.4.3-py3-none-linux_x86_64.whl Wheel bekommt man von der Riegl Webseite, oder ich habe sie mir selber per Email geschickt am 25.09.2024 um 14:18 (betreff: wheel riegl rdb whl
 ).
+
+```bash
+$ source /opt/ros/galactic/setup.bash
+$ ros2 launch riegl_vz std_launch.py
+(neues Terminal)
+$ source /opt/ros/galactic/setup.bash
+$ ros2 service call /scan std_srvs/srv/Trigger
+(neues Terminal)
+$ source /opt/ros/galactic/setup.bash
+% rviz2
+```
 
 
 
