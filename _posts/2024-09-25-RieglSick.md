@@ -40,6 +40,21 @@ $ source /opt/ros/galactic/setup.bash
 % rviz2
 ```
 
+Für den ASC das gitlab (Tu Wien) Package verwenden, das hat mit galactic direkt funktionert,
+Ich habe noch den magdwick-filter installiert (imu-tools), weil dann die IMU bzw. die lineraren Beschleunigungen in rviz angezeigt werden können.
+
+```bash
+$ sudo apt install ros-galactic-imu-tools
+$ ros2 run sensor_rs232 sensor
+(name des Topics auf /imu/data_raw ändern, damit der magdwick-filter damit arbeitet!)
+vim ~/my_workspace/src/sensor_rs232/sensor_rs232/sensor_node_rs232.py
+z35. self.pub_data = self.create_publisher(Imu, '/imu/data_raw', 10)
+(noch den Frame)
+$ ros2 run tf2_ros static_transform_publisher 0 0 0 0.95 0 0 riegl_vz_socs imu_link
+```
+Dann rviz2 neu starten, dann kann man auch Imu Messages plotten. Für den asc gibt es nur linear acceleration data, aber da kann man ein hacken setzen, dass die Daten angezeigt werden.
+Das ist dann so ein Pfeil, noch den Haken bei "fixed frame ..." und "derotate ..." wegmachen.
+
 
 
 
