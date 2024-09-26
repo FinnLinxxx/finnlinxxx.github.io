@@ -57,5 +57,3 @@ Das ist dann so ein Pfeil, noch den Haken bei "fixed frame ..." und "derotate ..
 
 
 
-
-
