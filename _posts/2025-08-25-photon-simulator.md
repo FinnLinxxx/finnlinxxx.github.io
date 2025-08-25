@@ -1,19 +1,14 @@
 ---
 layout: single
-title: "Photonen-Simulator · Mikrofacetten + Detektor"
+title: "Photonen-Simulator3 · Mikrofacetten + Detektor"
 classes: wide
 toc: false
 ---
 
-<!-- Full-bleed Container, verlässt das Theme-Grid -->
+<!-- Full-bleed Container -->
 <div class="mm-sim-fullbleed">
   <style>
-    /* Full-bleed Wrapper */
-    .mm-sim-fullbleed{
-      width:100vw; margin-left:50%; transform:translateX(-50%);
-      background:transparent;
-    }
-    /* === Alles wie in deiner funktionierenden Standalone === */
+    .mm-sim-fullbleed{ width:100vw; margin-left:50%; transform:translateX(-50%); }
     :root{
       --mf-air:#87CEEB; --mf-mat:#b99b71; --mf-line:#1c2a38; --mf-accent:#2f81f7; --mf-muted:#6b7c8f;
       --photon-reflect:#ff5d2a; --photon-sss:#8a2be2; --mf-emitter:#00bcd4;
@@ -21,7 +16,7 @@ toc: false
       --detector:#f0b93a; --total:#111;
     }
     .sim-root{
-      display:grid; grid-template-columns: minmax(420px,1fr) minmax(480px,46vw);
+      display:grid; grid-template-columns:minmax(420px,1fr) minmax(480px,46vw);
       gap:0; min-height:70vh; color:#2b3645; background:#fff;
     }
     @media (max-width:1100px){ .sim-root{ grid-template-columns:1fr; } }
@@ -52,7 +47,6 @@ toc: false
   </style>
 
   {% raw %}
-  <!-- Der komplette UI-Block im RAW, damit Liquid/Kramdown nichts verändert -->
   <div class="sim-root">
     <div id="left">
       <div class="mf-box">
@@ -199,26 +193,19 @@ toc: false
   </div>
   {% endraw %}
 
-  <!-- Externe Skripte LADEN (außerhalb von raw, damit {{ site.baseurl }} aufgelöst wird) -->
+  <!-- Externe Skripte -->
   <script src="{{ site.baseurl }}/assets/engine.js"></script>
   <script src="{{ site.baseurl }}/assets/app.js"></script>
 
-  <!-- Kickstart/Heilmittel: falls der Blog das Timing ändert, triggern wir initiale 'input'-Events -->
+  <!-- Kickstart + “Hard Reset” bei Roughness/Facet/Sigma/Count -->
   <script>
-    // Warte bis alles (inkl. externen Scripts) geladen ist:
     window.addEventListener('load', function(){
-      // kleine Sichtbarkeits-Prüfung
-      const must = ['mf-view','mf-rough','mf-zoom','mf-speed','mf-count','mf-sigPara','mf-sigOrtho','mf-n','mf-a','mf-s','mf-hg','histCanvas'];
-      const ok = must.every(id => document.getElementById(id));
-      if(!ok){ console.warn('[sim] DOM not complete, some ids missing'); }
-
-      // Initial alle Slider “antippen”, damit Labels/SIM-State sicher synchron sind
-      const sliders = [
+      const slidersToKick = [
         'mf-facetRes','mf-rough','mf-zoom','mf-speed','mf-count',
         'mf-sigPara','mf-sigOrtho','mf-n','mf-a','mf-s','mf-hg',
         'mf-detWidth','smoothSlider'
       ];
-      sliders.forEach(id=>{
+      slidersToKick.forEach(id=>{
         const el = document.getElementById(id);
         if(el){
           el.dispatchEvent(new Event('input', {bubbles:true}));
@@ -226,12 +213,39 @@ toc: false
         }
       });
 
-      // Einmal Render erzwingen (falls rAF pausiert war)
+      // Debounced Reset, damit Geometrie sofort neu gesampelt / gezeichnet wird
+      const needsReset = ['mf-rough','mf-facetRes','mf-sigPara','mf-sigOrtho','mf-count'];
+      const btnReset = document.getElementById('btnReset');
+      let req = null;
+      const debReset = () => {
+        if(!btnReset) return;
+        if(req) cancelAnimationFrame(req);
+        req = requestAnimationFrame(()=>{ btnReset.click(); req=null; });
+      };
+      needsReset.forEach(id=>{
+        const el = document.getElementById(id);
+        if(el){
+          el.addEventListener('input', debReset);
+          el.addEventListener('change', debReset);
+        }
+      });
+
+      // Falls du Pausenmodus nutzt: nach jeder Änderung hart neu zeichnen
+      const forceRepaint = () => window.dispatchEvent(new Event('resize'));
+      ['mf-zoom','mf-speed','mf-n','mf-a','mf-s','mf-hg','mf-detWidth','mf-geoToggle','mf-showSSS','mf-showRed','modeGraph','smoothSlider','chkRed','chkSSS','chkTotal']
+        .forEach(id=>{
+          const el = document.getElementById(id);
+          if(el){
+            el.addEventListener('input', forceRepaint);
+            el.addEventListener('change', forceRepaint);
+          }
+        });
+
+      // Optional: wenn MFSim API existiert, sofortige Neuzeichnung anfordern
       if (window.MFSim && typeof MFSim.requestImmediateRedraw === 'function') {
         MFSim.requestImmediateRedraw();
       } else {
-        // zur Not: kleinstes Timeout → nächste rAF
-        setTimeout(()=>{ window.dispatchEvent(new Event('resize')); }, 0);
+        setTimeout(()=>window.dispatchEvent(new Event('resize')), 0);
       }
     });
   </script>
