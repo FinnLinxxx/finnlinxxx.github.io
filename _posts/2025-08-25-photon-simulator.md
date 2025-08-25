@@ -1,11 +1,13 @@
 ---
 layout: single
-title: "Photonen-Simulator3 · Mikrofacetten + Detektor"
+title: "Photonen-Simulator · Mikrofacetten + Detektor"
 classes: wide
 toc: false
+mathjax: false
+use_math: false
 ---
 
-<!-- Full-bleed Container -->
+<!-- Full-bleed Container, damit nichts rechts gequetscht wird -->
 <div class="mm-sim-fullbleed">
   <style>
     .mm-sim-fullbleed{ width:100vw; margin-left:50%; transform:translateX(-50%); }
@@ -16,8 +18,8 @@ toc: false
       --detector:#f0b93a; --total:#111;
     }
     .sim-root{
-      display:grid; grid-template-columns:minmax(420px,1fr) minmax(480px,46vw);
-      gap:0; min-height:70vh; color:#2b3645; background:#fff;
+      display:grid; grid-template-columns:minmax(420px,1fr) minmax(520px,48vw);
+      gap:0; min-height:72vh; color:#2b3645; background:#fff;
     }
     @media (max-width:1100px){ .sim-root{ grid-template-columns:1fr; } }
     #left{ display:flex; flex-direction:column; align-items:center; gap:12px; padding:14px 16px; }
@@ -47,6 +49,7 @@ toc: false
   </style>
 
   {% raw %}
+  <!-- Dein vollständiges HTML-Gerüst aus der funktionierenden index.html -->
   <div class="sim-root">
     <div id="left">
       <div class="mf-box">
@@ -193,60 +196,82 @@ toc: false
   </div>
   {% endraw %}
 
-  <!-- Externe Skripte -->
+  <!-- Deine existierenden Dateien aus /assets/ -->
   <script src="{{ site.baseurl }}/assets/engine.js"></script>
   <script src="{{ site.baseurl }}/assets/app.js"></script>
 
-  <!-- Kickstart + “Hard Reset” bei Roughness/Facet/Sigma/Count -->
+  <!-- Glue: erzwingt Redraw/Resample bei Roughness/Facet/Sigmas/Count und setzt Speed direkt -->
   <script>
-    window.addEventListener('load', function(){
-      const slidersToKick = [
-        'mf-facetRes','mf-rough','mf-zoom','mf-speed','mf-count',
-        'mf-sigPara','mf-sigOrtho','mf-n','mf-a','mf-s','mf-hg',
-        'mf-detWidth','smoothSlider'
-      ];
-      slidersToKick.forEach(id=>{
-        const el = document.getElementById(id);
-        if(el){
-          el.dispatchEvent(new Event('input', {bubbles:true}));
-          el.dispatchEvent(new Event('change', {bubbles:true}));
+    (function(){
+      function $(id){ return document.getElementById(id); }
+      function safe(fn){ try{ fn(); }catch(e){ /*noop*/ } }
+
+      function hardReset(keepTime){
+        // bevorzuge API, sonst Button
+        if (window.MFSim){
+          safe(()=>{ if(typeof MFSim.resetWave==='function') MFSim.resetWave(!!keepTime); });
+          safe(()=>{ if(typeof MFSim.requestImmediateRedraw==='function') MFSim.requestImmediateRedraw(); });
+        } else {
+          const b=$('btnReset'); if(b) b.click();
         }
-      });
-
-      // Debounced Reset, damit Geometrie sofort neu gesampelt / gezeichnet wird
-      const needsReset = ['mf-rough','mf-facetRes','mf-sigPara','mf-sigOrtho','mf-count'];
-      const btnReset = document.getElementById('btnReset');
-      let req = null;
-      const debReset = () => {
-        if(!btnReset) return;
-        if(req) cancelAnimationFrame(req);
-        req = requestAnimationFrame(()=>{ btnReset.click(); req=null; });
-      };
-      needsReset.forEach(id=>{
-        const el = document.getElementById(id);
-        if(el){
-          el.addEventListener('input', debReset);
-          el.addEventListener('change', debReset);
-        }
-      });
-
-      // Falls du Pausenmodus nutzt: nach jeder Änderung hart neu zeichnen
-      const forceRepaint = () => window.dispatchEvent(new Event('resize'));
-      ['mf-zoom','mf-speed','mf-n','mf-a','mf-s','mf-hg','mf-detWidth','mf-geoToggle','mf-showSSS','mf-showRed','modeGraph','smoothSlider','chkRed','chkSSS','chkTotal']
-        .forEach(id=>{
-          const el = document.getElementById(id);
-          if(el){
-            el.addEventListener('input', forceRepaint);
-            el.addEventListener('change', forceRepaint);
-          }
-        });
-
-      // Optional: wenn MFSim API existiert, sofortige Neuzeichnung anfordern
-      if (window.MFSim && typeof MFSim.requestImmediateRedraw === 'function') {
-        MFSim.requestImmediateRedraw();
-      } else {
+        // ein kleiner „nudge“, falls Pause
         setTimeout(()=>window.dispatchEvent(new Event('resize')), 0);
       }
-    });
+
+      function bindImmediate(){
+        const rough = $('mf-rough');
+        const facet = $('mf-facetRes');
+        const sigP  = $('mf-sigPara');
+        const sigO  = $('mf-sigOrtho');
+        const count = $('mf-count');
+        const speed = $('mf-speed');
+
+        // Werte -> Engine direkt (falls API vorhanden)
+        function applyParams(){
+          if (!window.MFSim) return;
+          safe(()=>MFSim.setRoughness && MFSim.setRoughness(parseFloat(rough.value)));
+          safe(()=>MFSim.setFacetRes  && MFSim.setFacetRes(parseFloat(facet.value)));
+          safe(()=>MFSim.setSigmas    && MFSim.setSigmas(parseFloat(sigP.value), parseFloat(sigO.value)));
+          safe(()=>MFSim.setCount     && MFSim.setCount(parseInt(count.value,10)));
+          safe(()=>MFSim.setSpeed     && MFSim.setSpeed(parseFloat(speed.value)));
+        }
+
+        // Debounce Reset (Geometrie-ändernde Slider)
+        let raf=null;
+        function debouncedReset(){
+          applyParams();
+          if(raf) cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(()=>{ hardReset(true); raf=null; });
+        }
+
+        // Geometrie-abhängig → sofort neu samplen & redrawen
+        [rough, facet, sigP, sigO, count].forEach(el=>{
+          if(!el) return;
+          el.addEventListener('input', debouncedReset);
+          el.addEventListener('change', debouncedReset);
+        });
+
+        // Speed soll sofort wirken (ohne Neu-Sampling)
+        if(speed){
+          const onSpeed = ()=>{
+            applyParams();
+            // Falls deine Engine nur eine globale nutzt:
+            safe(()=>{ if(window.MFSim && typeof MFSim.touch==='function') MFSim.touch(); });
+          };
+          speed.addEventListener('input', onSpeed);
+          speed.addEventListener('change', onSpeed);
+        }
+
+        // Initial „kick“
+        debouncedReset();
+      }
+
+      // Nach Laden binden
+      if (document.readyState === 'complete' || document.readyState === 'interactive'){
+        setTimeout(bindImmediate, 0);
+      } else {
+        window.addEventListener('DOMContentLoaded', bindImmediate);
+      }
+    })();
   </script>
 </div>
