@@ -1,18 +1,60 @@
 ---
 layout: single
-title: "Photonen-Simulator (Mikrofacetten + Subsurface)"
+title: "Photonen-Simulator3 (Mikrofacetten + Subsurface)"
 permalink: /blog/photon-sim/
+classes: wide        # <- Minimal Mistakes: nutzt die volle Inhaltsbreite
+author_profile: false
 toc: false
 sidebar: false
 ---
 
-<!-- App-Styles (deine /assets/styles.css, enthält auch die Full-Bleed-Klassen mf-bleed/mf-shell) -->
+<!-- Seite lokal etwas „entfesseln“, damit der Inhalt NICHT rechts eingequetscht ist -->
+<style>
+/* Weite Inhaltsfläche nur auf dieser Seite öffnen */
+.page__content:has(#mf-app),
+.page__inner-wrap:has(#mf-app){
+  max-width:none;
+  padding-left:0;
+  padding-right:0;
+  overflow:visible; /* wichtig, sonst schneidet MM negative Margins ab */
+}
+
+/* Full-bleed Wrapper bis an den Viewportrand */
+.mf-bleed{
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+}
+
+/* Hauptlayout der App: zwei Spalten, links Simulation, rechts Plot/Controls */
+.mf-shell{
+  display:grid;
+  grid-template-columns: minmax(520px, 58vw) minmax(380px, 42vw);
+  grid-auto-rows: auto;
+  align-items:start;
+  gap:0;
+  padding:0;
+}
+
+/* Mobile: untereinander */
+@media (max-width: 1100px){
+  .mf-shell{ grid-template-columns: 1fr; }
+}
+
+/* Kleine optische Korrekturen, falls Theme globale Abstände setzt */
+.mf-shell > *{ margin:0; }
+
+/* Optional: etwas „Luft“ um die App */
+.mf-bleed{ padding: 0 0 24px; }
+</style>
+
+<!-- App-Styles (enthält die UI-Designfarben, Slider, Panels usw.) -->
 <link rel="stylesheet" href="/assets/styles.css">
 
 <div class="mf-bleed">
   <div class="mf-shell" id="mf-app">
 
-    <!-- ================= LEFT: Canvas + Controls ================= -->
+    <!-- =============== LEFT: Canvas + Controls =============== -->
     <div id="left">
       <div class="mf-box">
         <canvas id="mf-view" class="mf-canvas" width="1600" height="1200" aria-label="Rauigkeitskasten"></canvas>
@@ -116,7 +158,7 @@ sidebar: false
       </div>
     </div>
 
-    <!-- ================= RIGHT: Histogram Panel ================= -->
+    <!-- =============== RIGHT: Histogram Panel =============== -->
     <div id="right">
       <div class="panel">
         <canvas id="histCanvas" width="820" height="360"></canvas>
@@ -168,6 +210,6 @@ sidebar: false
   </div>
 </div>
 
-<!-- WICHTIG: Reihenfolge beibehalten -->
+<!-- Skripte (müssen auf /assets liegen, damit GitHub Pages sie findet) -->
 <script src="/assets/engine.js"></script>
 <script src="/assets/app.js"></script>
