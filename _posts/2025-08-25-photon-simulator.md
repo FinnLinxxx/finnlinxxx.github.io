@@ -5,99 +5,54 @@ classes: wide
 toc: false
 ---
 
-<!-- Vollbreit-Wrapper für Minimal Mistakes -->
+<!-- Full-bleed Container, verlässt das Theme-Grid -->
 <div class="mm-sim-fullbleed">
   <style>
-    /* -------------------------------
-       CSS-Variablen global (werden in JS via getCss('--...') gelesen)
-       ------------------------------- */
-    :root{
-      --mf-air:#87CEEB;      /* Luft */
-      --mf-mat:#b99b71;      /* Material */
-      --mf-line:#1c2a38;     /* Interface */
-      --mf-accent:#2f81f7;
-      --mf-muted:#6b7c8f;
-
-      --photon-reflect:#ff5d2a;  /* rote Photonen (Reflexion) */
-      --photon-sss:#8a2be2;      /* lila Photonen (SSS) */
-      --mf-emitter:#00bcd4;      /* Emitter */
-
-      --ovl-plane:#6b5cff;   /* Orthogonale (lila) */
-      --ovl-in:#00bcd4;      /* Einfallslinie (cyan) */
-      --ovl-arc:#202939;     /* Winkelbogen */
-      --ovl-fit:#2ecc71;     /* Fit-Linie (grün) + Punkte */
-
-      --detector:#f0b93a;    /* Detektor-Linie */
-      --total:#111;          /* Summenkurve im Histogramm */
-    }
-
-    /* -------------------------------
-       Full-bleed Container (verlässt das Theme-Grid)
-       ------------------------------- */
+    /* Full-bleed Wrapper */
     .mm-sim-fullbleed{
-      width:100vw;
-      margin-left:50%;
-      transform:translateX(-50%);
+      width:100vw; margin-left:50%; transform:translateX(-50%);
       background:transparent;
     }
-
-    /* Root der App */
+    /* === Alles wie in deiner funktionierenden Standalone === */
+    :root{
+      --mf-air:#87CEEB; --mf-mat:#b99b71; --mf-line:#1c2a38; --mf-accent:#2f81f7; --mf-muted:#6b7c8f;
+      --photon-reflect:#ff5d2a; --photon-sss:#8a2be2; --mf-emitter:#00bcd4;
+      --ovl-plane:#6b5cff; --ovl-in:#00bcd4; --ovl-arc:#202939; --ovl-fit:#2ecc71;
+      --detector:#f0b93a; --total:#111;
+    }
     .sim-root{
-      display:grid;
-      grid-template-columns: minmax(420px, 1fr) minmax(480px, 46vw);
-      grid-template-rows:auto;
-      gap:0;
-      min-height:70vh;
-      color:#2b3645;
-      background:#fff;
-      border:0;
+      display:grid; grid-template-columns: minmax(420px,1fr) minmax(480px,46vw);
+      gap:0; min-height:70vh; color:#2b3645; background:#fff;
     }
-    @media (max-width: 1100px){
-      .sim-root{ grid-template-columns: 1fr; }
-    }
-
-    /* Linker Bereich */
-    .sim-root #left{
-      display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
-      padding:14px 16px; gap:12px;
-    }
-    .mf-box{ width:min(160mm, 92vw); height:min(120mm, 68vh); position:relative; }
-    .mf-canvas{ width:100%; height:100%; display:block; border-radius:10px; box-shadow:0 12px 38px rgba(0,0,0,.12); background:transparent; }
-
-    .mf-controls{ display:grid; gap:8px; width:min(160mm, 92vw); }
-    .mf-row{ display:grid; grid-template-columns: 180px minmax(0,1fr) 140px; align-items:center; gap:10px; }
+    @media (max-width:1100px){ .sim-root{ grid-template-columns:1fr; } }
+    #left{ display:flex; flex-direction:column; align-items:center; gap:12px; padding:14px 16px; }
+    .mf-box{ width:min(160mm,92vw); height:min(120mm,68vh); position:relative; }
+    .mf-canvas{ width:100%; height:100%; display:block; border-radius:10px; box-shadow:0 12px 38px rgba(0,0,0,.12); }
+    .mf-controls{ display:grid; gap:8px; width:min(160mm,92vw); }
+    .mf-row{ display:grid; grid-template-columns:180px minmax(0,1fr) 140px; gap:10px; align-items:center; }
     .mf-row label{ color:var(--mf-muted); font-weight:700; white-space:nowrap }
     .mf-val{ justify-self:end; color:var(--mf-accent); font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
-    .mf-row input[type=range]{ -webkit-appearance:none; width:100%; height:6px; border-radius:999px; background:#d0d7de; outline:none; cursor:pointer }
+    .mf-row input[type=range]{ -webkit-appearance:none; width:100%; height:6px; border-radius:999px; background:#d0d7de; cursor:pointer }
     .mf-row input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--mf-accent); box-shadow:0 0 0 3px rgba(47,129,247,.18) }
     .mf-row input[type=checkbox]{ width:18px; height:18px; }
     .btnRow{ display:flex; gap:8px; align-items:center; flex-wrap:wrap }
     button{ appearance:none; border:1px solid #d5dbe0; background:#fff; border-radius:8px; padding:8px 12px; font-weight:600; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.04) }
-    button:hover{ background:#f2f5f8 }
-    .primary{ background:#0d6efd; color:#fff; border-color:#0d6efd }
-    .primary:hover{ background:#0b5ed7 }
-
-    /* Rechter Bereich */
-    .sim-root #right{
-      display:flex; flex-direction:column; background:#eef2f6; padding:16px; gap:14px; overflow:hidden;
-      border-left:1px solid #e4e7eb;
-    }
+    button:hover{ background:#f2f5f8 } .primary{ background:#0d6efd; color:#fff; border-color:#0d6efd } .primary:hover{ background:#0b5ed7 }
+    #right{ display:flex; flex-direction:column; background:#eef2f6; padding:16px; gap:14px; border-left:1px solid #e4e7eb; overflow:hidden }
     .panel{ background:#fff; border:1px solid #e4e7eb; border-radius:12px; box-shadow:0 10px 24px rgba(0,0,0,.10); padding:14px }
     #histCanvas{ width:100%; height:360px; border-radius:10px; border:1px solid #e4e7eb; background:#fff; display:block }
     .legendRow{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
     .chip{ padding:2px 6px; border-radius:999px; background:#f2f5f8; border:1px solid #e4e7eb; font-weight:700 }
     .swatch{ display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:middle }
-    .sw-red{ background: var(--photon-reflect) }
-    .sw-sss{ background: var(--photon-sss) }
-    .sw-total{ background: var(--total) }
-
+    .sw-red{ background:var(--photon-reflect) } .sw-sss{ background:var(--photon-sss) } .sw-total{ background:var(--total) }
     .rightControls{ display:grid; gap:10px }
-    .rightRow{ display:grid; grid-template-columns: 140px 1fr 140px; align-items:center; gap:10px }
+    .rightRow{ display:grid; grid-template-columns:140px 1fr 140px; gap:10px; align-items:center }
     .rightRow .val{ text-align:right; font-weight:800; color:#0d6efd }
-    .rightRow input[type=checkbox]{ width:18px; height:18px; }
     .rightRow select{ padding:6px 10px; border-radius:8px; border:1px solid #d5dbe0; background:#fff; font-weight:600 }
   </style>
 
+  {% raw %}
+  <!-- Der komplette UI-Block im RAW, damit Liquid/Kramdown nichts verändert -->
   <div class="sim-root">
     <div id="left">
       <div class="mf-box">
@@ -242,8 +197,42 @@ toc: false
       </div>
     </div>
   </div>
+  {% endraw %}
 
-  <!-- Skripte aus /assets laden, Reihenfolge beibehalten -->
+  <!-- Externe Skripte LADEN (außerhalb von raw, damit {{ site.baseurl }} aufgelöst wird) -->
   <script src="{{ site.baseurl }}/assets/engine.js"></script>
   <script src="{{ site.baseurl }}/assets/app.js"></script>
+
+  <!-- Kickstart/Heilmittel: falls der Blog das Timing ändert, triggern wir initiale 'input'-Events -->
+  <script>
+    // Warte bis alles (inkl. externen Scripts) geladen ist:
+    window.addEventListener('load', function(){
+      // kleine Sichtbarkeits-Prüfung
+      const must = ['mf-view','mf-rough','mf-zoom','mf-speed','mf-count','mf-sigPara','mf-sigOrtho','mf-n','mf-a','mf-s','mf-hg','histCanvas'];
+      const ok = must.every(id => document.getElementById(id));
+      if(!ok){ console.warn('[sim] DOM not complete, some ids missing'); }
+
+      // Initial alle Slider “antippen”, damit Labels/SIM-State sicher synchron sind
+      const sliders = [
+        'mf-facetRes','mf-rough','mf-zoom','mf-speed','mf-count',
+        'mf-sigPara','mf-sigOrtho','mf-n','mf-a','mf-s','mf-hg',
+        'mf-detWidth','smoothSlider'
+      ];
+      sliders.forEach(id=>{
+        const el = document.getElementById(id);
+        if(el){
+          el.dispatchEvent(new Event('input', {bubbles:true}));
+          el.dispatchEvent(new Event('change', {bubbles:true}));
+        }
+      });
+
+      // Einmal Render erzwingen (falls rAF pausiert war)
+      if (window.MFSim && typeof MFSim.requestImmediateRedraw === 'function') {
+        MFSim.requestImmediateRedraw();
+      } else {
+        // zur Not: kleinstes Timeout → nächste rAF
+        setTimeout(()=>{ window.dispatchEvent(new Event('resize')); }, 0);
+      }
+    });
+  </script>
 </div>
