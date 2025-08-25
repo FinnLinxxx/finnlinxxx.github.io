@@ -1,6 +1,35 @@
----
-layout: home
-author_profile: true
----
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Photonen-Simulator (Standalone)</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <style>html,body{height:100%} body{margin:0}</style>
+</head>
+<body>
+  <!-- Dein bestehendes Markup (Canvas, Controls, Panels) bleibt identisch -->
+  <div id="left">
+    <div class="mf-box">
+      <canvas id="mf-view" class="mf-canvas" width="1600" height="1200"></canvas>
+    </div>
+    <!-- … alle Controls … -->
+  </div>
 
-<p>This text should appear above the recent posts.</p>
+  <div id="right">
+    <div class="panel">
+      <canvas id="histCanvas" width="820" height="360"></canvas>
+      <div class="legendRow" style="margin-top:10px">
+        <span class="chip"><span class="swatch sw-red"></span>Rot aktiv: <span id="cntRed">0</span></span>
+        <span class="chip"><span class="swatch sw-sss"></span>Lila aktiv: <span id="cntSSS">0</span></span>
+        <span class="chip"><span class="swatch sw-total"></span>Summe: <span id="cntTotal">0</span></span>
+      </div>
+    </div>
+    <!-- … rechte Panel-Controls … -->
+  </div>
+
+  <!-- Skripte: absolut vom Repo-Root laden -->
+  <script src="/assets/engine.js"></script>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
