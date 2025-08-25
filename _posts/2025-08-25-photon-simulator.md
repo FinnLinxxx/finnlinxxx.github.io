@@ -1,104 +1,104 @@
 ---
 layout: single
 title: "Photonen-Simulator · Mikrofacetten + Detektor"
-excerpt: "Interaktive Web-App direkt im Post, vollbreit"
-classes: wide        # Minimal Mistakes breiter Content
+classes: wide
 toc: false
-author_profile: false
-mathjax: false
 ---
 
-<style>
-/* ===== Full-bleed Wrapper, berührt die Ränder ===== */
-.mm-bleed {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-}
+<!-- Vollbreit-Wrapper für Minimal Mistakes -->
+<div class="mm-sim-fullbleed">
+  <style>
+    /* -------------------------------
+       CSS-Variablen global (werden in JS via getCss('--...') gelesen)
+       ------------------------------- */
+    :root{
+      --mf-air:#87CEEB;      /* Luft */
+      --mf-mat:#b99b71;      /* Material */
+      --mf-line:#1c2a38;     /* Interface */
+      --mf-accent:#2f81f7;
+      --mf-muted:#6b7c8f;
 
-/* ===== App-Scope: nichts global (kein body) ===== */
-:root{
-  --mf-air:#87CEEB;      /* Luft */
-  --mf-mat:#b99b71;      /* Material */
-  --mf-line:#1c2a38;     /* Interface */
-  --mf-accent:#2f81f7;
-  --mf-muted:#6b7c8f;
-  --photon-reflect:#ff5d2a;  /* rot */
-  --photon-sss:#8a2be2;      /* lila */
-  --mf-emitter:#00bcd4;      /* Emitter */
-  --ovl-plane:#6b5cff;       /* lila Linie */
-  --ovl-in:#00bcd4;          /* cyan Linie */
-  --ovl-arc:#202939;         /* Winkelbogen */
-  --ovl-fit:#2ecc71;         /* grün */
-  --detector:#f0b93a;        /* Detektor */
-  --total:#111;              /* Summenkurve */
-}
+      --photon-reflect:#ff5d2a;  /* rote Photonen (Reflexion) */
+      --photon-sss:#8a2be2;      /* lila Photonen (SSS) */
+      --mf-emitter:#00bcd4;      /* Emitter */
 
-/* Root der App – nix global anfassen */
-.mm-sim {
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: minmax(420px, 1fr) minmax(520px, 46vw);
-  gap: 0;
-  align-items: start;
-  background: #fff;
-  color: #2b3645;
-  padding: 0;
-}
+      --ovl-plane:#6b5cff;   /* Orthogonale (lila) */
+      --ovl-in:#00bcd4;      /* Einfallslinie (cyan) */
+      --ovl-arc:#202939;     /* Winkelbogen */
+      --ovl-fit:#2ecc71;     /* Fit-Linie (grün) + Punkte */
 
-/* Linke Seite */
-.mm-sim #left{
-  display:flex; flex-direction:column; align-items:center; gap:12px;
-  padding:14px 16px;
-}
-.mm-sim .mf-box{ width:min(160mm, 95%); height:120mm; position:relative; }
-.mm-sim .mf-canvas{ width:100%; height:100%; display:block; border-radius:10px; box-shadow:0 12px 38px rgba(0,0,0,.12); background:transparent; }
+      --detector:#f0b93a;    /* Detektor-Linie */
+      --total:#111;          /* Summenkurve im Histogramm */
+    }
 
-.mm-sim .mf-controls{ display:grid; gap:8px; width:min(160mm, 95%); }
-.mm-sim .mf-row{ display:grid; grid-template-columns: 180px minmax(0,1fr) 140px; align-items:center; gap:10px; }
-.mm-sim .mf-row label{ color:var(--mf-muted); font-weight:700; white-space:nowrap }
-.mm-sim .mf-val{ justify-self:end; color:var(--mf-accent); font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
-.mm-sim input[type=range]{ -webkit-appearance:none; width:100%; height:6px; border-radius:999px; background:#d0d7de; outline:none; cursor:pointer }
-.mm-sim input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--mf-accent); box-shadow:0 0 0 3px rgba(47,129,247,.18) }
-.mm-sim input[type=checkbox]{ width:18px; height:18px; }
-.mm-sim .btnRow{ display:flex; gap:8px; align-items:center; }
-.mm-sim button{ appearance:none; border:1px solid #d5dbe0; background:#fff; border-radius:8px; padding:8px 12px; font-weight:600; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.04) }
-.mm-sim button:hover{ background:#f2f5f8 }
-.mm-sim .primary{ background:#0d6efd; color:#fff; border-color:#0d6efd }
-.mm-sim .primary:hover{ background:#0b5ed7 }
+    /* -------------------------------
+       Full-bleed Container (verlässt das Theme-Grid)
+       ------------------------------- */
+    .mm-sim-fullbleed{
+      width:100vw;
+      margin-left:50%;
+      transform:translateX(-50%);
+      background:transparent;
+    }
 
-/* Rechte Seite */
-.mm-sim #right{
-  display:flex; flex-direction:column; background:#eef2f6; padding:16px; gap:14px; overflow:hidden;
-  border-left:1px solid #e4e7eb;
-}
-.mm-sim .panel{ background:#fff; border:1px solid #e4e7eb; border-radius:12px; box-shadow:0 10px 24px rgba(0,0,0,.10); padding:14px }
-.mm-sim #histCanvas{ width:100%; height:360px; border-radius:10px; border:1px solid #e4e7eb; background:#fff; display:block }
-.mm-sim .legendRow{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
-.mm-sim .chip{ padding:2px 6px; border-radius:999px; background:#f2f5f8; border:1px solid #e4e7eb; font-weight:700 }
-.mm-sim .swatch{ display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:middle }
-.mm-sim .sw-red{ background: var(--photon-reflect) }
-.mm-sim .sw-sss{ background: var(--photon-sss) }
-.mm-sim .sw-total{ background: var(--total) }
-.mm-sim .rightControls{ display:grid; gap:10px }
-.mm-sim .rightRow{ display:grid; grid-template-columns: 140px 1fr 140px; align-items:center; gap:10px }
-.mm-sim .rightRow .val{ text-align:right; font-weight:800; color:#0d6efd }
-.mm-sim .rightRow input[type=checkbox]{ width:18px; height:18px; }
-.mm-sim .rightRow select{ padding:6px 10px; border-radius:8px; border:1px solid #d5dbe0; background:#fff; font-weight:600 }
+    /* Root der App */
+    .sim-root{
+      display:grid;
+      grid-template-columns: minmax(420px, 1fr) minmax(480px, 46vw);
+      grid-template-rows:auto;
+      gap:0;
+      min-height:70vh;
+      color:#2b3645;
+      background:#fff;
+      border:0;
+    }
+    @media (max-width: 1100px){
+      .sim-root{ grid-template-columns: 1fr; }
+    }
 
-/* Vollbreit auf kleinen Screens: Stapeln */
-@media (max-width: 1100px){
-  .mm-sim { grid-template-columns: 1fr; }
-  .mm-sim #right { border-left: none; }
-}
+    /* Linker Bereich */
+    .sim-root #left{
+      display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+      padding:14px 16px; gap:12px;
+    }
+    .mf-box{ width:min(160mm, 92vw); height:min(120mm, 68vh); position:relative; }
+    .mf-canvas{ width:100%; height:100%; display:block; border-radius:10px; box-shadow:0 12px 38px rgba(0,0,0,.12); background:transparent; }
 
-/* Optional: App oben/unten vom Theme etwas absetzen */
-.mm-sim { margin: 0; }
-.mm-bleed + .page__comments { margin-top: 1rem; }
-</style>
+    .mf-controls{ display:grid; gap:8px; width:min(160mm, 92vw); }
+    .mf-row{ display:grid; grid-template-columns: 180px minmax(0,1fr) 140px; align-items:center; gap:10px; }
+    .mf-row label{ color:var(--mf-muted); font-weight:700; white-space:nowrap }
+    .mf-val{ justify-self:end; color:var(--mf-accent); font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+    .mf-row input[type=range]{ -webkit-appearance:none; width:100%; height:6px; border-radius:999px; background:#d0d7de; outline:none; cursor:pointer }
+    .mf-row input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--mf-accent); box-shadow:0 0 0 3px rgba(47,129,247,.18) }
+    .mf-row input[type=checkbox]{ width:18px; height:18px; }
+    .btnRow{ display:flex; gap:8px; align-items:center; flex-wrap:wrap }
+    button{ appearance:none; border:1px solid #d5dbe0; background:#fff; border-radius:8px; padding:8px 12px; font-weight:600; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.04) }
+    button:hover{ background:#f2f5f8 }
+    .primary{ background:#0d6efd; color:#fff; border-color:#0d6efd }
+    .primary:hover{ background:#0b5ed7 }
 
-<div class="mm-bleed">
-  <div class="mm-sim" id="mf-app">
+    /* Rechter Bereich */
+    .sim-root #right{
+      display:flex; flex-direction:column; background:#eef2f6; padding:16px; gap:14px; overflow:hidden;
+      border-left:1px solid #e4e7eb;
+    }
+    .panel{ background:#fff; border:1px solid #e4e7eb; border-radius:12px; box-shadow:0 10px 24px rgba(0,0,0,.10); padding:14px }
+    #histCanvas{ width:100%; height:360px; border-radius:10px; border:1px solid #e4e7eb; background:#fff; display:block }
+    .legendRow{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+    .chip{ padding:2px 6px; border-radius:999px; background:#f2f5f8; border:1px solid #e4e7eb; font-weight:700 }
+    .swatch{ display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:middle }
+    .sw-red{ background: var(--photon-reflect) }
+    .sw-sss{ background: var(--photon-sss) }
+    .sw-total{ background: var(--total) }
+
+    .rightControls{ display:grid; gap:10px }
+    .rightRow{ display:grid; grid-template-columns: 140px 1fr 140px; align-items:center; gap:10px }
+    .rightRow .val{ text-align:right; font-weight:800; color:#0d6efd }
+    .rightRow input[type=checkbox]{ width:18px; height:18px; }
+    .rightRow select{ padding:6px 10px; border-radius:8px; border:1px solid #d5dbe0; background:#fff; font-weight:600 }
+  </style>
+
+  <div class="sim-root">
     <div id="left">
       <div class="mf-box">
         <canvas id="mf-view" class="mf-canvas" width="1600" height="1200" aria-label="Rauigkeitskasten"></canvas>
@@ -158,7 +158,7 @@ mathjax: false
           <div id="mf-sVal" class="mf-val">1.00</div>
         </div>
         <div class="mf-row">
-          <label for="mf-hg">HG-g</label>
+          <label for="mf-hg">HG g</label>
           <input id="mf-hg" type="range" min="-0.95" max="0.95" step="0.01" value="-0.45" />
           <div id="mf-hgVal" class="mf-val">-0.45</div>
         </div>
@@ -168,7 +168,6 @@ mathjax: false
           <input id="mf-detWidth" type="range" min="10" max="800" step="1" value="200" />
           <div id="mf-detWidthVal" class="mf-val">200 px</div>
         </div>
-
         <div class="mf-row">
           <label for="mf-geoToggle">Geometrie-Overlay</label>
           <input id="mf-geoToggle" type="checkbox" />
@@ -184,18 +183,10 @@ mathjax: false
           <input id="mf-showRed" type="checkbox" checked />
           <div id="mf-showRedVal" class="mf-val">An</div>
         </div>
-
         <div class="mf-row">
           <label for="mf-useFresnel">Fresnel (statt 50/50)</label>
           <input id="mf-useFresnel" type="checkbox" />
           <div id="mf-useFresnelVal" class="mf-val">Aus</div>
-        </div>
-
-        <!-- Live-Fresnel-Ausgabe -->
-        <div class="mf-row">
-          <label>Fresnel R<sub>s</sub> (%)</label>
-          <div class="mf-val" id="fresnelVal">—</div>
-          <div class="mf-val" style="opacity:.65">θ & n,a abhängig</div>
         </div>
 
         <div class="btnRow">
@@ -213,9 +204,9 @@ mathjax: false
           <span class="chip"><span class="swatch sw-red"></span>Rot aktiv: <span id="cntRed">0</span></span>
           <span class="chip"><span class="swatch sw-sss"></span>Lila aktiv: <span id="cntSSS">0</span></span>
           <span class="chip"><span class="swatch sw-total"></span>Summe: <span id="cntTotal">0</span></span>
+          <span class="chip" id="fresChip">Fresnel Rs: <span id="fresVal">—</span></span>
         </div>
       </div>
-
       <div class="panel rightControls">
         <div class="rightRow">
           <label>Kurven</label>
@@ -226,7 +217,6 @@ mathjax: false
           </div>
           <div class="val"></div>
         </div>
-
         <div class="rightRow">
           <label>Darstellung</label>
           <select id="modeGraph">
@@ -236,34 +226,24 @@ mathjax: false
           </select>
           <div class="val"></div>
         </div>
-
         <div class="rightRow">
           <label>Smooth-Fenster</label>
           <input id="smoothSlider" type="range" min="3" max="101" step="2" value="21" />
-          <div id="smoothVal" class="mf-val">21</div>
+          <div id="smoothVal" class="val">21</div>
         </div>
-
         <div class="rightRow">
           <label>Zoom (ziehen)</label>
           <div class="legendRow" style="gap:8px">
             <button id="btnZoomReset">Reset</button>
-            <span style="color:#6b7c8f">Drag im Plot = Zoom</span>
+            <span style="color:#6b7c8f">Box-Zoom im Plot</span>
           </div>
-          <div class="val"></div>
-        </div>
-
-        <div class="rightRow">
-          <label>Bin-Breite</label>
-          <div id="binInfo" class="mf-val">— s</div>
           <div class="val"></div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Skripte aus /assets laden, Reihenfolge beibehalten -->
+  <script src="{{ site.baseurl }}/assets/engine.js"></script>
+  <script src="{{ site.baseurl }}/assets/app.js"></script>
 </div>
-
-<noscript><p><strong>Bitte JavaScript aktivieren</strong>, um die Simulation zu sehen.</p></noscript>
-
-<!-- App-Skripte vom Repo -->
-<script src="{{ '/assets/engine.js' | relative_url }}"></script>
-<script src="{{ '/assets/app.js' | relative_url }}"></script>
