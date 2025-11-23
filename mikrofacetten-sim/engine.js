@@ -121,8 +121,8 @@
         sigPara: 0, sigOrtho: 14, detWidth: 200,
         showGeo: true, showSSS: true, showRed: true, 
         hideReentry: false, 
-        useFresnel: true, nMat: 1.40, 
-        aCoeff: 0.32, sCoeff: 1.00, hg: 0
+        useFresnel: true, nMat: 1.40, aCoeff: 0.16, sCoeff: 1.25, 
+        hg: 0
       };
 
       this.N_AIR = 1.0; this.MF_FLASH_T = 0.18; this.ABSORB_FLASH_T = 0.28;
@@ -156,11 +156,9 @@
       });
       window.addEventListener('mouseup',()=>{ this.emitter.dragging=false; });
 
-      // --- TOUCH EVENTS FIX ---
       this.canvas.addEventListener('touchstart', (e)=>{
         const w=this._toWorld(e); 
         const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
-        // Radius-Faktor von 4 auf 25 erhöht (große Trefferzone für Finger)
         if(dx*dx+dy*dy <= this.emitter.r*this.emitter.r*25){ 
              this.emitter.dragging=true; e.preventDefault();
         }
@@ -192,11 +190,14 @@
     setPlaying(p){ this.isPlaying=p; }
 
     fitDPI(customScale){
-      const baseDpr = Math.min(2, window.devicePixelRatio||1);
-      const dpr = customScale ? customScale : baseDpr;
+      const baseDpr = window.devicePixelRatio || 1;
+      // PERFORMANCE FIX: Begrenze DPI auf Mobile auf max 1.5 (statt 2 oder 3)
+      // customScale (für HD Export) hat Vorrang.
+      const limit = customScale ? customScale : Math.min(1.5, baseDpr);
+      
       const cssW=this.canvas.clientWidth, cssH=this.canvas.clientHeight;
-      this.canvas.width=Math.round(cssW*dpr); this.canvas.height=Math.round(cssH*dpr);
-      this.ctx.setTransform(dpr,0,0,dpr,0,0);
+      this.canvas.width=Math.round(cssW*limit); this.canvas.height=Math.round(cssH*limit);
+      this.ctx.setTransform(limit,0,0,limit,0,0);
     }
 
     exportHighRes(scale=4){
