@@ -19,7 +19,7 @@
         
         <div class="mf-row">
           <label for="mf-facetRes">Facet-Dichte</label>
-          <input id="mf-facetRes" type="range" min="0" max="1" step="0.01" value="0.76" />
+          <input id="mf-facetRes" type="range" min="0" max="1" step="0.01" value="0.25" />
           <div id="mf-facetResVal" class="mf-val">Facets≈—</div>
         </div>
         <div class="mf-row">
@@ -50,8 +50,8 @@
 
         <div class="mf-row">
           <label for="mf-count">Photonen (1–10000)</label>
-          <input id="mf-count" type="range" min="1" max="10000" step="1" value="5001" />
-          <div id="mf-countVal" class="mf-val">5001</div>
+          <input id="mf-count" type="range" min="1" max="10000" step="1" value="600" />
+          <div id="mf-countVal" class="mf-val">600</div>
         </div>
         
         <div class="mf-row">
@@ -76,16 +76,19 @@
           <input id="mf-n" type="range" min="1.05" max="3.00" step="0.01" value="1.40" />
           <div id="mf-nVal" class="mf-val">1.40</div>
         </div>
+        
         <div class="mf-row">
-          <label for="mf-a">a (Absorption)</label>
-          <input id="mf-a" type="range" min="0.01" max="9.01" step="0.01" value="0.16" />
-          <div id="mf-aVal" class="mf-val">0.16</div>
+          <label for="mf-a">µₐ (Absorption)</label>
+          <input id="mf-a" type="range" min="0" max="100" step="0.1" value="50" />
+          <div id="mf-aVal" class="mf-val">0.32</div>
         </div>
+
         <div class="mf-row">
-          <label for="mf-s">s (Streuung)</label>
-          <input id="mf-s" type="range" min="0.01" max="9.01" step="0.01" value="1.25" />
-          <div id="mf-sVal" class="mf-val">1.25</div>
+          <label for="mf-s">µₛ (Streuung)</label>
+          <input id="mf-s" type="range" min="0" max="100" step="0.1" value="65" />
+          <div id="mf-sVal" class="mf-val">1.00</div>
         </div>
+
         <div class="mf-row">
           <label for="mf-hg">HG g</label>
           <input id="mf-hg" type="range" min="-0.95" max="0.95" step="0.01" value="0" />
@@ -182,10 +185,10 @@
           <span style="color:#6b7c8f; font-size:12px; margin-left:8px;">[Leertaste=Pause, H=UI]</span>
         </div>
 
-      </div> </div>
+      </div> 
+    </div>
   </div>
 
-  <script src="svg-exporter.js"></script>
   <script src="engine.js"></script>
   <script src="app.js"></script>
 </body>

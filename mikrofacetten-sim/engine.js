@@ -29,7 +29,6 @@
     translate(x,y){ this.buffer.push(`<g transform="translate(${x},${y})">`); this.groups.push({type:'implicit'}); }
     scale(x,y){ this.buffer.push(`<g transform="scale(${x},${y})">`); this.groups.push({type:'implicit'}); }
     rotate(a){ const d=a*180/Math.PI; this.buffer.push(`<g transform="rotate(${d})">`); this.groups.push({type:'implicit'}); }
-    
     beginPath(){ this.currentPath=""; }
     moveTo(x,y){ this.currentPath+=`M ${x} ${y} `; }
     lineTo(x,y){ this.currentPath+=`L ${x} ${y} `; }
@@ -44,7 +43,6 @@
       this.currentPath+=`A ${r} ${r} 0 ${la} ${sw} ${ex} ${ey} `;
     }
     arcTo(x1,y1,x2,y2,r){ this.lineTo(x1,y1); }
-    
     fill(){ 
       if(!this.currentPath)return; 
       const {color, opacity} = this._parseColor(this.fillStyle);
@@ -60,7 +58,6 @@
       this.buffer.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${color}" fill-opacity="${opacity}" />`); 
     }
     clearRect(x,y,w,h){} clip(){} setLineDash(){}
-    
     getSerializedSvg(){
       while(this.groups.length>0){ this.buffer.push(`</g>`); this.groups.pop(); }
       this.buffer.push(`</svg>`); return this.buffer.join('\n');
@@ -119,12 +116,20 @@
       };
 
       this.params = {
-        rough: 0.37, facetRes: 0.76, zoom: 1, speedAir: 500, pCount: 5001,
-        radius: 5.5, autoStop: true, stopTime: 1.8,
+        rough: 0.37, 
+        facetRes: 0.25, // UPDATED (entspricht ~800)
+        zoom: 1, 
+        speedAir: 500, 
+        pCount: 600,    // UPDATED
+        radius: 5.5, 
+        autoStop: true, 
+        stopTime: 1.8,
         sigPara: 0, sigOrtho: 14, detWidth: 200,
-        showGeo: true, showSSS: true, showRed: true, 
-        hideReentry: false, 
-        useFresnel: true, nMat: 1.40, aCoeff: 0.16, sCoeff: 1.25, 
+        showGeo: true, showSSS: true, showRed: true, hideReentry: false,
+        useFresnel: true, nMat: 1.40, 
+        // Startwerte passend zu Slider Position 50 und 65 (Log Scale)
+        aCoeff: 0.32, 
+        sCoeff: 1.00, 
         hg: 0
       };
 
@@ -145,7 +150,6 @@
       window.addEventListener('resize', ()=>this.fitDPI());
       if(this.emitter.y==null) this.emitter.y=this.canvas.clientHeight/2;
 
-      // --- MOUSE EVENTS ---
       this.canvas.addEventListener('mousedown', (e)=>{
         const w=this._toWorld(e); const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
         if(dx*dx+dy*dy<=this.emitter.r*this.emitter.r*2) this.emitter.dragging=true;
@@ -160,20 +164,17 @@
       });
       window.addEventListener('mouseup',()=>{ this.emitter.dragging=false; });
 
-      // --- TOUCH EVENTS (NEU) ---
       this.canvas.addEventListener('touchstart', (e)=>{
         const w=this._toWorld(e); 
         const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
-        // Größere Toleranz (*4) für Touch
         if(dx*dx+dy*dy <= this.emitter.r*this.emitter.r*4){ 
-             this.emitter.dragging=true; 
-             e.preventDefault(); // Verhindert Maus-Emulation
+             this.emitter.dragging=true; e.preventDefault();
         }
       }, {passive:false});
 
       window.addEventListener('touchmove', (e)=>{
         if(!this.emitter.dragging) return;
-        e.preventDefault(); // Verhindert Scrollen der Seite
+        e.preventDefault(); 
         const w=this._toWorld(e);
         const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
         this.emitter.x=Math.max(6,Math.min(W-6,w.x));
@@ -205,14 +206,11 @@
     }
 
     exportHighRes(scale=4){
-        this.fitDPI(scale); 
-        this.draw(); 
+        this.fitDPI(scale); this.draw(); 
         const link = document.createElement('a');
-        link.download = 'simulation-hd.png';
-        link.href = this.canvas.toDataURL('image/png');
+        link.download = 'simulation-hd.png'; link.href = this.canvas.toDataURL('image/png');
         link.click();
-        this.fitDPI(); 
-        this.draw();
+        this.fitDPI(); this.draw();
     }
 
     computeN(height, roughVal, facetRes){
@@ -624,12 +622,7 @@
 
     _toWorld(e){
       const R=this.canvas.getBoundingClientRect();
-      
-      // Fallback für Touch oder Maus
-      const clientX = (e.touches && e.touches.length>0) ? e.touches[0].clientX : e.clientX;
-      const clientY = (e.touches && e.touches.length>0) ? e.touches[0].clientY : e.clientY;
-      
-      const mx=clientX-R.left, my=clientY-R.top;
+      const mx=e.clientX-R.left, my=e.clientY-R.top;
       const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
       const cx=W/2, cy=H/2;
       return {x:cx+(mx-cx)/this.params.zoom, y:cy+(my-cy)/this.params.zoom};
