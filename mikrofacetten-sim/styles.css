@@ -1,94 +1,166 @@
 :root{
-  --mf-air:#87CEEB; --mf-mat:#b99b71; --mf-line:#1c2a38;
-  --mf-accent:#2f81f7; --mf-muted:#6b7c8f;
-  --photon-reflect:#ff5d2a; --photon-sss:#8a2be2; --mf-emitter:#00bcd4;
-  --ovl-plane:#6b5cff; --ovl-in:#0000ff; --ovl-arc:#202939; --ovl-fit:#2ecc71;
-  --detector:#f0b93a;
+  --mf-air:#87CEEB;      /* Luft */
+  --mf-mat:#b99b71;      /* Material */
+  --mf-line:#1c2a38;     /* Interface */
+  --mf-accent:#2f81f7;
+  --mf-muted:#6b7c8f;
+
+  --photon-reflect:#ff5d2a;  /* rote Photonen (Reflexion) */
+  --photon-sss:#8a2be2;      /* lila Photonen (SSS) */
+  --mf-emitter:#00bcd4;      /* Emitter */
+
+  --ovl-plane:#6b5cff;   /* Orthogonale (lila) */
+  --ovl-in:#0000ff;      /* Einfallslinie (blau) */
+  --ovl-arc:#202939;     /* Winkelbogen */
+  --ovl-fit:#2ecc71;     /* Fit-Linie (grün) + Punkte */
+
+  --detector:#f0b93a;    /* Detektor-Linie */
 }
+
 *{box-sizing:border-box}
-html,body{ height:100%; width: 100%; }
-body{
-  margin:0; overflow:hidden; 
+
+html, body { height: 100%; width: 100%; }
+
+body {
+  margin: 0; overflow: hidden; 
   height: 100dvh; min-height: 100vh; 
-  font: 13px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; 
+  /* Schrift noch einen Tick kompakter für mehr Platz */
+  font: 13px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   color: #2b3645; background: #222;
 }
-#left{ position: relative; width: 100vw; height: 100dvh; overflow: hidden; }
-.mf-box{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: #fff; }
-.mf-canvas{ width:100%; height:100%; display:block; background:transparent; touch-action: none; }
+
+#left { position: relative; width: 100vw; height: 100dvh; overflow: hidden; }
+
+.mf-box { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: #fff; }
+.mf-canvas { width:100%; height:100%; display:block; background:transparent; touch-action: none; }
 
 /* Hauptcontainer */
-.mf-controls{ 
+.mf-controls { 
   position: fixed; bottom: 0; left: 0; width: 100%; z-index: 10; 
-  background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(0,0,0,0.1); box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-  overflow: visible; padding: 0; transition: transform 0.3s ease;
+  background: rgba(255, 255, 255, 0.97); 
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0,0,0,0.1); 
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+  overflow: visible; padding: 0; 
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   padding-bottom: env(safe-area-inset-bottom); 
 }
+
 .mf-controls.ui-minimized { transform: translateY(100%); }
 
+/* Reiter-Button */
 #toggleUiBtn {
-  position: absolute; top: -24px; left: 16px; width: 40px; height: 24px;
+  position: absolute; top: -24px; left: 16px; width: 44px; height: 24px;
   border-radius: 6px 6px 0 0; border: 1px solid rgba(0,0,0,0.1); border-bottom: none;
-  background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(10px);
   cursor: pointer; font-size: 10px; color: var(--mf-muted);
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.05); z-index: 20; padding: 0;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.06); z-index: 20; padding: 0;
   display: flex; align-items: center; justify-content: center;
 }
 #toggleUiBtn:hover { background: #fff; color: var(--mf-accent); }
 
-/* Scroll-Bereich mit Gruppen */
+/* Innerer Scroll-Bereich */
 .mf-scroll-area {
-  padding: 10px 16px; padding-bottom: 40px; max-height: 60dvh;     
-  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 12px 20px;
+  padding-bottom: 24px; 
+  max-height: 60dvh;    
+  overflow-y: auto; 
+  -webkit-overflow-scrolling: touch;
   display: grid;
-  /* Automatische Spalten, mind. 280px breit. Auf iPad passen 2-3 nebeneinander */
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 12px;
+  /* FIX: Breitere Spalten (340px), damit Inhalte nicht kollidieren. 
+     Auf iPad Portrait wird es dann 1-spaltig (sauber), Landscape 2-3 spaltig. */
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 6px 30px; /* Weniger vertikaler Abstand, mehr horizontaler */
 }
 
-/* Gruppen-Boxen */
-.group-box {
-  background: rgba(0,0,0,0.02);
-  border: 1px solid rgba(0,0,0,0.06);
-  border-radius: 8px;
-  padding: 8px 12px;
-  display: flex; flex-direction: column; gap: 6px;
-}
-.group-box.full-width { grid-column: 1 / -1; } /* Farben über volle Breite */
-
-.group-title {
-  font-weight: 700; color: #2b3645; border-bottom: 1px solid rgba(0,0,0,0.05);
-  padding-bottom: 4px; margin-bottom: 2px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+/* Zeilen-Layout */
+.mf-row { 
+  display:grid; 
+  /* Fixe Breite für Labels, flexibel für Slider, fix für Wert */
+  grid-template-columns: 120px 1fr 60px; 
+  align-items:center; 
+  gap:8px; 
+  height: 28px; 
 }
 
-/* Rows */
-.mf-row{ display:grid; grid-template-columns: 110px minmax(0,1fr) 55px; align-items:center; gap:8px; min-height: 24px; }
-.mf-row label{ color:var(--mf-muted); font-weight:600; white-space:nowrap; font-size: 11px; }
-.mf-val{ justify-self:end; color:var(--mf-accent); font-weight:700; white-space:nowrap; font-size: 11px; }
+/* Spezialzeile für Checkboxen (SSS) */
+.dual-check-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  height: 28px;
+  overflow: hidden; /* Verhindert rauslaufen */
+}
+.dual-label { 
+  width: 120px; /* Muss gleich sein wie grid-col 1 oben */
+  color:var(--mf-muted); font-weight:700; white-space:nowrap; font-size: 12px; flex-shrink: 0; 
+}
+.check-group { 
+  display: flex; align-items: center; gap: 4px; 
+  white-space: nowrap; /* Verhindert Umbruch des Labels */
+}
+.check-group label { font-size: 11px; color: var(--mf-muted); cursor: pointer; }
 
-.mf-row input[type=range]{ -webkit-appearance:none; width:100%; height:4px; border-radius:999px; background:#d0d7de; outline:none; cursor:pointer }
-.mf-row input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--mf-accent); box-shadow:0 0 0 2px rgba(47,129,247,.18) }
-.mf-row input[type=checkbox] { width:14px; height:14px; cursor: pointer; }
+/* Labels & Inputs */
+.mf-row label { color:var(--mf-muted); font-weight:700; white-space:nowrap; font-size: 12px; }
+.mf-val { justify-self:end; color:var(--mf-accent); font-weight:800; white-space:nowrap; font-size: 12px; }
 
-/* Farb-Grid */
-.colors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
-.color-item { display: flex; flex-direction: column; gap: 4px; }
-.color-item label { font-size: 11px; color: var(--mf-muted); font-weight: 600; }
-.rgba-inputs { display:flex; gap:2px; }
-.rgba-inputs input { width: 100%; border:1px solid #d0d7de; border-radius:3px; padding:2px; font-size:10px; text-align:center; background: #fff; }
-.sm-btn { padding: 2px; font-size: 10px; height: 20px; width: 100%; margin-top: 2px; }
+.mf-row input[type=range] { -webkit-appearance:none; width:100%; height:4px; border-radius:999px; background:#d0d7de; outline:none; cursor:pointer; display:block; }
+.mf-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--mf-accent); box-shadow:0 0 0 2px rgba(47,129,247,.18); margin-top:0; }
+.mf-row input[type=checkbox], .check-group input[type=checkbox] { width:14px; height:14px; cursor: pointer; margin:0; }
 
 /* Buttons */
-.btnRow{ 
+.btnRow { 
   display:flex; gap:8px; align-items:center; 
-  grid-column: 1 / -1; justify-content: center;
-  padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.06);
+  grid-column: 1 / -1; /* Immer volle Breite */
+  justify-content: center;
+  padding-top: 12px; margin-top: 6px; border-top: 1px solid rgba(0,0,0,0.06);
 }
-button { appearance:none; border:1px solid #d5dbe0; background:#fff; border-radius:5px; padding:5px 12px; font-weight:600; cursor:pointer; font-size: 13px; }
-button:hover{ background:#f2f5f8 }
+button { appearance:none; border:1px solid #d5dbe0; background:#fff; border-radius:5px; padding:5px 14px; font-weight:600; cursor:pointer; font-size: 13px; }
+button:hover { background:#f2f5f8 }
 button.primary { background:#0d6efd; color:#fff; border-color:#0d6efd }
 button.primary:hover { background:#0b5ed7 }
+
+/* FIX FÜR IPAD FARBEN: Zeile flexibel gestalten */
+.color-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px;
+  height: auto; 
+  min-height: 28px; 
+}
+.color-row > label { 
+  width: 100px; /* Fixe Labelbreite */
+  flex-shrink: 0; 
+}
+.color-row > button.sm-btn {
+  width: 40px;
+  flex-shrink: 0;
+}
+
+/* Der Container für die Inputs */
+.rgba-inputs { 
+  display: flex; 
+  gap: 4px; 
+  flex: 1; /* Nimmt den restlichen Platz */
+  width: auto; /* Reset width */
+  flex-wrap: nowrap; /* VERHINDERT UMBUCH! */
+}
+
+/* Die Inputs selbst */
+.rgba-inputs input { 
+  flex: 1; /* Teilen sich den Platz gleichmäßig auf */
+  min-width: 0; /* Erlaubt das Schrumpfen unter Standardbreite */
+  width: 100%; /* Fallback */
+  border: 1px solid #d0d7de; 
+  border-radius: 4px; 
+  padding: 2px 0; 
+  font-size: 11px; 
+  text-align: center; 
+  background: #fcfcfc; 
+}
+.rgba-inputs input:focus { border-color: var(--mf-accent); outline: none; background: #fff; }
+.sm-btn { padding: 0; font-size: 11px; height: 22px; }
 
 .mf-scroll-area::-webkit-scrollbar { width: 6px; }
 .mf-scroll-area::-webkit-scrollbar-track { background: transparent; }
