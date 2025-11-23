@@ -1,6 +1,6 @@
 /* engine.js — MFSim: Physik + Rendering der linken Seite */
 (function(){
-  // === SVG Exporter Integration (Bleibt hier drin) ===
+  // === SVG Exporter Integration ===
   class SVGContext {
     constructor(width, height) {
       this.width = width; this.height = height; this.buffer = [];
@@ -116,21 +116,13 @@
       };
 
       this.params = {
-        rough: 0.37, 
-        facetRes: 0.25, // UPDATED (entspricht ~800)
-        zoom: 1, 
-        speedAir: 500, 
-        pCount: 600,    // UPDATED
-        radius: 5.5, 
-        autoStop: true, 
-        stopTime: 1.8,
+        rough: 0.37, facetRes: 0.76, zoom: 1, speedAir: 500, pCount: 5001,
+        radius: 5.5, autoStop: true, stopTime: 1.8,
         sigPara: 0, sigOrtho: 14, detWidth: 200,
-        showGeo: true, showSSS: true, showRed: true, hideReentry: false,
+        showGeo: true, showSSS: true, showRed: true, 
+        hideReentry: false, 
         useFresnel: true, nMat: 1.40, 
-        // Startwerte passend zu Slider Position 50 und 65 (Log Scale)
-        aCoeff: 0.32, 
-        sCoeff: 1.00, 
-        hg: 0
+        aCoeff: 0.32, sCoeff: 1.00, hg: 0
       };
 
       this.N_AIR = 1.0; this.MF_FLASH_T = 0.18; this.ABSORB_FLASH_T = 0.28;
@@ -164,10 +156,12 @@
       });
       window.addEventListener('mouseup',()=>{ this.emitter.dragging=false; });
 
+      // --- TOUCH EVENTS FIX ---
       this.canvas.addEventListener('touchstart', (e)=>{
         const w=this._toWorld(e); 
         const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
-        if(dx*dx+dy*dy <= this.emitter.r*this.emitter.r*4){ 
+        // Radius-Faktor von 4 auf 25 erhöht (große Trefferzone für Finger)
+        if(dx*dx+dy*dy <= this.emitter.r*this.emitter.r*25){ 
              this.emitter.dragging=true; e.preventDefault();
         }
       }, {passive:false});
@@ -622,7 +616,12 @@
 
     _toWorld(e){
       const R=this.canvas.getBoundingClientRect();
-      const mx=e.clientX-R.left, my=e.clientY-R.top;
+      
+      // Fallback für Touch oder Maus
+      const clientX = (e.touches && e.touches.length>0) ? e.touches[0].clientX : e.clientX;
+      const clientY = (e.touches && e.touches.length>0) ? e.touches[0].clientY : e.clientY;
+      
+      const mx=clientX-R.left, my=clientY-R.top;
       const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
       const cx=W/2, cy=H/2;
       return {x:cx+(mx-cx)/this.params.zoom, y:cy+(my-cy)/this.params.zoom};

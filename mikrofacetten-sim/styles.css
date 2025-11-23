@@ -1,146 +1,76 @@
 :root{
-  --mf-air:#87CEEB;      /* Luft */
-  --mf-mat:#b99b71;      /* Material */
-  --mf-line:#1c2a38;     /* Interface */
-  --mf-accent:#2f81f7;
-  --mf-muted:#6b7c8f;
-
-  --photon-reflect:#ff5d2a;  /* rote Photonen (Reflexion) */
-  --photon-sss:#8a2be2;      /* lila Photonen (SSS) */
-  --mf-emitter:#00bcd4;      /* Emitter */
-
-  --ovl-plane:#6b5cff;   /* Orthogonale (lila) */
-  --ovl-in:#0000ff;      /* Einfallslinie (blau) */
-  --ovl-arc:#202939;     /* Winkelbogen */
-  --ovl-fit:#2ecc71;     /* Fit-Linie (grün) + Punkte */
-
-  --detector:#f0b93a;    /* Detektor-Linie */
+  --mf-air:#87CEEB; --mf-mat:#b99b71; --mf-line:#1c2a38;
+  --mf-accent:#2f81f7; --mf-muted:#6b7c8f;
+  --photon-reflect:#ff5d2a; --photon-sss:#8a2be2; --mf-emitter:#00bcd4;
+  --ovl-plane:#6b5cff; --ovl-in:#0000ff; --ovl-arc:#202939; --ovl-fit:#2ecc71;
+  --detector:#f0b93a;
 }
-
 *{box-sizing:border-box}
-
-html, body { 
-  height: 100%; 
-  width: 100%; 
-}
-
-body {
-  margin: 0; 
-  overflow: hidden; 
+html,body{ height:100%; width: 100%; }
+body{
+  margin:0; overflow:hidden; 
   /* WICHTIG FÜR IPAD: dvh statt vh */
-  height: 100dvh; 
-  /* Fallback für ältere Browser */
-  min-height: 100vh; 
+  height: 100dvh; min-height: 100vh; 
   font: 16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  color: #2b3645; 
-  background: #222;
+  color: #2b3645; background: #222;
+}
+#left{ position: relative; width: 100vw; height: 100dvh; overflow: hidden; }
+.mf-box{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: #fff; }
+
+.mf-canvas{ 
+  width:100%; 
+  height:100%; 
+  display:block; 
+  background:transparent;
+  /* WICHTIGSTER FIX FÜR TOUCH: Verhindert Scrollen/Zoomen auf dem Canvas */
+  touch-action: none; 
 }
 
-#left { 
-  position: relative;
-  width: 100vw;
-  /* Auch hier dvh nutzen, damit der Canvas nicht unter die Leiste rutscht */
-  height: 100dvh;
-  overflow: hidden;
-}
-
-.mf-box { 
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  z-index: 1; 
-  background: #fff;
-}
-
-.mf-canvas { width:100%; height:100%; display:block; background:transparent; }
-
-/* Hauptcontainer (fixed position für Stabilität auf Mobile) */
-.mf-controls { 
-  /* WICHTIG: fixed statt absolute */
-  position: fixed; 
-  bottom: 0; left: 0; width: 100%;
-  z-index: 10; 
-  background: rgba(255, 255, 255, 0.96); 
-  backdrop-filter: blur(8px);
-  border-top: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-  overflow: visible; 
-  padding: 0;
-  transition: transform 0.3s ease;
-  /* Sicherheitsabstand für iOS Home Indicator */
+/* Hauptcontainer (fixed) */
+.mf-controls{ 
+  position: fixed; bottom: 0; left: 0; width: 100%; z-index: 10; 
+  background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(0,0,0,0.1); box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+  overflow: visible; padding: 0; transition: transform 0.3s ease;
   padding-bottom: env(safe-area-inset-bottom); 
 }
+.mf-controls.ui-minimized { transform: translateY(100%); }
 
-/* Minimierter Zustand: Fährt nach unten */
-.mf-controls.ui-minimized {
-  transform: translateY(100%);
-}
-
-/* Der Reiter-Button */
 #toggleUiBtn {
-  position: absolute;
-  top: -28px; /* Sitzt oben auf dem Rand */
-  left: 20px;
-  width: 44px;
-  height: 28px;
-  border-radius: 8px 8px 0 0;
-  border: 1px solid rgba(0,0,0,0.1);
-  border-bottom: none;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(8px);
-  cursor: pointer;
-  font-size: 12px;
-  color: var(--mf-muted);
-  box-shadow: 0 -3px 6px rgba(0,0,0,0.05);
-  z-index: 20;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: absolute; top: -28px; left: 20px; width: 44px; height: 28px;
+  border-radius: 8px 8px 0 0; border: 1px solid rgba(0,0,0,0.1); border-bottom: none;
+  background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(8px);
+  cursor: pointer; font-size: 12px; color: var(--mf-muted);
+  box-shadow: 0 -3px 6px rgba(0,0,0,0.05); z-index: 20; padding: 0;
+  display: flex; align-items: center; justify-content: center;
 }
-#toggleUiBtn:hover {
-  background: #fff;
-  color: var(--mf-accent);
-}
+#toggleUiBtn:hover { background: #fff; color: var(--mf-accent); }
 
-/* Innerer Container für den Inhalt (Grid + Scrollen) */
+/* Innerer Scroll-Bereich */
 .mf-scroll-area {
-  padding: 12px 24px;
-  /* WICHTIG: Viel Platz unten, damit man die Buttons hochscrollen kann über die iOS Leiste */
-  padding-bottom: 60px; 
-  /* Dynamische Höhe, damit es nicht oben rausragt */
-  max-height: 60dvh;     
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* Flüssiges Scrollen auf iOS */
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  padding: 12px 24px; padding-bottom: 60px; max-height: 60dvh;     
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 8px 32px;
 }
 
-.mf-row { display:grid; grid-template-columns: 140px minmax(0,1fr) 70px; align-items:center; gap:10px; height: 32px; }
+.mf-row{ display:grid; grid-template-columns: 140px minmax(0,1fr) 70px; align-items:center; gap:10px; height: 32px; }
 .dual-check-row { display: flex; align-items: center; gap: 10px; }
 .dual-label { width: 140px; color:var(--mf-muted); font-weight:700; white-space:nowrap; font-size: 13px; flex-shrink: 0; }
 .check-group { display: flex; align-items: center; gap: 4px; }
 .check-group label { font-size: 12px; color: var(--mf-muted); cursor: pointer; }
+.mf-row label{ color:var(--mf-muted); font-weight:700; white-space:nowrap; font-size: 13px; }
+.mf-val{ justify-self:end; color:var(--mf-accent); font-weight:800; white-space:nowrap; font-size: 13px; }
+.mf-row input[type=range]{ -webkit-appearance:none; width:100%; height:4px; border-radius:999px; background:#d0d7de; outline:none; cursor:pointer }
+.mf-row input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--mf-accent); box-shadow:0 0 0 2px rgba(47,129,247,.18) }
+.mf-row input[type=checkbox], .check-group input[type=checkbox]{ width:16px; height:16px; cursor: pointer; }
 
-.mf-row label { color:var(--mf-muted); font-weight:700; white-space:nowrap; font-size: 13px; }
-.mf-val { justify-self:end; color:var(--mf-accent); font-weight:800; white-space:nowrap; font-size: 13px; }
-
-.mf-row input[type=range] { -webkit-appearance:none; width:100%; height:4px; border-radius:999px; background:#d0d7de; outline:none; cursor:pointer }
-.mf-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--mf-accent); box-shadow:0 0 0 2px rgba(47,129,247,.18) }
-.mf-row input[type=checkbox], .check-group input[type=checkbox] { width:16px; height:16px; cursor: pointer; }
-
-.btnRow { 
-  display:flex; gap:8px; align-items:center; 
-  grid-column: 1 / -1; justify-content: center;
-  padding-top: 12px; margin-top: 4px; border-top: 1px solid rgba(0,0,0,0.06);
-}
-
+.btnRow{ display:flex; gap:8px; align-items:center; grid-column: 1 / -1; justify-content: center; padding-top: 12px; margin-top: 4px; border-top: 1px solid rgba(0,0,0,0.06); }
 button { appearance:none; border:1px solid #d5dbe0; background:#fff; border-radius:6px; padding:6px 16px; font-weight:600; cursor:pointer; font-size: 14px; }
-button:hover { background:#f2f5f8 }
+button:hover{ background:#f2f5f8 }
 button.primary { background:#0d6efd; color:#fff; border-color:#0d6efd }
 button.primary:hover { background:#0b5ed7 }
 
-/* RGBA Inputs */
 .color-row { height: auto; min-height: 32px; grid-template-columns: 110px 1fr 50px; }
 .rgba-inputs { display:flex; gap:6px; justify-content: space-between; width: 100%; }
 .rgba-inputs input { width: 100%; min-width: 40px; border:1px solid #d0d7de; border-radius:4px; padding:4px 2px; font-size:13px; text-align:center; background: #fcfcfc; }
