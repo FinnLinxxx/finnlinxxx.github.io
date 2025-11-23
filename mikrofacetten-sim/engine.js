@@ -1,19 +1,85 @@
 /* engine.js — MFSim: Physik + Rendering der linken Seite */
 (function(){
+  // === SVG Exporter Integration (Bleibt hier drin) ===
+  class SVGContext {
+    constructor(width, height) {
+      this.width = width; this.height = height; this.buffer = [];
+      this.currentPath = ""; this.fillStyle = "#000000"; this.strokeStyle = "#000000";
+      this.lineWidth = 1; this.globalAlpha = 1; this.lineCap = "butt"; this.lineJoin = "miter";
+      this.groups = [];
+      this.buffer.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`);
+      this.buffer.push(`<rect width="100%" height="100%" fill="#ffffff"/>`);
+    }
+    _parseColor(c){ 
+      let col=c, op=1; 
+      if(typeof c==='string'&&c.trim().startsWith('rgba')){ 
+        const p=c.match(/[\d.]+/g); if(p&&p.length>=4){ col=`rgb(${p[0]},${p[1]},${p[2]})`; op=p[3]; } 
+      } 
+      return {color:col, opacity:op}; 
+    }
+    save(){ this.groups.push({type:'save', alpha:this.globalAlpha}); this.buffer.push(`<g>`); }
+    restore(){ 
+      if(this.groups.length===0)return; 
+      while(true){ 
+        if(this.groups.length===0)break; 
+        const g=this.groups.pop(); this.buffer.push(`</g>`); 
+        if(g.type==='save'){ this.globalAlpha=g.alpha; break; } 
+      } 
+    }
+    translate(x,y){ this.buffer.push(`<g transform="translate(${x},${y})">`); this.groups.push({type:'implicit'}); }
+    scale(x,y){ this.buffer.push(`<g transform="scale(${x},${y})">`); this.groups.push({type:'implicit'}); }
+    rotate(a){ const d=a*180/Math.PI; this.buffer.push(`<g transform="rotate(${d})">`); this.groups.push({type:'implicit'}); }
+    
+    beginPath(){ this.currentPath=""; }
+    moveTo(x,y){ this.currentPath+=`M ${x} ${y} `; }
+    lineTo(x,y){ this.currentPath+=`L ${x} ${y} `; }
+    closePath(){ this.currentPath+="Z "; }
+    rect(x,y,w,h){ this.currentPath+=`M ${x} ${y} L ${x+w} ${y} L ${x+w} ${y+h} L ${x} ${y+h} Z `; }
+    arc(x,y,r,sa,ea,ccw){
+      const sx=x+r*Math.cos(sa), sy=y+r*Math.sin(sa);
+      const ex=x+r*Math.cos(ea), ey=y+r*Math.sin(ea);
+      if(Math.abs(ea-sa)>=Math.PI*2){ this.currentPath+=`M ${x-r} ${y} A ${r} ${r} 0 1 0 ${x+r} ${y} A ${r} ${r} 0 1 0 ${x-r} ${y} `; return; }
+      const la=Math.abs(ea-sa)>Math.PI?1:0; const sw=ccw?0:1;
+      if(this.currentPath.length===0) this.currentPath+=`M ${sx} ${sy} `; else this.currentPath+=`L ${sx} ${sy} `;
+      this.currentPath+=`A ${r} ${r} 0 ${la} ${sw} ${ex} ${ey} `;
+    }
+    arcTo(x1,y1,x2,y2,r){ this.lineTo(x1,y1); }
+    
+    fill(){ 
+      if(!this.currentPath)return; 
+      const {color, opacity} = this._parseColor(this.fillStyle);
+      this.buffer.push(`<path d="${this.currentPath}" fill="${color}" stroke="none" fill-opacity="${opacity}" />`); 
+    }
+    stroke(){ 
+      if(!this.currentPath)return; 
+      const {color, opacity} = this._parseColor(this.strokeStyle);
+      this.buffer.push(`<path d="${this.currentPath}" fill="none" stroke="${color}" stroke-width="${this.lineWidth}" stroke-opacity="${opacity}" stroke-linecap="${this.lineCap}" stroke-linejoin="${this.lineJoin}" />`); 
+    }
+    fillRect(x,y,w,h){ 
+      const {color, opacity} = this._parseColor(this.fillStyle);
+      this.buffer.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${color}" fill-opacity="${opacity}" />`); 
+    }
+    clearRect(x,y,w,h){} clip(){} setLineDash(){}
+    
+    getSerializedSvg(){
+      while(this.groups.length>0){ this.buffer.push(`</g>`); this.groups.pop(); }
+      this.buffer.push(`</svg>`); return this.buffer.join('\n');
+    }
+  }
+  window.SVGContext = SVGContext;
+
+  // === Main Engine ===
   const getCss = (name)=> getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const dot = (a,b)=> a.x*b.x + a.y*b.y;
   const norm = (v)=>{ const L=Math.hypot(v.x,v.y)||1; return {x:v.x/L, y:v.y/L}; };
 
   function reflect(d,n){ d=norm(d); n=norm(n); const k=2*dot(d,n); return norm({x:d.x-k*n.x, y:d.y-k*n.y}); }
   function refract(d,n,n1,n2){
-    d=norm(d); n=norm(n);
-    let c1 = -dot(n,d);
+    d=norm(d); n=norm(n); let c1 = -dot(n,d);
     if(c1<0){ n={x:-n.x,y:-n.y}; c1 = -dot(n,d); }
-    const eta = n1/n2;
-    const k = 1 - eta*eta*(1 - c1*c1);
+    const eta = n1/n2; const k = 1 - eta*eta*(1 - c1*c1);
     if(k<0) return null;
-    const t = { x: eta*d.x + (eta*c1 - Math.sqrt(k))*n.x,
-                y: eta*d.y + (eta*c1 - Math.sqrt(k))*n.y };
+    const t = { x: eta*d.x + (eta*c1 - Math.sqrt(k))*n.x, y: eta*d.y + (eta*c1 - Math.sqrt(k))*n.y };
     return norm(t);
   }
   function mulberry32(a){ return function(){ let t=a+=0x6D2B79F5; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; } }
@@ -21,18 +87,15 @@
 
   function fresnelRs_sPolar(n, k, cosThetaI){
     const sin2 = Math.max(0, 1 - cosThetaI*cosThetaI);
-    const n2 = n*n - k*k;
-    const nk2 = 2*n*k;
-    const a = n2 - sin2;
-    const b = nk2;
+    const n2 = n*n - k*k; const nk2 = 2*n*k;
+    const a = n2 - sin2; const b = nk2;
     const mag = Math.hypot(a, b);
     const t = Math.sqrt((mag + a)/2);
     const u = (b>=0 ? 1 : -1) * Math.sqrt((mag - a)/2);
     const A = cosThetaI - t, B = -u;
     const C = cosThetaI + t, D =  u;
     const denom = C*C + D*D;
-    const Re = (A*C + B*D)/denom;
-    const Im = (B*C - A*D)/denom;
+    const Re = (A*C + B*D)/denom; const Im = (B*C - A*D)/denom;
     return Math.max(0, Math.min(1, Re*Re + Im*Im));
   }
 
@@ -41,7 +104,6 @@
       this.canvas = canvas;
       this.ctx = canvas.getContext('2d');
 
-      // Colors Defaults (gemäß Screenshot)
       this.colors = {
         air:  'rgba(135,206,235,1)',
         mat:  'rgba(238,227,244,1)',
@@ -51,20 +113,19 @@
         emitter: getCss('--mf-emitter') || '#00bcd4',
         det: getCss('--detector') || '#f0b93a',
         ovlPlane: getCss('--ovl-plane') || '#6b5cff',
-        ovlIn: getCss('--ovl-in') || '#000000', // Holt sich jetzt das Blau aus CSS
+        ovlIn: getCss('--ovl-in') || '#000000',
         ovlArc: getCss('--ovl-arc') || '#202939',
         ovlFit: 'rgba(235,30,0,0.7)'
       };
 
-      // Params Defaults (gemäß Screenshot)
       this.params = {
         rough: 0.37, facetRes: 0.76, zoom: 1, speedAir: 500, pCount: 5001,
         radius: 5.5, autoStop: true, stopTime: 1.8,
         sigPara: 0, sigOrtho: 14, detWidth: 200,
         showGeo: true, showSSS: true, showRed: true, 
-        hideReentry: false, // Standard jetzt: nicht angehakt
+        hideReentry: false, 
         useFresnel: true, nMat: 1.40, aCoeff: 0.16, sCoeff: 1.25, 
-        hg: 0 // Standard jetzt: 0
+        hg: 0
       };
 
       this.N_AIR = 1.0; this.MF_FLASH_T = 0.18; this.ABSORB_FLASH_T = 0.28;
@@ -77,7 +138,6 @@
       this.hitsRed=[]; this.hitsSSS=[];
       this.lastFresnelR = null; this.lastThetaDeg = null;
 
-      // NEU: Startposition näher an der Oberfläche (ca. 1/4 der Breite statt fix 16px)
       const startX = this.canvas.clientWidth ? this.canvas.clientWidth * 0.25 : 200;
       this.emitter = {x:startX, y:null, r:8, dragging:false};
 
@@ -85,6 +145,7 @@
       window.addEventListener('resize', ()=>this.fitDPI());
       if(this.emitter.y==null) this.emitter.y=this.canvas.clientHeight/2;
 
+      // --- MOUSE EVENTS ---
       this.canvas.addEventListener('mousedown', (e)=>{
         const w=this._toWorld(e); const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
         if(dx*dx+dy*dy<=this.emitter.r*this.emitter.r*2) this.emitter.dragging=true;
@@ -98,6 +159,30 @@
         this.resetWave(true);
       });
       window.addEventListener('mouseup',()=>{ this.emitter.dragging=false; });
+
+      // --- TOUCH EVENTS (NEU) ---
+      this.canvas.addEventListener('touchstart', (e)=>{
+        const w=this._toWorld(e); 
+        const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
+        // Größere Toleranz (*4) für Touch
+        if(dx*dx+dy*dy <= this.emitter.r*this.emitter.r*4){ 
+             this.emitter.dragging=true; 
+             e.preventDefault(); // Verhindert Maus-Emulation
+        }
+      }, {passive:false});
+
+      window.addEventListener('touchmove', (e)=>{
+        if(!this.emitter.dragging) return;
+        e.preventDefault(); // Verhindert Scrollen der Seite
+        const w=this._toWorld(e);
+        const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
+        this.emitter.x=Math.max(6,Math.min(W-6,w.x));
+        this.emitter.y=Math.max(6,Math.min(H-6,w.y));
+        this.resetWave(true);
+      }, {passive:false});
+
+      window.addEventListener('touchend', ()=>{ this.emitter.dragging=false; });
+
       this.resetWave(false);
     }
 
@@ -386,65 +471,40 @@
       ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); 
     }
 
-    // NEU: Zeichnet die realistische PIN-Photodiode
     drawRealisticPhotodiode(ctx, poly){
       const det = this.currentDetector(poly);
       const W = this.params.detWidth;
-      const totalH = 50; // Gesamtdicke des Stacks
+      const totalH = 50; 
 
-      // Winkel berechnen: baseDir ist die Normale der Detektoroberfläche.
-      // Wir wollen, dass die Breite des Rechtecks senkrecht dazu steht.
       const angle = Math.atan2(det.baseDir.y, det.baseDir.x) + Math.PI/2;
 
       ctx.save();
       ctx.translate(det.E.x, det.E.y);
       ctx.rotate(angle);
 
-      // Wir zeichnen um den Mittelpunkt (0,0).
-      // Schichten von "oben" (Lichteinfall) nach "unten".
       let curY = -totalH / 2;
-
-      // Hilfsfunktion für Rechtecke (kompatibel mit Canvas und SVG Mock)
       const drawRect = (x,y,w,h,color) => {
           ctx.fillStyle = color;
           if(ctx.fillRect) ctx.fillRect(x,y,w,h);
           else { ctx.beginPath(); ctx.rect(x,y,w,h); ctx.fill(); }
       };
 
-      // 1. SiO2 (Antireflex, hellblau transparent)
-      const h_sio2 = 5;
-      drawRect(-W/2, curY, W, h_sio2, 'rgba(180, 230, 255, 0.6)');
-      curY += h_sio2;
-
-      // 2. Anode Kontakte (Metall, nur am Rand) & P+ Layer
-      const h_anode = 6;
-      const w_contact = W * 0.12; // 12% Breite pro Kontakt
-      // P+ Layer (zwischen den Kontakten, rötlich)
+      // SiO2
+      const h_sio2 = 5; drawRect(-W/2, curY, W, h_sio2, 'rgba(180, 230, 255, 0.6)'); curY += h_sio2;
+      // Anode / P+
+      const h_anode = 6; const w_contact = W * 0.12; 
       drawRect(-W/2 + w_contact, curY, W - 2*w_contact, h_anode, '#d46a63');
-      // Metallkontakte (grau)
       drawRect(-W/2, curY, w_contact, h_anode, '#b0b0b0');
-      drawRect(W/2 - w_contact, curY, w_contact, h_anode, '#b0b0b0');
-      curY += h_anode;
+      drawRect(W/2 - w_contact, curY, w_contact, h_anode, '#b0b0b0'); curY += h_anode;
+      // I-Layer
+      const h_i = 24; drawRect(-W/2, curY, W, h_i, '#9aa5b1'); curY += h_i;
+      // N+
+      const h_n = 10; drawRect(-W/2, curY, W, h_n, '#6d5e5a'); curY += h_n;
+      // Kathode
+      const h_cathode = 5; drawRect(-W/2, curY, W, h_cathode, '#a0a0a0');
 
-      // 3. I-Layer (Intrinsic, dickste Schicht, neutrales Grau)
-      const h_i = 24;
-      drawRect(-W/2, curY, W, h_i, '#9aa5b1');
-      curY += h_i;
-
-      // 4. N+ Substrat (dunkleres Grau/Braun)
-      const h_n = 10;
-      drawRect(-W/2, curY, W, h_n, '#6d5e5a');
-      curY += h_n;
-
-      // 5. Kathode (Metall unten, durchgehend)
-      const h_cathode = 5;
-      drawRect(-W/2, curY, W, h_cathode, '#a0a0a0');
-
-      // Optional: Feiner Rahmen um alles für Definition
-      ctx.strokeStyle = 'rgba(0,0,0,0.4)';
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(0,0,0,0.4)'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.rect(-W/2, -totalH/2, W, totalH); ctx.stroke();
-
       ctx.restore();
     }
     
@@ -564,7 +624,12 @@
 
     _toWorld(e){
       const R=this.canvas.getBoundingClientRect();
-      const mx=e.clientX-R.left, my=e.clientY-R.top;
+      
+      // Fallback für Touch oder Maus
+      const clientX = (e.touches && e.touches.length>0) ? e.touches[0].clientX : e.clientX;
+      const clientY = (e.touches && e.touches.length>0) ? e.touches[0].clientY : e.clientY;
+      
+      const mx=clientX-R.left, my=clientY-R.top;
       const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
       const cx=W/2, cy=H/2;
       return {x:cx+(mx-cx)/this.params.zoom, y:cy+(my-cy)/this.params.zoom};
