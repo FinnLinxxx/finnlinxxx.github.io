@@ -17,164 +17,174 @@
 
       <div class="mf-scroll-area">
         
-        <div class="mf-row">
-          <label for="mf-facetRes">Facet-Dichte</label>
-          <input id="mf-facetRes" type="range" min="0" max="1" step="0.01" value="0.25" />
-          <div id="mf-facetResVal" class="mf-val">Facets≈—</div>
-        </div>
-        <div class="mf-row">
-          <label for="mf-rough">Rauigkeit</label>
-          <input id="mf-rough" type="range" min="0" max="1" step="0.01" value="0.37" />
-          <div id="mf-roughVal" class="mf-val">0.37</div>
-        </div>
-        <div class="mf-row">
-          <label for="mf-zoom">Zoom</label>
-          <input id="mf-zoom" type="range" min="1" max="6" step="0.01" value="1" />
-          <div id="mf-zoomVal" class="mf-val">1.00×</div>
-        </div>
-        <div class="mf-row">
-          <label for="mf-speed">Geschwindigkeit</label>
-          <input id="mf-speed" type="range" min="10" max="2000" step="1" value="500" />
-          <div id="mf-speedVal" class="mf-val">500 px/s</div>
-        </div>
-        
-        <div class="mf-row">
-          <label for="mf-autoStop">Auto-Stopp</label>
-          <div style="display:flex; align-items:center; gap:10px;">
-              <input id="mf-autoStop" type="checkbox" checked style="width:16px; height:16px;" />
-              <input id="mf-stopTime" type="number" step="0.1" min="0.1" value="1.8" style="width:60px; border:1px solid #d0d7de; border-radius:4px; text-align:center; font-size:13px;" />
-              <span style="font-size:12px; color:#6b7c8f;">Sekunden</span>
+        <div class="group-box">
+          <div class="group-title">Simulation & Quelle</div>
+          
+          <div class="mf-row">
+            <label for="mf-speed">Geschwindigkeit</label>
+            <input id="mf-speed" type="range" min="10" max="2000" step="1" value="500" />
+            <div id="mf-speedVal" class="mf-val">500 px/s</div>
           </div>
-          <div class="mf-val"></div>
-        </div>
 
-        <div class="mf-row">
-          <label for="mf-count">Photonen (1–10000)</label>
-          <input id="mf-count" type="range" min="1" max="10000" step="1" value="600" />
-          <div id="mf-countVal" class="mf-val">600</div>
-        </div>
-        
-        <div class="mf-row">
-          <label for="mf-radius">Punktgröße</label>
-          <input id="mf-radius" type="range" min="0.5" max="20.0" step="0.1" value="5.5" />
-          <div id="mf-radiusVal" class="mf-val">5.5 px</div>
-        </div>
-
-        <div class="mf-row">
-          <label for="mf-sigPara">σ∥ (entlang Achse)</label>
-          <input id="mf-sigPara" type="range" min="0" max="120" step="1" value="0" />
-          <div id="mf-sigParaVal" class="mf-val">0 px</div>
-        </div>
-        <div class="mf-row">
-          <label for="mf-sigOrtho">σ⊥ (orthogonal)</label>
-          <input id="mf-sigOrtho" type="range" min="0" max="120" step="1" value="14" />
-          <div id="mf-sigOrthoVal" class="mf-val">14 px</div>
-        </div>
-
-        <div class="mf-row">
-          <label for="mf-n">n (Brechungsindex)</label>
-          <input id="mf-n" type="range" min="1.05" max="3.00" step="0.01" value="1.40" />
-          <div id="mf-nVal" class="mf-val">1.40</div>
-        </div>
-        
-        <div class="mf-row">
-          <label for="mf-a">µₐ (Absorption)</label>
-          <input id="mf-a" type="range" min="0" max="100" step="0.1" value="50" />
-          <div id="mf-aVal" class="mf-val">0.32</div>
-        </div>
-
-        <div class="mf-row">
-          <label for="mf-s">µₛ (Streuung)</label>
-          <input id="mf-s" type="range" min="0" max="100" step="0.1" value="65" />
-          <div id="mf-sVal" class="mf-val">1.00</div>
-        </div>
-
-        <div class="mf-row">
-          <label for="mf-hg">HG g</label>
-          <input id="mf-hg" type="range" min="-0.95" max="0.95" step="0.01" value="0" />
-          <div id="mf-hgVal" class="mf-val">0</div>
-        </div>
-
-        <div class="mf-row">
-          <label for="mf-detWidth">Detektor-Breite</label>
-          <input id="mf-detWidth" type="range" min="10" max="800" step="1" value="200" />
-          <div id="mf-detWidthVal" class="mf-val">200 px</div>
-        </div>
-        <div class="mf-row">
-          <label for="mf-geoToggle">Geometrie-Overlay</label>
-          <input id="mf-geoToggle" type="checkbox" checked />
-          <div id="mf-geoVal" class="mf-val">An</div>
-        </div>
-
-        <div class="mf-row dual-check-row">
-          <span class="dual-label">SSS-Photonen (lila)</span>
-          <div class="check-group">
-             <label for="mf-showSSS">Anzeigen</label>
-             <input id="mf-showSSS" type="checkbox" checked />
+          <div class="mf-row">
+            <label for="mf-count">Photonen</label>
+            <input id="mf-count" type="range" min="1" max="10000" step="1" value="600" />
+            <div id="mf-countVal" class="mf-val">600</div>
           </div>
-          <div class="check-group">
-             <label for="mf-hideReentry" style="color:#dba225;">Austritt verstecken</label>
-             <input id="mf-hideReentry" type="checkbox" />
+
+          <div class="mf-row">
+            <label for="mf-autoStop">Auto-Stopp</label>
+            <div style="display:flex; align-items:center; gap:8px; flex:1;">
+                <input id="mf-autoStop" type="checkbox" checked style="width:16px; height:16px;" />
+                <input id="mf-stopTime" type="number" step="0.1" min="0.1" value="1.8" style="width:50px; border:1px solid #d0d7de; border-radius:4px; text-align:center; font-size:12px;" />
+                <span style="font-size:11px; color:#6b7c8f;">Sek</span>
+            </div>
+          </div>
+
+          <div class="mf-row">
+            <label for="mf-radius">Punktgröße</label>
+            <input id="mf-radius" type="range" min="0.5" max="20.0" step="0.1" value="5.5" />
+            <div id="mf-radiusVal" class="mf-val">5.5 px</div>
+          </div>
+
+          <div class="mf-row">
+            <label for="mf-sigOrtho">Strahlbreite σ⊥</label>
+            <input id="mf-sigOrtho" type="range" min="0" max="120" step="1" value="14" />
+            <div id="mf-sigOrthoVal" class="mf-val">14 px</div>
+          </div>
+          
+          <div class="mf-row">
+            <label for="mf-sigPara">Länge σ∥</label>
+            <input id="mf-sigPara" type="range" min="0" max="120" step="1" value="0" />
+            <div id="mf-sigParaVal" class="mf-val">0 px</div>
           </div>
         </div>
 
-        <div class="mf-row">
-          <label for="mf-showRed">Reflexions-Photonen (rot)</label>
-          <input id="mf-showRed" type="checkbox" checked />
-          <div id="mf-showRedVal" class="mf-val">An</div>
-        </div>
-        <div class="mf-row">
-          <label for="mf-useFresnel">Fresnel (statt 50/50)</label>
-          <input id="mf-useFresnel" type="checkbox" checked />
-          <div id="mf-useFresnelVal" class="mf-val">An</div>
+        <div class="group-box">
+          <div class="group-title">Material & Physik</div>
+          
+          <div class="mf-row">
+            <label for="mf-n">Brechungsindex n</label>
+            <input id="mf-n" type="range" min="1.05" max="3.00" step="0.01" value="1.40" />
+            <div id="mf-nVal" class="mf-val">1.40</div>
+          </div>
+
+          <div class="mf-row">
+            <label for="mf-a">Absorption µₐ</label>
+            <input id="mf-a" type="range" min="0" max="100" step="0.1" value="50" />
+            <div id="mf-aVal" class="mf-val">0.32</div>
+          </div>
+
+          <div class="mf-row">
+            <label for="mf-s">Streuung µₛ</label>
+            <input id="mf-s" type="range" min="0" max="100" step="0.1" value="65" />
+            <div id="mf-sVal" class="mf-val">1.00</div>
+          </div>
+
+          <div class="mf-row">
+            <label for="mf-hg">Anisotropie g</label>
+            <input id="mf-hg" type="range" min="-0.95" max="0.95" step="0.01" value="0" />
+            <div id="mf-hgVal" class="mf-val">0</div>
+          </div>
+
+          <div class="mf-row">
+            <label for="mf-useFresnel">Fresnel-Gleichung</label>
+            <input id="mf-useFresnel" type="checkbox" checked />
+            <div id="mf-useFresnelVal" class="mf-val">An</div>
+          </div>
         </div>
 
-        <div class="mf-row" style="grid-column:1/-1; border-top:1px solid #eee; padding-top:8px; margin-top:4px;">
-          <span style="font-weight:700; color:#2b3645">Farben (R G B A)</span>
-        </div>
-        
-        <div class="mf-row color-row">
-          <label>Material (rechts)</label>
-          <div class="rgba-inputs">
-            <input type="number" id="c-mat-r" value="238" min="0" max="255">
-            <input type="number" id="c-mat-g" value="227" min="0" max="255">
-            <input type="number" id="c-mat-b" value="244" min="0" max="255">
-            <input type="number" id="c-mat-a" value="1" step="0.1" min="0" max="1">
+        <div class="group-box">
+          <div class="group-title">Oberfläche & Geometrie</div>
+          
+          <div class="mf-row">
+            <label for="mf-rough">Rauigkeit</label>
+            <input id="mf-rough" type="range" min="0" max="1" step="0.01" value="0.37" />
+            <div id="mf-roughVal" class="mf-val">0.37</div>
           </div>
-          <button id="btnSetMat" class="sm-btn">Set</button>
+
+          <div class="mf-row">
+            <label for="mf-facetRes">Facet-Dichte</label>
+            <input id="mf-facetRes" type="range" min="0" max="1" step="0.01" value="0.25" />
+            <div id="mf-facetResVal" class="mf-val">Facets≈—</div>
+          </div>
+
+          <div class="mf-row">
+            <label for="mf-detWidth">Detektor-Breite</label>
+            <input id="mf-detWidth" type="range" min="10" max="800" step="1" value="200" />
+            <div id="mf-detWidthVal" class="mf-val">200 px</div>
+          </div>
         </div>
 
-        <div class="mf-row color-row">
-          <label>Luft (links)</label>
-          <div class="rgba-inputs">
-            <input type="number" id="c-air-r" value="135" min="0" max="255">
-            <input type="number" id="c-air-g" value="206" min="0" max="255">
-            <input type="number" id="c-air-b" value="235" min="0" max="255">
-            <input type="number" id="c-air-a" value="1" step="0.1" min="0" max="1">
+        <div class="group-box">
+          <div class="group-title">Ansicht & Filter</div>
+          
+          <div class="mf-row">
+            <label for="mf-zoom">Zoom</label>
+            <input id="mf-zoom" type="range" min="1" max="6" step="0.01" value="1" />
+            <div id="mf-zoomVal" class="mf-val">1.00×</div>
           </div>
-          <button id="btnSetAir" class="sm-btn">Set</button>
+
+          <div class="mf-row">
+            <label for="mf-geoToggle">Overlay (Linien)</label>
+            <input id="mf-geoToggle" type="checkbox" checked />
+            <div id="mf-geoVal" class="mf-val">An</div>
+          </div>
+
+          <div class="mf-row">
+            <label for="mf-showRed">Reflexion (rot)</label>
+            <input id="mf-showRed" type="checkbox" checked />
+            <div id="mf-showRedVal" class="mf-val">An</div>
+          </div>
+
+          <div class="mf-row">
+             <label>SSS (lila)</label>
+             <div style="display:flex; align-items:center; gap:12px; flex:1;">
+               <label style="font-weight:normal; cursor:pointer; font-size:11px;">
+                 <input id="mf-showSSS" type="checkbox" checked style="vertical-align:middle; margin-right:4px;" />Zeigen
+               </label>
+               <label style="font-weight:normal; cursor:pointer; font-size:11px; color:#dba225;">
+                 <input id="mf-hideReentry" type="checkbox" style="vertical-align:middle; margin-right:4px;" />Austritt verstecken
+               </label>
+             </div>
+          </div>
         </div>
 
-        <div class="mf-row color-row">
-          <label>Pfade (Overlay)</label>
-          <div class="rgba-inputs">
-            <input type="number" id="c-fit-r" value="235" min="0" max="255">
-            <input type="number" id="c-fit-g" value="30" min="0" max="255">
-            <input type="number" id="c-fit-b" value="0" min="0" max="255">
-            <input type="number" id="c-fit-a" value="0.7" step="0.1" min="0" max="1">
+        <div class="group-box full-width">
+          <div class="group-title">Farben (R G B A)</div>
+          <div class="colors-grid">
+            <div class="color-item">
+              <label>Material</label>
+              <div class="rgba-inputs">
+                <input type="number" id="c-mat-r" value="238" min="0" max="255"><input type="number" id="c-mat-g" value="227" min="0" max="255"><input type="number" id="c-mat-b" value="244" min="0" max="255"><input type="number" id="c-mat-a" value="1" step="0.1" min="0" max="1">
+              </div>
+              <button id="btnSetMat" class="sm-btn">Set</button>
+            </div>
+            
+            <div class="color-item">
+              <label>Luft</label>
+              <div class="rgba-inputs">
+                <input type="number" id="c-air-r" value="135" min="0" max="255"><input type="number" id="c-air-g" value="206" min="0" max="255"><input type="number" id="c-air-b" value="235" min="0" max="255"><input type="number" id="c-air-a" value="1" step="0.1" min="0" max="1">
+              </div>
+              <button id="btnSetAir" class="sm-btn">Set</button>
+            </div>
+
+            <div class="color-item">
+              <label>Overlay</label>
+              <div class="rgba-inputs">
+                <input type="number" id="c-fit-r" value="235" min="0" max="255"><input type="number" id="c-fit-g" value="30" min="0" max="255"><input type="number" id="c-fit-b" value="0" min="0" max="255"><input type="number" id="c-fit-a" value="0.7" step="0.1" min="0" max="1">
+              </div>
+              <button id="btnSetFit" class="sm-btn">Set</button>
+            </div>
+
+            <div class="color-item">
+              <label>SSS</label>
+              <div class="rgba-inputs">
+                <input type="number" id="c-sss-r" value="60" min="0" max="255"><input type="number" id="c-sss-g" value="55" min="0" max="255"><input type="number" id="c-sss-b" value="180" min="0" max="255"><input type="number" id="c-sss-a" value="0.75" step="0.05" min="0" max="1">
+              </div>
+              <button id="btnSetSSS" class="sm-btn">Set</button>
+            </div>
           </div>
-          <button id="btnSetFit" class="sm-btn">Set</button>
-        </div>
-        
-        <div class="mf-row color-row">
-          <label>SSS-Photonen</label>
-          <div class="rgba-inputs">
-            <input type="number" id="c-sss-r" value="60" min="0" max="255">
-            <input type="number" id="c-sss-g" value="55" min="0" max="255">
-            <input type="number" id="c-sss-b" value="180" min="0" max="255">
-            <input type="number" id="c-sss-a" value="0.75" step="0.05" min="0" max="1">
-          </div>
-          <button id="btnSetSSS" class="sm-btn">Set</button>
         </div>
 
         <div class="btnRow">
