@@ -26,6 +26,7 @@
   const nEl = document.getElementById('mf-n');
   const nValEl = document.getElementById('mf-nVal');
   
+  // LOG SLIDER ELEMNTS
   const aEl = document.getElementById('mf-a');
   const aValEl = document.getElementById('mf-aVal');
   const sEl = document.getElementById('mf-s');
@@ -44,34 +45,43 @@
   const useFresnelEl = document.getElementById('mf-useFresnel');
   const useFresnelValEl = document.getElementById('mf-useFresnelVal');
   const hideReentryEl = document.getElementById('mf-hideReentry');
-  
-  // NEU: Detector Toggle
-  const showDetEl = document.getElementById('mf-showDet');
-  const showDetValEl = document.getElementById('mf-showDetVal');
 
   const btnPlay = document.getElementById('btnPlay');
   const btnSnapshot = document.getElementById('btnSnapshot'); 
   const btnSvg = document.getElementById('btnSvg'); 
   const btnReset = document.getElementById('btnReset');
 
+  // Engine Init
   if(!window.MFSim){ console.error('MFSim (engine.js) nicht geladen.'); }
   const engine = new MFSim(canvas);
 
+  // Init Labels
   facetResValEl.textContent = 'Facets≈' + engine.updateFacetEstimate();
 
+  // Helper für Logarithmische Slider
+  // Input: 0..100 -> Output: 0.01 .. 10.0
   function getLogValue(sliderVal) {
-      const minLog = 0.01; const maxLog = 10.0;
+      const minLog = 0.01;
+      const maxLog = 10.0;
+      // scale from 0..100 to 0..1
       const position = parseFloat(sliderVal) / 100.0;
+      // Log interp: v = min * (max/min)^pos
       return minLog * Math.pow(maxLog / minLog, position);
   }
 
+  // UI Toggle
   function toggleUI() {
       uiContainer.classList.toggle('ui-minimized');
-      if (uiContainer.classList.contains('ui-minimized')) { toggleUiBtn.textContent = '▲'; } else { toggleUiBtn.textContent = '▼'; }
+      if (uiContainer.classList.contains('ui-minimized')) {
+          toggleUiBtn.textContent = '▲'; 
+      } else {
+          toggleUiBtn.textContent = '▼'; 
+      }
   }
   if(toggleUiBtn) toggleUiBtn.addEventListener('click', toggleUI);
 
-  // Listeners
+  // --- Listeners ---
+  
   facetResEl.addEventListener('input', ()=>{ engine.setParam('facetRes', parseFloat(facetResEl.value)); facetResValEl.textContent = 'Facets≈' + engine.updateFacetEstimate(); });
   roughEl.addEventListener('input', ()=>{ engine.setParam('rough', parseFloat(roughEl.value)); roughValEl.textContent=roughEl.value; });
   zoomEl.addEventListener('input', ()=>{ engine.setParam('zoom', parseFloat(zoomEl.value)); zoomValEl.textContent=zoomEl.value+'×'; });
@@ -84,30 +94,33 @@
   sigOrthoEl.addEventListener('input', ()=>{ engine.setParam('sigOrtho', parseFloat(sigOrthoEl.value)); sigOrthoValEl.textContent=Math.round(sigOrthoEl.value)+' px'; });
   nEl.addEventListener('input', ()=>{ engine.setParam('nMat', parseFloat(nEl.value)); nValEl.textContent = parseFloat(nEl.value).toFixed(2); });
 
-  aEl.addEventListener('input', ()=>{ const val = getLogValue(aEl.value); engine.setParam('aCoeff', val); aValEl.textContent = val.toFixed(2); });
-  sEl.addEventListener('input', ()=>{ const val = getLogValue(sEl.value); engine.setParam('sCoeff', val); sValEl.textContent = val.toFixed(2); });
+  // LOG SLIDER LISTENER
+  aEl.addEventListener('input', ()=>{ 
+      const val = getLogValue(aEl.value);
+      engine.setParam('aCoeff', val); 
+      aValEl.textContent = val.toFixed(2); 
+  });
+  
+  sEl.addEventListener('input', ()=>{ 
+      const val = getLogValue(sEl.value);
+      engine.setParam('sCoeff', val); 
+      sValEl.textContent = val.toFixed(2); 
+  });
 
   hgEl.addEventListener('input', ()=>{ engine.setParam('hg', parseFloat(hgEl.value)); hgValEl.textContent = parseFloat(hgEl.value).toFixed(2); });
   detWidthEl.addEventListener('input', ()=>{ engine.setParam('detWidth', parseFloat(detWidthEl.value)); detWidthValEl.textContent = Math.round(detWidthEl.value) + ' px'; });
-  geoToggleEl.addEventListener('change', ()=>{ engine.setParam('showGeo', geoToggleEl.checked); geoValEl.textContent= geoToggleEl.checked?'On':'Off'; });
-  
-  // NEU: Detector Toggle Listener
-  showDetEl.addEventListener('change', ()=>{ 
-      engine.setParam('showDet', showDetEl.checked); 
-      showDetValEl.textContent= showDetEl.checked?'On':'Off'; 
-  });
-
+  geoToggleEl.addEventListener('change', ()=>{ engine.setParam('showGeo', geoToggleEl.checked); geoValEl.textContent= geoToggleEl.checked?'An':'Aus'; });
   showSSSEl.addEventListener('change', ()=>{ engine.setParam('showSSS', showSSSEl.checked); showSSSValEl.textContent= showSSSEl.checked?'An':'Aus'; });
   hideReentryEl.addEventListener('change', ()=>{ engine.setParam('hideReentry', hideReentryEl.checked); });
-  showRedEl.addEventListener('change', ()=>{ engine.setParam('showRed', showRedEl.checked); showRedValEl.textContent= showRedEl.checked?'On':'Off'; });
-  useFresnelEl.addEventListener('change', ()=>{ engine.setParam('useFresnel', useFresnelEl.checked); useFresnelValEl.textContent= useFresnelEl.checked?'On':'Off'; });
+  showRedEl.addEventListener('change', ()=>{ engine.setParam('showRed', showRedEl.checked); showRedValEl.textContent= showRedEl.checked?'An':'Aus'; });
+  useFresnelEl.addEventListener('change', ()=>{ engine.setParam('useFresnel', useFresnelEl.checked); useFresnelValEl.textContent= useFresnelEl.checked?'An':'Aus'; });
 
   btnReset.addEventListener('click', ()=>{ engine.resetWave(false); });
   btnPlay.addEventListener('click', ()=>{ const p=!engine.isPlaying; engine.setPlaying(p); btnPlay.textContent = p? '⏸︎ Pause':'▶︎ Play'; btnPlay.classList.toggle('primary', p); });
   btnSnapshot.addEventListener('click', ()=>{ engine.exportHighRes(6); });
 
   btnSvg.addEventListener('click', ()=>{
-      if(!window.SVGContext) return alert("SVG Exporter not loaded.");
+      if(!window.SVGContext) return alert("SVG Exporter nicht geladen.");
       const w = canvas.width / window.devicePixelRatio; 
       const h = canvas.height / window.devicePixelRatio;
       const svgCtx = new window.SVGContext(w, h);

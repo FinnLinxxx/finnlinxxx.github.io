@@ -116,12 +116,13 @@
       };
 
       this.params = {
-        rough: 0.37, facetRes: 0.07, zoom: 1, speedAir: 500, pCount: 400,
-        radius: 5.5, autoStop: false, stopTime: 1.8,
+        rough: 0.37, facetRes: 0.76, zoom: 1, speedAir: 500, pCount: 5001,
+        radius: 5.5, autoStop: true, stopTime: 1.8,
         sigPara: 0, sigOrtho: 14, detWidth: 200,
         showGeo: true, showSSS: true, showRed: true, 
-        hideReentry: false, showDet: false, // NEU: Standardmäßig aus
-        useFresnel: true, nMat: 1.40, aCoeff: 0.32, sCoeff: 1.00, hg: 0
+        hideReentry: false, 
+        useFresnel: true, nMat: 1.40, aCoeff: 0.16, sCoeff: 1.25, 
+        hg: 0
       };
 
       this.N_AIR = 1.0; this.MF_FLASH_T = 0.18; this.ABSORB_FLASH_T = 0.28;
@@ -189,11 +190,14 @@
     setPlaying(p){ this.isPlaying=p; }
 
     fitDPI(customScale){
-      const baseDpr = Math.min(2, window.devicePixelRatio||1);
-      const dpr = customScale ? customScale : baseDpr;
+      const baseDpr = window.devicePixelRatio || 1;
+      // PERFORMANCE FIX: Begrenze DPI auf Mobile auf max 1.5 (statt 2 oder 3)
+      // customScale (für HD Export) hat Vorrang.
+      const limit = customScale ? customScale : Math.min(1.5, baseDpr);
+      
       const cssW=this.canvas.clientWidth, cssH=this.canvas.clientHeight;
-      this.canvas.width=Math.round(cssW*dpr); this.canvas.height=Math.round(cssH*dpr);
-      this.ctx.setTransform(dpr,0,0,dpr,0,0);
+      this.canvas.width=Math.round(cssW*limit); this.canvas.height=Math.round(cssH*limit);
+      this.ctx.setTransform(limit,0,0,limit,0,0);
     }
 
     exportHighRes(scale=4){
@@ -574,10 +578,7 @@
       ctx.strokeStyle='rgba(0,0,0,.25)'; ctx.lineWidth=1; ctx.stroke();
 
       // NEU: Realistische Photodiode statt einfachem Strich
-      // NUR ZEICHNEN WENN SHOW DETECTOR TRUE IST
-      if(this.params.showDet) {
-          this.drawRealisticPhotodiode(ctx, poly);
-      }
+      this.drawRealisticPhotodiode(ctx, poly);
 
       // Overlay
       const det = this.currentDetector(poly);
@@ -616,7 +617,12 @@
 
     _toWorld(e){
       const R=this.canvas.getBoundingClientRect();
-      const mx=e.clientX-R.left, my=e.clientY-R.top;
+      
+      // Fallback für Touch oder Maus
+      const clientX = (e.touches && e.touches.length>0) ? e.touches[0].clientX : e.clientX;
+      const clientY = (e.touches && e.touches.length>0) ? e.touches[0].clientY : e.clientY;
+      
+      const mx=clientX-R.left, my=clientY-R.top;
       const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
       const cx=W/2, cy=H/2;
       return {x:cx+(mx-cx)/this.params.zoom, y:cy+(my-cy)/this.params.zoom};
