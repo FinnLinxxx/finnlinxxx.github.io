@@ -120,7 +120,7 @@
         radius: 5.5, autoStop: false, stopTime: 1.8,
         sigPara: 0, sigOrtho: 14, detWidth: 200,
         showGeo: true, showSSS: true, showRed: true, 
-        hideReentry: false, showDet: false, // Default AUS
+        hideReentry: false, showDet: false, 
         useFresnel: true, nMat: 1.40, aCoeff: 0.32, sCoeff: 1.00, hg: 0
       };
 
@@ -155,24 +155,18 @@
       });
       window.addEventListener('mouseup',()=>{ this.emitter.dragging=false; });
 
-      // --- TOUCH EVENTS FIX (Scrollen erlauben, wenn nicht gegriffen) ---
       this.canvas.addEventListener('touchstart', (e)=>{
         const w=this._toWorld(e); 
         const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
-        
-        // Check ob wir den Emitter/Detektor treffen
         const touchRadius = this.params.showDet ? Math.max(60, this.params.detWidth/2) : 60;
-        
         if(dx*dx + dy*dy <= touchRadius * touchRadius){ 
-             this.emitter.dragging=true; 
-             e.preventDefault(); // NUR dann preventDefault (kein Scrollen)
+             this.emitter.dragging=true; e.preventDefault();
         }
       }, {passive:false});
 
       window.addEventListener('touchmove', (e)=>{
-        if(!this.emitter.dragging) return; // Wenn wir nicht draggen, lassen wir das Event durch -> Browser scrollt
-        
-        e.preventDefault(); // Wenn wir draggen: Stopp Scrollen!
+        if(!this.emitter.dragging) return;
+        e.preventDefault(); 
         const w=this._toWorld(e);
         const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
         this.emitter.x=Math.max(6,Math.min(W-6,w.x));
@@ -376,7 +370,15 @@
           if (ph.medium==='air'){
             const endAir = {x:ph.pos.x + ph.dir.x*budget, y:ph.pos.y + ph.dir.y*budget};
             const tDet = segSeg(ph.pos, endAir, det.A, det.B);
-            if (tDet != null && ph.dir.x < -1e-6) { recordHit(ph, this.time + (budget*tDet)/speedAir); break; }
+            
+            // HIER WAR DAS PROBLEM:
+            // Wir prüfen NUR dann auf Kollision, wenn showDet = true ist.
+            // Wenn showDet = false ist, wird der IF-Block übersprungen und das Photon fliegt weiter.
+            if (this.params.showDet && tDet != null && ph.dir.x < -1e-6) { 
+                recordHit(ph, this.time + (budget*tDet)/speedAir); 
+                break; 
+            }
+            
             const hit=nearestIntersection(ph.pos,ph.dir,budget,poly);
             if (hit){
               const d=budget*hit.t; ph.pos.x+=ph.dir.x*d; ph.pos.y+=ph.dir.y*d; budget-=d;
