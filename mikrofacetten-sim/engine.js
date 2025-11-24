@@ -1,6 +1,6 @@
 /* engine.js — MFSim: Physik + Rendering der linken Seite */
 (function(){
-  // === SVG Exporter Integration ===
+  // === SVG Exporter Integration (Bleibt hier drin) ===
   class SVGContext {
     constructor(width, height) {
       this.width = width; this.height = height; this.buffer = [];
@@ -155,23 +155,26 @@
       });
       window.addEventListener('mouseup',()=>{ this.emitter.dragging=false; });
 
+      // --- TOUCH EVENTS FIX ---
       this.canvas.addEventListener('touchstart', (e)=>{
+        // 1. Zuerst Browser stoppen (kein Scrollen/Bouncen)
+        e.preventDefault();
+
         const w=this._toWorld(e); 
         const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
         
-        // INTELLIGENTER HIT-CHECK FÜR TOUCH:
-        // Wenn Detektor angezeigt wird, nutze dessen halbe Breite als Radius (damit man den Kasten greifen kann).
-        // Wenn nicht, nutze einen großzügigen 60px Radius für den Finger.
         const touchRadius = this.params.showDet ? Math.max(60, this.params.detWidth/2) : 60;
         
         if(dx*dx + dy*dy <= touchRadius * touchRadius){ 
-             this.emitter.dragging=true; e.preventDefault();
+             this.emitter.dragging=true; 
         }
-      }, {passive:false});
+      }, {passive:false}); // Wichtig: passive:false erlaubt preventDefault
 
       window.addEventListener('touchmove', (e)=>{
-        if(!this.emitter.dragging) return;
+        // Immer preventDefault, damit Canvas nicht wackelt
         e.preventDefault(); 
+        
+        if(!this.emitter.dragging) return;
         const w=this._toWorld(e);
         const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
         this.emitter.x=Math.max(6,Math.min(W-6,w.x));
@@ -580,10 +583,7 @@
       ctx.strokeStyle='rgba(0,0,0,.25)'; ctx.lineWidth=1; ctx.stroke();
 
       // NEU: Realistische Photodiode statt einfachem Strich
-      // NUR ZEICHNEN WENN SHOW DETECTOR TRUE IST
-      if(this.params.showDet) {
-          this.drawRealisticPhotodiode(ctx, poly);
-      }
+      this.drawRealisticPhotodiode(ctx, poly);
 
       // Overlay
       const det = this.currentDetector(poly);
