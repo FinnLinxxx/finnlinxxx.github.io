@@ -120,7 +120,7 @@
         radius: 5.5, autoStop: false, stopTime: 1.8,
         sigPara: 0, sigOrtho: 14, detWidth: 200,
         showGeo: true, showSSS: true, showRed: true, 
-        hideReentry: false, showDet: false, // NEU: Standardmäßig aus
+        hideReentry: false, showDet: false, 
         useFresnel: true, nMat: 1.40, aCoeff: 0.32, sCoeff: 1.00, hg: 0
       };
 
@@ -158,7 +158,13 @@
       this.canvas.addEventListener('touchstart', (e)=>{
         const w=this._toWorld(e); 
         const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
-        if(dx*dx+dy*dy <= this.emitter.r*this.emitter.r*25){ 
+        
+        // INTELLIGENTER HIT-CHECK FÜR TOUCH:
+        // Wenn Detektor angezeigt wird, nutze dessen halbe Breite als Radius (damit man den Kasten greifen kann).
+        // Wenn nicht, nutze einen großzügigen 60px Radius für den Finger.
+        const touchRadius = this.params.showDet ? Math.max(60, this.params.detWidth/2) : 60;
+        
+        if(dx*dx + dy*dy <= touchRadius * touchRadius){ 
              this.emitter.dragging=true; e.preventDefault();
         }
       }, {passive:false});
@@ -616,7 +622,12 @@
 
     _toWorld(e){
       const R=this.canvas.getBoundingClientRect();
-      const mx=e.clientX-R.left, my=e.clientY-R.top;
+      
+      // Fallback für Touch oder Maus
+      const clientX = (e.touches && e.touches.length>0) ? e.touches[0].clientX : e.clientX;
+      const clientY = (e.touches && e.touches.length>0) ? e.touches[0].clientY : e.clientY;
+      
+      const mx=clientX-R.left, my=clientY-R.top;
       const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
       const cx=W/2, cy=H/2;
       return {x:cx+(mx-cx)/this.params.zoom, y:cy+(my-cy)/this.params.zoom};
