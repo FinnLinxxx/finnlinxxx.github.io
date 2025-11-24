@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Microfacet · Simulation</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -19,19 +19,16 @@
         
         <div class="group-box">
           <div class="group-title">Simulation & Source</div>
-          
           <div class="mf-row">
             <label for="mf-speed">Speed</label>
             <input id="mf-speed" type="range" min="10" max="2000" step="1" value="500" />
             <div id="mf-speedVal" class="mf-val">500 px/s</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-count">Photons</label>
             <input id="mf-count" type="range" min="1" max="10000" step="1" value="400" />
             <div id="mf-countVal" class="mf-val">400</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-autoStop">Auto-Stop</label>
             <div style="display:flex; align-items:center; gap:8px; flex:1;">
@@ -40,19 +37,16 @@
                 <span style="font-size:11px; color:#6b7c8f;">Sec</span>
             </div>
           </div>
-
           <div class="mf-row">
             <label for="mf-radius">Point Size</label>
             <input id="mf-radius" type="range" min="0.5" max="20.0" step="0.1" value="5.5" />
             <div id="mf-radiusVal" class="mf-val">5.5 px</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-sigOrtho">Beam Width σ⊥</label>
             <input id="mf-sigOrtho" type="range" min="0" max="120" step="1" value="14" />
             <div id="mf-sigOrthoVal" class="mf-val">14 px</div>
           </div>
-          
           <div class="mf-row">
             <label for="mf-sigPara">Length σ∥</label>
             <input id="mf-sigPara" type="range" min="0" max="120" step="1" value="0" />
@@ -62,31 +56,26 @@
 
         <div class="group-box">
           <div class="group-title">Material & Physics</div>
-          
           <div class="mf-row">
             <label for="mf-n">Refractive Index n</label>
             <input id="mf-n" type="range" min="1.05" max="3.00" step="0.01" value="1.40" />
             <div id="mf-nVal" class="mf-val">1.40</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-a">Absorption µₐ</label>
             <input id="mf-a" type="range" min="0" max="100" step="0.1" value="50" />
             <div id="mf-aVal" class="mf-val">0.32</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-s">Scattering µₛ</label>
             <input id="mf-s" type="range" min="0" max="100" step="0.1" value="65" />
             <div id="mf-sVal" class="mf-val">1.00</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-hg">Anisotropy g</label>
             <input id="mf-hg" type="range" min="-0.95" max="0.95" step="0.01" value="0" />
             <div id="mf-hgVal" class="mf-val">0</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-useFresnel">Fresnel Eq.</label>
             <input id="mf-useFresnel" type="checkbox" checked />
@@ -96,19 +85,16 @@
 
         <div class="group-box">
           <div class="group-title">Surface & Geometry</div>
-          
           <div class="mf-row">
             <label for="mf-rough">Roughness</label>
             <input id="mf-rough" type="range" min="0" max="1" step="0.01" value="0.37" />
             <div id="mf-roughVal" class="mf-val">0.37</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-facetRes">Facet Density</label>
             <input id="mf-facetRes" type="range" min="0" max="1" step="0.01" value="0.07" />
             <div id="mf-facetResVal" class="mf-val">Facets≈—</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-detWidth">Detector Width</label>
             <input id="mf-detWidth" type="range" min="10" max="800" step="1" value="200" />
@@ -118,31 +104,26 @@
 
         <div class="group-box">
           <div class="group-title">View & Filter</div>
-          
           <div class="mf-row">
             <label for="mf-zoom">Zoom</label>
             <input id="mf-zoom" type="range" min="1" max="6" step="0.01" value="1" />
             <div id="mf-zoomVal" class="mf-val">1.00×</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-geoToggle">Overlay (Lines)</label>
             <input id="mf-geoToggle" type="checkbox" checked />
             <div id="mf-geoVal" class="mf-val">On</div>
           </div>
-          
           <div class="mf-row">
             <label for="mf-showDet">Show Detector</label>
             <input id="mf-showDet" type="checkbox" />
             <div id="mf-showDetVal" class="mf-val">Off</div>
           </div>
-
           <div class="mf-row">
             <label for="mf-showRed">Reflection (red)</label>
             <input id="mf-showRed" type="checkbox" checked />
             <div id="mf-showRedVal" class="mf-val">On</div>
           </div>
-
           <div class="mf-row">
              <label>SSS (purple)</label>
              <div style="display:flex; align-items:center; gap:12px; flex:1;">
@@ -166,7 +147,6 @@
               </div>
               <button id="btnSetMat" class="sm-btn">Set</button>
             </div>
-            
             <div class="color-item">
               <label>Air</label>
               <div class="rgba-inputs">
@@ -174,7 +154,6 @@
               </div>
               <button id="btnSetAir" class="sm-btn">Set</button>
             </div>
-
             <div class="color-item">
               <label>Overlay</label>
               <div class="rgba-inputs">
@@ -182,7 +161,6 @@
               </div>
               <button id="btnSetFit" class="sm-btn">Set</button>
             </div>
-
             <div class="color-item">
               <label>SSS</label>
               <div class="rgba-inputs">
