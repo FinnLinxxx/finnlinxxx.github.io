@@ -4,7 +4,7 @@
   const uiContainer = document.getElementById('uiContainer');
   const toggleUiBtn = document.getElementById('toggleUiBtn');
 
-  // Controls
+  // Controls (Selektoren unverändert)
   const facetResEl = document.getElementById('mf-facetRes');
   const facetResValEl = document.getElementById('mf-facetResVal');
   const roughEl = document.getElementById('mf-rough');
@@ -45,7 +45,6 @@
   const useFresnelValEl = document.getElementById('mf-useFresnelVal');
   const hideReentryEl = document.getElementById('mf-hideReentry');
   
-  // NEU: Detector Toggle
   const showDetEl = document.getElementById('mf-showDet');
   const showDetValEl = document.getElementById('mf-showDetVal');
 
@@ -65,9 +64,14 @@
       return minLog * Math.pow(maxLog / minLog, position);
   }
 
+  // UI Toggle Logic: angepasst für Sidebar
   function toggleUI() {
       uiContainer.classList.toggle('ui-minimized');
-      if (uiContainer.classList.contains('ui-minimized')) { toggleUiBtn.textContent = '▲'; } else { toggleUiBtn.textContent = '▼'; }
+      if (uiContainer.classList.contains('ui-minimized')) {
+          toggleUiBtn.textContent = '◀'; // Nach Links zeigen zum Hervorholen
+      } else {
+          toggleUiBtn.textContent = '▶'; // Nach Rechts zeigen zum Wegschieben
+      }
   }
   if(toggleUiBtn) toggleUiBtn.addEventListener('click', toggleUI);
 
@@ -91,11 +95,7 @@
   detWidthEl.addEventListener('input', ()=>{ engine.setParam('detWidth', parseFloat(detWidthEl.value)); detWidthValEl.textContent = Math.round(detWidthEl.value) + ' px'; });
   geoToggleEl.addEventListener('change', ()=>{ engine.setParam('showGeo', geoToggleEl.checked); geoValEl.textContent= geoToggleEl.checked?'On':'Off'; });
   
-  // NEU: Detector Toggle Listener
-  showDetEl.addEventListener('change', ()=>{ 
-      engine.setParam('showDet', showDetEl.checked); 
-      showDetValEl.textContent= showDetEl.checked?'On':'Off'; 
-  });
+  showDetEl.addEventListener('change', ()=>{ engine.setParam('showDet', showDetEl.checked); showDetValEl.textContent= showDetEl.checked?'On':'Off'; });
 
   showSSSEl.addEventListener('change', ()=>{ engine.setParam('showSSS', showSSSEl.checked); showSSSValEl.textContent= showSSSEl.checked?'An':'Aus'; });
   hideReentryEl.addEventListener('change', ()=>{ engine.setParam('hideReentry', hideReentryEl.checked); });

@@ -7,156 +7,140 @@
 }
 
 *{box-sizing:border-box}
-
-html, body { 
-  height: 100%; 
-  width: 100%; 
-  margin: 0; 
-}
+html, body { height: 100%; width: 100%; margin: 0; }
 
 body {
-  overflow-x: hidden; 
-  overflow-y: auto;
-  font: 14px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  color: #2b3645; 
-  background: #f4f7f9; 
-  padding-bottom: 40px;
+  overflow-x: hidden; overflow-y: auto;
+  font: 13px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  color: #2b3645; background: #f4f7f9; padding-bottom: 40px;
 }
 
-.content-wrapper {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  background: #fff;
-}
+.content-wrapper { max-width: 900px; margin: 0 auto; padding: 20px; background: #fff; }
 .content-wrapper h1 { margin-top: 0; color: #0d6efd; }
 
+/* SIMULATION WINDOW: Etwas höher */
 #simulation-window {
-  position: relative;
-  width: 100%;
-  /* BREITER GEMACHT */
-  max-width: 1400px; /* Von 1200px auf 1400px */
-  height: 85vh;      
-  min-height: 600px; 
-  margin: 20px auto; 
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  background: #222;
+  position: relative; width: 100%; max-width: 1400px;
+  height: 90vh; min-height: 600px; /* Erhöht */
+  margin: 20px auto; border: 1px solid #e0e0e0; border-radius: 8px;
+  overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); background: #222;
 }
 
-#left { 
-  position: absolute; 
-  top: 0; left: 0; 
-  width: 100%; height: 100%; 
-  overflow: hidden; 
-}
-
+#left { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; }
 .mf-box { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: #fff; }
 
+/* Canvas: Touch-Action none verhindert Scrollen beim Malen */
 .mf-canvas { 
   width:100%; height:100%; display:block; background:transparent; 
   touch-action: none; -webkit-user-select: none; user-select: none;
 }
 
+/* --- SIDEBAR RECHTS --- */
 .mf-controls { 
   position: absolute; 
-  bottom: 0; left: 0; width: 100%; 
-  z-index: 10; 
+  top: 0; 
+  right: 0; /* Rechts angedockt */
+  width: 300px; /* Max 1/4 bei Desktop, auf Mobile ggf anpassen */
+  max-width: 45%; /* Sicherstellen, dass nicht zu breit auf kleinen Screens */
+  height: 100%; /* Volle Höhe */
+  
   background: rgba(255, 255, 255, 0.97); 
   backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(0,0,0,0.1); 
-  box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
-  overflow: visible; 
-  padding: 0; 
+  border-left: 1px solid rgba(0,0,0,0.1); 
+  box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+  
+  overflow: visible; padding: 0; 
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 10;
 }
 
-.mf-controls.ui-minimized { transform: translateY(100%); }
+/* Slide nach rechts raus */
+.mf-controls.ui-minimized { transform: translateX(100%); }
 
+/* TOGGLE BUTTON: Sitzt links an der Leiste mittig */
 #toggleUiBtn {
-  position: absolute; top: -24px; left: 16px; width: 44px; height: 24px;
-  border-radius: 6px 6px 0 0; border: 1px solid rgba(0,0,0,0.1); border-bottom: none;
+  position: absolute; 
+  left: -24px; /* Links raus */
+  top: 50%; transform: translateY(-50%);
+  width: 24px; height: 48px;
+  border-radius: 6px 0 0 6px; 
+  border: 1px solid rgba(0,0,0,0.1); border-right: none;
   background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(10px);
   cursor: pointer; font-size: 10px; color: var(--mf-muted);
-  box-shadow: 0 -2px 6px rgba(0,0,0,0.06); z-index: 20; padding: 0;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.06); z-index: 20; padding: 0;
   display: flex; align-items: center; justify-content: center;
 }
 #toggleUiBtn:hover { background: #fff; color: var(--mf-accent); }
 
-/* Innerer Scroll-Bereich: jetzt 4 Spalten erzwingen */
+/* INNERER SCROLL BEREICH: 1 Spalte, kompakt */
 .mf-scroll-area {
-  padding: 12px 20px;
-  padding-bottom: 24px; 
-  max-height: 50%; /* Maximal die Hälfte des Simulationsfensters */
+  padding: 12px 14px; 
+  height: 100%;
   overflow-y: auto; 
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
-  /* NEU: 4 feste Spalten */
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Erzwingt 4 gleich breite Spalten */
-  gap: 6px 30px; 
+  /* Alles in einer Spalte untereinander */
+  display: flex; 
+  flex-direction: column;
+  gap: 8px; /* Geringer Abstand zwischen Gruppen */
 }
 
-/* Anpassung für kleinere Bildschirme, damit es nicht zu eng wird */
-@media (max-width: 1000px) { /* Anstatt 1200px jetzt 1000px */
-  .mf-scroll-area {
-    grid-template-columns: repeat(2, 1fr); /* Auf 2 Spalten wechseln */
-  }
-}
-@media (max-width: 650px) {
-  .mf-scroll-area {
-    grid-template-columns: 1fr; /* Auf 1 Spalte wechseln */
-    padding: 12px 10px; /* Weniger Padding auf sehr kleinen Bildschirmen */
-  }
-  .color-item { flex-direction: column; align-items: flex-start; height: auto; padding: 8px; }
-  .color-item > label { margin-bottom: 4px; }
-  .rgba-inputs { width: 100%; }
-  .color-item > button.sm-btn { margin-top: 8px; align-self: flex-end; }
-}
-
-/* Gruppen & UI Elemente */
+/* GRUPPEN */
 .group-box {
   background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06);
-  border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; gap: 6px;
+  border-radius: 6px; padding: 6px 10px; 
+  display: flex; flex-direction: column; gap: 4px;
 }
-.group-box.full-width { grid-column: 1 / -1; }
 .group-title {
   font-weight: 700; color: #2b3645; border-bottom: 1px solid rgba(0,0,0,0.05);
-  padding-bottom: 4px; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  padding-bottom: 2px; margin-bottom: 2px; font-size: 10px; text-transform: lowercase; letter-spacing: 0.5px;
 }
-/* NEU: Überschriften in Kleinbuchstaben forcieren */
-.group-title { text-transform: lowercase; }
 
+/* Rows noch kompakter */
+.mf-row { 
+  display:grid; grid-template-columns: 100px 1fr 45px; 
+  align-items:center; gap:6px; height: 24px; /* Sehr kompakt */
+}
 
-.mf-row { display:grid; grid-template-columns: 120px 1fr 60px; align-items:center; gap:8px; height: 28px; }
-.dual-check-row { display: flex; align-items: center; gap: 12px; height: 28px; overflow: hidden; }
-.dual-label { width: 120px; color:var(--mf-muted); font-weight:700; white-space:nowrap; font-size: 12px; flex-shrink: 0; }
+.dual-check-row { display: flex; align-items: center; gap: 8px; height: 24px; overflow: hidden; }
+.dual-label { width: 100px; color:var(--mf-muted); font-weight:700; white-space:nowrap; font-size: 11px; flex-shrink: 0; }
 .check-group { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
-.check-group label { font-size: 11px; color: var(--mf-muted); cursor: pointer; }
+.check-group label { font-size: 10px; color: var(--mf-muted); cursor: pointer; }
 
-.mf-row label { color:var(--mf-muted); font-weight:700; white-space:nowrap; font-size: 12px; }
-.mf-val { justify-self:end; color:var(--mf-accent); font-weight:800; white-space:nowrap; font-size: 12px; }
+.mf-row label { color:var(--mf-muted); font-weight:700; white-space:nowrap; font-size: 11px; }
+.mf-val { justify-self:end; color:var(--mf-accent); font-weight:800; white-space:nowrap; font-size: 10px; }
 
 .mf-row input[type=range] { -webkit-appearance:none; width:100%; height:4px; border-radius:999px; background:#d0d7de; outline:none; cursor:pointer; display:block; }
-.mf-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--mf-accent); box-shadow:0 0 0 2px rgba(47,129,247,.18); margin-top:0; }
-.mf-row input[type=checkbox], .check-group input[type=checkbox] { width:14px; height:14px; cursor: pointer; margin:0; }
+.mf-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:12px; height:12px; border-radius:50%; background:var(--mf-accent); box-shadow:0 0 0 2px rgba(47,129,247,.18); margin-top:0; }
+.mf-row input[type=checkbox], .check-group input[type=checkbox] { width:12px; height:12px; cursor: pointer; margin:0; }
 
-.btnRow { display:flex; gap:8px; align-items:center; grid-column: 1 / -1; justify-content: center; padding-top: 12px; margin-top: 6px; border-top: 1px solid rgba(0,0,0,0.06); }
-button { appearance:none; border:1px solid #d5dbe0; background:#fff; border-radius:5px; padding:5px 14px; font-weight:600; cursor:pointer; font-size: 13px; }
+/* BUTTONS */
+.btnRow { 
+  display:flex; gap:6px; align-items:center; 
+  justify-content: center; flex-wrap: wrap;
+  padding-top: 8px; margin-top: 4px; border-top: 1px solid rgba(0,0,0,0.06);
+}
+button { appearance:none; border:1px solid #d5dbe0; background:#fff; border-radius:5px; padding:4px 10px; font-weight:600; cursor:pointer; font-size: 11px; }
 button:hover { background:#f2f5f8 }
 button.primary { background:#0d6efd; color:#fff; border-color:#0d6efd }
 button.primary:hover { background:#0b5ed7 }
 
-.colors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 8px 20px; }
-.color-item { display: flex; flex-direction: row; align-items: center; gap: 8px; height: 30px; background: rgba(0,0,0,0.03); padding: 0 8px; border-radius: 6px; }
-.color-item > label { width: 90px; flex-shrink: 0; font-size: 11px; color: var(--mf-muted); font-weight: 600; margin: 0; }
-.color-item > button.sm-btn { width: 36px; flex-shrink: 0; height: 22px; padding: 0; font-size: 10px; }
+/* FARBEN: EINE SPALTE, gestapelt */
+.colors-grid { 
+  display: flex; flex-direction: column; gap: 4px; 
+}
+.color-item { 
+  display: flex; flex-direction: row; align-items: center; 
+  gap: 6px; height: 26px; 
+  background: rgba(0,0,0,0.03); padding: 0 6px; border-radius: 4px; 
+}
+.color-item > label { width: 70px; flex-shrink: 0; font-size: 10px; color: var(--mf-muted); font-weight: 600; margin: 0; }
+.color-item > button.sm-btn { width: 30px; flex-shrink: 0; height: 20px; padding: 0; font-size: 9px; }
+
 .rgba-inputs { display: flex; gap: 2px; flex: 1; width: auto; flex-wrap: nowrap; }
-.rgba-inputs input { flex: 1; min-width: 25px; width: 100%; border: 1px solid #d0d7de; border-radius: 3px; padding: 2px 0; font-size: 10px; text-align: center; background: #fff; margin: 0; }
+.rgba-inputs input { flex: 1; min-width: 20px; width: 100%; border: 1px solid #d0d7de; border-radius: 3px; padding: 1px 0; font-size: 9px; text-align: center; background: #fff; margin: 0; }
 .rgba-inputs input:focus { border-color: var(--mf-accent); outline: none; }
 
-.mf-scroll-area::-webkit-scrollbar { width: 6px; }
+.mf-scroll-area::-webkit-scrollbar { width: 5px; }
 .mf-scroll-area::-webkit-scrollbar-track { background: transparent; }
 .mf-scroll-area::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); border-radius: 3px; }
