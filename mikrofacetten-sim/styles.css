@@ -15,34 +15,30 @@ html, body {
 }
 
 body {
-  /* Scrollen erlauben für den Text */
   overflow-x: hidden; 
   overflow-y: auto;
   font: 14px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   color: #2b3645; 
-  background: #f4f7f9; /* Hellerer Hintergrund für die Webseite */
+  background: #f4f7f9; 
   padding-bottom: 40px;
 }
 
-/* Text Container */
 .content-wrapper {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
   background: #fff;
-  /* Optional: Box Shadow für Papier-Look */
-  /* box-shadow: 0 2px 10px rgba(0,0,0,0.05); */
 }
 .content-wrapper h1 { margin-top: 0; color: #0d6efd; }
 
-/* DAS SIMULATIONS-FENSTER */
 #simulation-window {
   position: relative;
   width: 100%;
-  max-width: 1200px; /* Maximale Breite */
-  height: 85vh;      /* 85% der Bildschirmhöhe */
-  min-height: 600px; /* Mindesthöhe */
-  margin: 20px auto; /* Zentriert */
+  /* BREITER GEMACHT */
+  max-width: 1400px; /* Von 1200px auf 1400px */
+  height: 85vh;      
+  min-height: 600px; 
+  margin: 20px auto; 
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   overflow: hidden;
@@ -50,7 +46,6 @@ body {
   background: #222;
 }
 
-/* Innerhalb des Fensters: Absolut positioniert */
 #left { 
   position: absolute; 
   top: 0; left: 0; 
@@ -65,7 +60,6 @@ body {
   touch-action: none; -webkit-user-select: none; user-select: none;
 }
 
-/* Controls: Jetzt ABSOLUT im Simulation-Window (nicht mehr fixed im Browser) */
 .mf-controls { 
   position: absolute; 
   bottom: 0; left: 0; width: 100%; 
@@ -77,7 +71,6 @@ body {
   overflow: visible; 
   padding: 0; 
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  /* Kein safe-area-padding hier nötig, da im Container */
 }
 
 .mf-controls.ui-minimized { transform: translateY(100%); }
@@ -92,7 +85,7 @@ body {
 }
 #toggleUiBtn:hover { background: #fff; color: var(--mf-accent); }
 
-/* Innerer Scroll-Bereich */
+/* Innerer Scroll-Bereich: jetzt 4 Spalten erzwingen */
 .mf-scroll-area {
   padding: 12px 20px;
   padding-bottom: 24px; 
@@ -100,12 +93,30 @@ body {
   overflow-y: auto; 
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
+  /* NEU: 4 feste Spalten */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(4, 1fr); /* Erzwingt 4 gleich breite Spalten */
   gap: 6px 30px; 
 }
 
-/* Gruppen & UI Elemente (unverändert gut) */
+/* Anpassung für kleinere Bildschirme, damit es nicht zu eng wird */
+@media (max-width: 1000px) { /* Anstatt 1200px jetzt 1000px */
+  .mf-scroll-area {
+    grid-template-columns: repeat(2, 1fr); /* Auf 2 Spalten wechseln */
+  }
+}
+@media (max-width: 650px) {
+  .mf-scroll-area {
+    grid-template-columns: 1fr; /* Auf 1 Spalte wechseln */
+    padding: 12px 10px; /* Weniger Padding auf sehr kleinen Bildschirmen */
+  }
+  .color-item { flex-direction: column; align-items: flex-start; height: auto; padding: 8px; }
+  .color-item > label { margin-bottom: 4px; }
+  .rgba-inputs { width: 100%; }
+  .color-item > button.sm-btn { margin-top: 8px; align-self: flex-end; }
+}
+
+/* Gruppen & UI Elemente */
 .group-box {
   background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06);
   border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; gap: 6px;
@@ -115,6 +126,9 @@ body {
   font-weight: 700; color: #2b3645; border-bottom: 1px solid rgba(0,0,0,0.05);
   padding-bottom: 4px; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
 }
+/* NEU: Überschriften in Kleinbuchstaben forcieren */
+.group-title { text-transform: lowercase; }
+
 
 .mf-row { display:grid; grid-template-columns: 120px 1fr 60px; align-items:center; gap:8px; height: 28px; }
 .dual-check-row { display: flex; align-items: center; gap: 12px; height: 28px; overflow: hidden; }
