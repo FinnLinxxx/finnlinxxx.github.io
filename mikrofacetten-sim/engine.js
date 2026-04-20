@@ -96,6 +96,9 @@
     return Math.max(0, Math.min(1, Re*Re + Im*Im));
   }
 
+  const SIM_MODE = { LASERSCANNER: 'laserscanner', MATERIAL_IMPULSE: 'material_impulse', PATTERSON: 'patterson' };
+  window.SIM_MODE = SIM_MODE;
+
   class MFSim {
     constructor(canvas){
       this.canvas = canvas;
@@ -116,13 +119,34 @@
       };
 
       this.params = {
+        mode: SIM_MODE.LASERSCANNER,
         rough: 0.37, facetRes: 0.07, zoom: 1, speedAir: 500, pCount: 400,
         radius: 5.5, autoStop: false, stopTime: 1.8,
-        sigPara: 0, sigOrtho: 14, detWidth: 200,
-        showGeo: true, showSSS: true, showRed: true, 
-        hideReentry: false, showDet: false, 
+        sigPara: 0, sigOrtho: 14, detWidth: 200, rhoM: 80,
+        showGeo: true, showSSS: true, showRed: true,
+        hideReentry: false, showDet: false,
         useFresnel: true, nMat: 1.40, aCoeff: 0.32, sCoeff: 1.00, hg: 0
       };
+
+      this.MODE_PRESETS = {
+        laserscanner: {
+          defaults: { sigOrtho: 14, sigPara: 0, detWidth: 200, showDet: false },
+          forceTransmission: false,
+          hiddenControls: ['row-rhoM']
+        },
+        material_impulse: {
+          defaults: { sigOrtho: 0, sigPara: 0, detWidth: 800, showDet: true },
+          forceTransmission: true,
+          hiddenControls: ['row-sigOrtho', 'row-sigPara', 'row-rhoM']
+        },
+        patterson: {
+          defaults: { detWidth: 40, showDet: true, rhoM: 80, rough: 0.01 },
+          forceTransmission: false,
+          hiddenControls: ['row-sigOrtho', 'row-sigPara']
+        }
+      };
+
+      this.pattersonSpawn = null;
 
       this.N_AIR = 1.0; this.MF_FLASH_T = 0.18; this.ABSORB_FLASH_T = 0.28;
       this.ABSORB_MEAN_SCATTERS = 8; this.MFP_PIXELS = 30;
@@ -136,56 +160,145 @@
 
       const startX = this.canvas.clientWidth ? this.canvas.clientWidth * 0.25 : 200;
       this.emitter = {x:startX, y:null, r:8, dragging:false};
+      this.detectorDragging = false;
 
       this.fitDPI();
       window.addEventListener('resize', ()=>this.fitDPI());
       if(this.emitter.y==null) this.emitter.y=this.canvas.clientHeight/2;
 
       this.canvas.addEventListener('mousedown', (e)=>{
-        const w=this._toWorld(e); const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
-        if(dx*dx+dy*dy<=this.emitter.r*this.emitter.r*2) this.emitter.dragging=true;
+        const w=this._toWorld(e);
+        if(this.params.mode === SIM_MODE.PATTERSON && this.pattersonSpawn){
+          if(this.params.showDet && this.cachedPoly){
+            const midY=this.canvas.clientHeight/2;
+            const detY=midY-this.params.rhoM;
+            const detX=this.xAtY(this.cachedPoly,detY);
+            const ddx=w.x-detX, ddy=w.y-detY;
+            if(ddx*ddx+ddy*ddy<=900){ this.detectorDragging=true; return; }
+          }
+          const dx=w.x-this.pattersonSpawn.x, dy=w.y-this.pattersonSpawn.y;
+          if(dx*dx+dy*dy<=900) this.emitter.dragging=true;
+        } else {
+          const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
+          if(dx*dx+dy*dy<=this.emitter.r*this.emitter.r*2) this.emitter.dragging=true;
+        }
       });
       window.addEventListener('mousemove',(e)=>{
+        if(this.detectorDragging){
+          const w=this._toWorld(e);
+          const H=this.canvas.clientHeight;
+          const newRhoM=Math.max(10,Math.min(H/2-10,Math.round(H/2-w.y)));
+          this.params.rhoM=newRhoM;
+          this.resetWave(true);
+          if(this._onDetectorDrag) this._onDetectorDrag(newRhoM);
+          return;
+        }
         if(!this.emitter.dragging) return;
         const w=this._toWorld(e);
         const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
-        this.emitter.x=Math.max(6,Math.min(W-6,w.x));
-        this.emitter.y=Math.max(6,Math.min(H-6,w.y));
-        this.resetWave(true);
+        if(this.params.mode === SIM_MODE.PATTERSON){
+          const midY=H/2;
+          const poly=this.cachedPoly||this.buildInterface(W,H,this.params.rough);
+          const xSurf=this.xAtY(poly,midY);
+          const newX=Math.max(xSurf+2, Math.min(W-6, w.x));
+          const z0_px=newX-xSurf;
+          const sPrime=this.MFP_PIXELS/Math.max(1e-6,z0_px);
+          this.params.sCoeff=Math.max(0.01,Math.min(10,sPrime/Math.max(1e-6,1-Math.abs(this.params.hg))));
+          this.emitter.x=newX; this.emitter.y=midY;
+          this.resetWave(true);
+          if(this._onPattersonDrag) this._onPattersonDrag(this.params.sCoeff);
+        } else {
+          this.emitter.x=Math.max(6,Math.min(W-6,w.x));
+          this.emitter.y=Math.max(6,Math.min(H-6,w.y));
+          this.resetWave(true);
+        }
       });
-      window.addEventListener('mouseup',()=>{ this.emitter.dragging=false; });
+      window.addEventListener('mouseup',()=>{ this.emitter.dragging=false; this.detectorDragging=false; });
 
       this.canvas.addEventListener('touchstart', (e)=>{
-        const w=this._toWorld(e); 
-        const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
-        const touchRadius = this.params.showDet ? Math.max(60, this.params.detWidth/2) : 60;
-        if(dx*dx + dy*dy <= touchRadius * touchRadius){ 
-             this.emitter.dragging=true; e.preventDefault();
+        const w=this._toWorld(e);
+        if(this.params.mode === SIM_MODE.PATTERSON && this.pattersonSpawn){
+          if(this.params.showDet && this.cachedPoly){
+            const midY=this.canvas.clientHeight/2;
+            const detY=midY-this.params.rhoM;
+            const detX=this.xAtY(this.cachedPoly,detY);
+            const ddx=w.x-detX, ddy=w.y-detY;
+            if(ddx*ddx+ddy*ddy<=900){ this.detectorDragging=true; e.preventDefault(); return; }
+          }
+          const dx=w.x-this.pattersonSpawn.x, dy=w.y-this.pattersonSpawn.y;
+          if(dx*dx+dy*dy<=900){ this.emitter.dragging=true; e.preventDefault(); }
+        } else {
+          const dx=w.x-this.emitter.x, dy=w.y-this.emitter.y;
+          const touchRadius = this.params.showDet ? Math.max(60, this.params.detWidth/2) : 60;
+          if(dx*dx + dy*dy <= touchRadius * touchRadius){ this.emitter.dragging=true; e.preventDefault(); }
         }
       }, {passive:false});
 
       window.addEventListener('touchmove', (e)=>{
+        if(this.detectorDragging){
+          e.preventDefault();
+          const w=this._toWorld(e);
+          const H=this.canvas.clientHeight;
+          const newRhoM=Math.max(10,Math.min(H/2-10,Math.round(H/2-w.y)));
+          this.params.rhoM=newRhoM;
+          this.resetWave(true);
+          if(this._onDetectorDrag) this._onDetectorDrag(newRhoM);
+          return;
+        }
         if(!this.emitter.dragging) return;
-        e.preventDefault(); 
+        e.preventDefault();
         const w=this._toWorld(e);
         const W=this.canvas.clientWidth,H=this.canvas.clientHeight;
-        this.emitter.x=Math.max(6,Math.min(W-6,w.x));
-        this.emitter.y=Math.max(6,Math.min(H-6,w.y));
-        this.resetWave(true);
+        if(this.params.mode === SIM_MODE.PATTERSON){
+          const midY=H/2;
+          const poly=this.cachedPoly||this.buildInterface(W,H,this.params.rough);
+          const xSurf=this.xAtY(poly,midY);
+          const newX=Math.max(xSurf+2, Math.min(W-6, w.x));
+          const z0_px=newX-xSurf;
+          const sPrime=this.MFP_PIXELS/Math.max(1e-6,z0_px);
+          this.params.sCoeff=Math.max(0.01,Math.min(10,sPrime/Math.max(1e-6,1-Math.abs(this.params.hg))));
+          this.emitter.x=newX; this.emitter.y=midY;
+          this.resetWave(true);
+          if(this._onPattersonDrag) this._onPattersonDrag(this.params.sCoeff);
+        } else {
+          this.emitter.x=Math.max(6,Math.min(W-6,w.x));
+          this.emitter.y=Math.max(6,Math.min(H-6,w.y));
+          this.resetWave(true);
+        }
       }, {passive:false});
 
-      window.addEventListener('touchend', ()=>{ this.emitter.dragging=false; });
+      window.addEventListener('touchend', ()=>{ this.emitter.dragging=false; this.detectorDragging=false; });
 
       this.resetWave(false);
     }
 
     setParam(name, value){
       this.params[name]=value;
-      if(name==='rough' || name==='facetRes' || name==='sigPara' || name==='sigOrtho' || name==='pCount'){
+      if(name==='rough' || name==='facetRes' || name==='sigPara' || name==='sigOrtho' || name==='pCount'
+         || name==='aCoeff' || name==='sCoeff' || name==='hg' || name==='nMat' || name==='useFresnel'){
         this.resetWave(true);
       }
     }
     setColor(key, rgba){ if(this.colors[key] !== undefined) this.colors[key] = rgba; }
+
+    setMode(modeName){
+      if(!this.MODE_PRESETS[modeName]) return null;
+      this.params.mode = modeName;
+      const preset = this.MODE_PRESETS[modeName];
+      for(const [k,v] of Object.entries(preset.defaults)) this.params[k] = v;
+      this.pattersonSpawn = null;
+      // Material Impulse: Emitter einmalig nah an die Oberflaeche schieben
+      if(modeName === SIM_MODE.MATERIAL_IMPULSE){
+        const W=this.canvas.clientWidth, H=this.canvas.clientHeight;
+        const poly = this.buildInterface(W, H, this.params.rough);
+        const midY = (typeof this.emitter.y==='number') ? this.emitter.y : H/2;
+        const xSurf = this.xAtY(poly, midY);
+        this.emitter.x = xSurf - 20;
+      }
+      this.resetWave(false);
+      return preset;
+    }
+
     getIsPlaying(){ return this.isPlaying; }
     setPlaying(p){ this.isPlaying=p; }
 
@@ -261,6 +374,17 @@
       return norm({x:xMid-this.emitter.x,y:midY-Ey});
     }
     currentDetector(poly){
+      if(this.params.mode === SIM_MODE.PATTERSON && this.pattersonSpawn){
+        // Patterson: Detektor auf der Oberflaeche, rhoM px vom Spawn entfernt
+        const midY = this.canvas.clientHeight/2;
+        const detY = midY - this.params.rhoM;
+        const detX = this.xAtY(poly, detY);
+        const half = this.params.detWidth/2;
+        const E = {x:detX, y:detY};
+        const A = {x:detX - half, y:detY};
+        const B = {x:detX + half, y:detY};
+        return {A,B,E,baseDir:{x:1,y:0},ortho:{x:0,y:1}};
+      }
       const Ey=(typeof this.emitter.y==='number')?this.emitter.y:this.canvas.clientHeight/2;
       const E={x:this.emitter.x,y:Ey};
       const baseDir=this.buildBaseDir(poly);
@@ -308,21 +432,50 @@
       const baseDir=this.buildBaseDir(poly); const ortho={x:-baseDir.y,y:baseDir.x};
       const rng=mulberry32(this.seedEmit++);
       const pCount=this.params.pCount|0;
-      this.photons = new Array(pCount).fill(0).map((_,i)=>{
-        const dx=gaussian(rng)*this.params.sigPara, dy=gaussian(rng)*this.params.sigOrtho;
-        let sx=this.emitter.x+baseDir.x*dx+ortho.x*dy, sy=this.emitter.y+baseDir.y*dx+ortho.y*dy;
-        const xSurf=this.xAtY(poly,sy); const margin=6;
-        if(sx >= xSurf - margin){ const push=(sx-(xSurf-margin))+1; sx -= baseDir.x*push; sy -= baseDir.y*push; }
-        return {
-          active:true, medium:'air', pos:{x:sx,y:sy}, dir:{x:baseDir.x,y:baseDir.y},
-          noReenter:false, hasReentered: false, stepLeft:0, scatters:0,
-          absorbAfter: this._sampleAbsorbAfter(this.ABSORB_MEAN_SCATTERS, mulberry32(this.seedEmit + i*1777)),
-          rng: mulberry32(this.seedEmit + i*9773), pathMat:[], isSSS:false
-        };
-      });
+      const mode = this.params.mode;
+
+      if(mode === SIM_MODE.PATTERSON){
+        // Patterson: isotrope Punktquelle im Material bei Tiefe z0
+        const midY=H/2;
+        const xSurf=this.xAtY(poly,midY);
+        const sPrime = this.params.sCoeff * (1 - Math.abs(this.params.hg));
+        const z0_px = this.MFP_PIXELS / Math.max(1e-6, sPrime);
+        const spawnX = xSurf + z0_px;
+        const spawnY = midY;
+        this.pattersonSpawn = {x:spawnX, y:spawnY};
+        this.photons = new Array(pCount).fill(0).map((_,i)=>{
+          const phRng = mulberry32(this.seedEmit + i*9773);
+          const theta = phRng() * Math.PI * 2;
+          const sa = this.params.aCoeff, ss = this.params.sCoeff;
+          return {
+            active:true, medium:'mat', pos:{x:spawnX,y:spawnY}, dir:norm({x:Math.cos(theta),y:Math.sin(theta)}),
+            noReenter:false, hasReentered:false, hasEnteredMat:true, stepLeft: this._sampleFreePathPx(Math.max(1e-9,sa+ss), phRng),
+            scatters:0, absorbAfter:9999, totalPathLength:0, innerPathLength:0,
+            rng: phRng, pathMat:[{x:spawnX,y:spawnY}], isSSS:true
+          };
+        });
+      } else {
+        // Laserscanner / Material Impulse: Beam vom Emitter
+        const sigO = (mode === SIM_MODE.MATERIAL_IMPULSE) ? 0 : this.params.sigOrtho;
+        const sigP = (mode === SIM_MODE.MATERIAL_IMPULSE) ? 0 : this.params.sigPara;
+        this.pattersonSpawn = null;
+        this.photons = new Array(pCount).fill(0).map((_,i)=>{
+          const dx=gaussian(rng)*sigP, dy=gaussian(rng)*sigO;
+          let sx=this.emitter.x+baseDir.x*dx+ortho.x*dy, sy=this.emitter.y+baseDir.y*dx+ortho.y*dy;
+          const xSurf=this.xAtY(poly,sy); const margin=6;
+          if(sx >= xSurf - margin){ const push=(sx-(xSurf-margin))+1; sx -= baseDir.x*push; sy -= baseDir.y*push; }
+          return {
+            active:true, medium:'air', pos:{x:sx,y:sy}, dir:{x:baseDir.x,y:baseDir.y},
+            noReenter:false, hasReentered:false, hasEnteredMat:false, stepLeft:0, scatters:0, totalPathLength:0, innerPathLength:0,
+            absorbAfter: this._sampleAbsorbAfter(this.ABSORB_MEAN_SCATTERS, mulberry32(this.seedEmit + i*1777)),
+            rng: mulberry32(this.seedEmit + i*9773), pathMat:[], isSSS:false
+          };
+        });
+      }
       this.mfFlash = new Array(Math.max(0, poly.length-1)).fill(0);
       this.absorptions = []; this.cachedPoly = poly;
       if(!keepTime){ this.time = 0; this.hitsRed=[]; this.hitsSSS=[]; }
+      this._waveSignal = (this._waveSignal||0) + 1;
     }
 
     step(dt){
@@ -351,7 +504,7 @@
         if(best==null) return null;
         return {t:best, idx};
       };
-      const recordHit=(ph, tHit)=>{ if (ph.isSSS) this.hitsSSS.push(tHit); else this.hitsRed.push(tHit); ph.active=false; };
+      const recordHit=(ph, tHit)=>{ const entry={time:tHit, pathLength:ph.totalPathLength, innerPathLength:ph.innerPathLength}; if(ph.isSSS) this.hitsSSS.push(entry); else this.hitsRed.push(entry); ph.active=false; };
       const pushMatPath=(ph,px,py,nx,ny)=>{
         if(!ph.pathMat) ph.pathMat=[];
         const dx=nx-px, dy=ny-py; if(dx*dx+dy*dy<0.25) return;
@@ -374,35 +527,41 @@
             // HIER WAR DAS PROBLEM:
             // Wir prüfen NUR dann auf Kollision, wenn showDet = true ist.
             // Wenn showDet = false ist, wird der IF-Block übersprungen und das Photon fliegt weiter.
-            if (this.params.showDet && tDet != null && ph.dir.x < -1e-6) { 
-                recordHit(ph, this.time + (budget*tDet)/speedAir); 
-                break; 
+            if (this.params.showDet && tDet != null && (this.params.mode === SIM_MODE.PATTERSON || this.params.mode === SIM_MODE.MATERIAL_IMPULSE || ph.dir.x < -1e-6)) {
+                ph.totalPathLength += budget*tDet;
+                recordHit(ph, this.time + (budget*tDet)/speedAir);
+                break;
             }
             
             const hit=nearestIntersection(ph.pos,ph.dir,budget,poly);
             if (hit){
-              const d=budget*hit.t; ph.pos.x+=ph.dir.x*d; ph.pos.y+=ph.dir.y*d; budget-=d;
+              const d=budget*hit.t; ph.totalPathLength+=d; ph.pos.x+=ph.dir.x*d; ph.pos.y+=ph.dir.y*d; budget-=d;
               const n_air=this.facetNormal(poly,hit.idx,'air'); this.mfFlash[hit.idx]=this.params.showSSS ? this.MF_FLASH_T : 0;
               let transmit = true;
               if (this.params.useFresnel){
                 const d_in = norm({x:ph.dir.x, y:ph.dir.y});
                 const cosI2 = Math.max(0, -dot(n_air, d_in));
                 const R = fresnelRs_sPolar(this.params.nMat, this.params.aCoeff, cosI2);
-                if (ph.rng() < R) transmit = false;
+                // Material Impulse: force first transmission
+                if (this.params.mode === SIM_MODE.MATERIAL_IMPULSE && !ph.hasEnteredMat){
+                  transmit = true;
+                } else {
+                  if (ph.rng() < R) transmit = false;
+                }
               } else { transmit = (ph.rng() >= 0.5); }
               if (!transmit){
                 ph.dir = reflect(ph.dir, n_air); ph.pos.x += n_air.x*0.8; ph.pos.y += n_air.y*0.8;
               } else {
                 const tdir = refract(ph.dir, n_air, this.N_AIR, this.params.nMat);
                 if (tdir){
-                  ph.dir = tdir; ph.medium='mat'; ph.pos.x += ph.dir.x*0.8; ph.pos.y += ph.dir.y*0.8;
+                  ph.dir = tdir; ph.medium='mat'; ph.hasEnteredMat=true; ph.pos.x += ph.dir.x*0.8; ph.pos.y += ph.dir.y*0.8;
                   ph.scatters=0; ph.pathMat = [{x:ph.pos.x,y:ph.pos.y}]; ph.isSSS = true;
                   ph.stepLeft = this.params.useFresnel ? this._sampleFreePathPx(this.params.aCoeff + this.params.sCoeff, ph.rng) : this._sampleStepLegacy(ph.rng);
                 } else {
                   ph.dir = reflect(ph.dir, n_air); ph.pos.x += n_air.x*0.8; ph.pos.y += n_air.y*0.8;
                 }
               }
-            } else { ph.pos = endAir; budget=0; }
+            } else { ph.totalPathLength+=budget; ph.pos = endAir; budget=0; }
           } else {
             // Material
             if (this.params.useFresnel){
@@ -425,7 +584,7 @@
             const step=Math.min(budget, ph.stepLeft);
             const hit=nearestIntersection(ph.pos, ph.dir, step, poly);
             if (hit){
-              const px=ph.pos.x, py=ph.pos.y; const d=step*hit.t; ph.pos.x+=ph.dir.x*d; ph.pos.y+=ph.dir.y*d;
+              const px=ph.pos.x, py=ph.pos.y; const d=step*hit.t; ph.totalPathLength+=d; ph.innerPathLength+=d; ph.pos.x+=ph.dir.x*d; ph.pos.y+=ph.dir.y*d;
               pushMatPath(ph, px,py, ph.pos.x,ph.pos.y); budget-=d; ph.stepLeft-=d;
               const n_mat=this.facetNormal(poly,hit.idx,'mat'); this.mfFlash[hit.idx]=this.params.showSSS ? this.MF_FLASH_T : 0;
               const tout = refract(ph.dir, n_mat, this.params.nMat, this.N_AIR);
@@ -442,7 +601,7 @@
                 ph.dir=reflect(ph.dir, n_mat); ph.pos.x += n_mat.x*0.8; ph.pos.y += n_mat.y*0.8;
               }
             } else {
-              const px=ph.pos.x, py=ph.pos.y; ph.pos.x += ph.dir.x*step; ph.pos.y += ph.dir.y*step;
+              const px=ph.pos.x, py=ph.pos.y; ph.totalPathLength+=step; ph.innerPathLength+=step; ph.pos.x += ph.dir.x*step; ph.pos.y += ph.dir.y*step;
               pushMatPath(ph, px,py, ph.pos.x,ph.pos.y); budget-=step; ph.stepLeft-=step;
             }
           }
@@ -480,17 +639,21 @@
       ctx.translate(det.E.x, det.E.y);
       ctx.rotate(angle);
 
-      let curY = -totalH / 2;
+      let curY = 0;
       const drawRect = (x,y,w,h,color) => {
           ctx.fillStyle = color;
           if(ctx.fillRect) ctx.fillRect(x,y,w,h);
           else { ctx.beginPath(); ctx.rect(x,y,w,h); ctx.fill(); }
       };
 
+      // Surface highlight line at det.E
+      ctx.strokeStyle = '#f0b93a'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(-W/2, 0); ctx.lineTo(W/2, 0); ctx.stroke();
+
       // SiO2
       const h_sio2 = 5; drawRect(-W/2, curY, W, h_sio2, 'rgba(180, 230, 255, 0.6)'); curY += h_sio2;
       // Anode / P+
-      const h_anode = 6; const w_contact = W * 0.12; 
+      const h_anode = 6; const w_contact = W * 0.12;
       drawRect(-W/2 + w_contact, curY, W - 2*w_contact, h_anode, '#d46a63');
       drawRect(-W/2, curY, w_contact, h_anode, '#b0b0b0');
       drawRect(W/2 - w_contact, curY, w_contact, h_anode, '#b0b0b0'); curY += h_anode;
@@ -502,7 +665,7 @@
       const h_cathode = 5; drawRect(-W/2, curY, W, h_cathode, '#a0a0a0');
 
       ctx.strokeStyle = 'rgba(0,0,0,0.4)'; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.rect(-W/2, -totalH/2, W, totalH); ctx.stroke();
+      ctx.beginPath(); ctx.rect(-W/2, 0, W, totalH); ctx.stroke();
       ctx.restore();
     }
     
@@ -568,19 +731,30 @@
       if(ctx.globalCompositeOperation) ctx.restore();
 
       // Photonen
+      const isMI = this.params.mode === SIM_MODE.MATERIAL_IMPULSE;
       for(const p of this.photons){
         if(!p.active) continue;
         if (this.params.hideReentry && p.hasReentered && p.medium === 'air') continue;
         if(p.isSSS){ if(!this.params.showSSS) continue; }
         else { if(!this.params.showRed) continue; }
-        
-        ctx.fillStyle = p.isSSS ? this.colors.sss : this.colors.red;
+
+        // Material Impulse: Photonen in Luft (nach Austritt) grau faerben
+        if(isMI && p.medium === 'air' && p.hasEnteredMat){
+          ctx.fillStyle = 'rgba(160,160,160,0.4)';
+        } else {
+          ctx.fillStyle = p.isSSS ? this.colors.sss : this.colors.red;
+        }
         ctx.beginPath(); ctx.arc(p.pos.x,p.pos.y,this.params.radius,0,Math.PI*2); ctx.fill();
       }
 
-      // Emitter
-      ctx.fillStyle=this.colors.emitter; ctx.beginPath(); ctx.arc(this.emitter.x,Ey,4,0,Math.PI*2); ctx.fill();
-      ctx.strokeStyle='rgba(0,0,0,.25)'; ctx.lineWidth=1; ctx.stroke();
+      // Emitter / Patterson Spawn Point
+      if(this.params.mode === SIM_MODE.PATTERSON && this.pattersonSpawn){
+        ctx.fillStyle='#ff9800'; ctx.beginPath(); ctx.arc(this.pattersonSpawn.x,this.pattersonSpawn.y,5,0,Math.PI*2); ctx.fill();
+        ctx.strokeStyle='rgba(0,0,0,.35)'; ctx.lineWidth=1; ctx.stroke();
+      } else {
+        ctx.fillStyle=this.colors.emitter; ctx.beginPath(); ctx.arc(this.emitter.x,Ey,4,0,Math.PI*2); ctx.fill();
+        ctx.strokeStyle='rgba(0,0,0,.25)'; ctx.lineWidth=1; ctx.stroke();
+      }
 
       // NEU: Realistische Photodiode statt einfachem Strich
       // NUR ZEICHNEN WENN SHOW DETECTOR TRUE IST

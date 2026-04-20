@@ -26,7 +26,16 @@
         <button id="toggleUiBtn" title="Toggle Menu">▶</button>
 
         <div class="mf-scroll-area">
-          
+
+          <div class="group-box" id="mode-select-group">
+            <div class="group-title">mode</div>
+            <div class="mode-options">
+              <label><input type="radio" name="simMode" value="laserscanner" checked /> Laserscanner</label>
+              <label><input type="radio" name="simMode" value="material_impulse" /> Material Impulse</label>
+              <label><input type="radio" name="simMode" value="patterson" /> Patterson</label>
+            </div>
+          </div>
+
           <div class="group-box">
             <div class="group-title">simulation & source</div>
             <div class="mf-row">
@@ -52,12 +61,12 @@
               <input id="mf-radius" type="range" min="0.5" max="20.0" step="0.1" value="5.5" />
               <div id="mf-radiusVal" class="mf-val">5.5 px</div>
             </div>
-            <div class="mf-row">
+            <div class="mf-row" id="row-sigOrtho">
               <label for="mf-sigOrtho">Beam Width σ⊥</label>
               <input id="mf-sigOrtho" type="range" min="0" max="120" step="1" value="14" />
               <div id="mf-sigOrthoVal" class="mf-val">14 px</div>
             </div>
-            <div class="mf-row">
+            <div class="mf-row" id="row-sigPara">
               <label for="mf-sigPara">Length σ∥</label>
               <input id="mf-sigPara" type="range" min="0" max="120" step="1" value="0" />
               <div id="mf-sigParaVal" class="mf-val">0 px</div>
@@ -110,6 +119,11 @@
               <input id="mf-detWidth" type="range" min="10" max="800" step="1" value="200" />
               <div id="mf-detWidthVal" class="mf-val">200 px</div>
             </div>
+            <div class="mf-row" id="row-rhoM" style="display:none;">
+              <label for="mf-rhoM">ρ_m (Src↔Det)</label>
+              <input id="mf-rhoM" type="range" min="0" max="400" step="1" value="80" />
+              <div id="mf-rhoMVal" class="mf-val">80 px</div>
+            </div>
           </div>
 
           <div class="group-box">
@@ -123,11 +137,6 @@
               <label for="mf-geoToggle">Overlay (Lines)</label>
               <input id="mf-geoToggle" type="checkbox" checked />
               <div id="mf-geoVal" class="mf-val">On</div>
-            </div>
-            <div class="mf-row">
-              <label for="mf-showDet">Show Detector</label>
-              <input id="mf-showDet" type="checkbox" />
-              <div id="mf-showDetVal" class="mf-val">Off</div>
             </div>
             <div class="mf-row">
               <label for="mf-showRed">Reflection (red)</label>
@@ -193,6 +202,58 @@
     </div>
   </div>
 
+  <div id="histogram-window">
+    <div id="hist-left">
+      <canvas id="histogram-canvas" width="1600" height="600"></canvas>
+    </div>
+    <div id="hist-controls">
+      <div class="group-box">
+        <div class="group-title">detector</div>
+        <div class="mf-row">
+          <label for="mf-showDet">Activate</label>
+          <input id="mf-showDet" type="checkbox" />
+          <div id="mf-showDetVal" class="mf-val">Off</div>
+        </div>
+      </div>
+      <div class="group-box">
+        <div class="group-title">chart settings</div>
+        <div id="histogram-stats" style="font-size:10px; color:#6b7c8f; padding:2px 0; line-height:1.5;"></div>
+        <div class="mode-options" style="margin:2px 0 4px;">
+          <label style="font-size:10px;"><input type="radio" name="histMode" value="accumulate" checked style="width:11px;height:11px;margin:0 4px 0 0;" />Accumulate</label>
+          <label style="font-size:10px;"><input type="radio" name="histMode" value="timeline" style="width:11px;height:11px;margin:0 4px 0 0;" />Timeline</label>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:2px; padding:2px 0;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label for="mf-binSize" style="color:#6b7c8f; font-weight:700; font-size:10px;">Bin Size</label>
+            <div id="mf-binSizeVal" class="mf-val">20 px</div>
+          </div>
+          <input id="mf-binSize" type="range" min="0" max="50" step="1" value="20" style="width:100%; height:3px;" />
+        </div>
+        <div class="mf-row">
+          <label for="hist-showSpline">Spline</label>
+          <input id="hist-showSpline" type="checkbox" checked />
+          <div id="hist-showSplineVal" class="mf-val">On</div>
+        </div>
+        <div class="mf-row">
+          <label for="hist-combined">Combined</label>
+          <input id="hist-combined" type="checkbox" />
+          <div id="hist-combinedVal" class="mf-val">Off</div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:2px; padding:2px 0;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label for="hist-smooth" style="color:#6b7c8f; font-weight:700; font-size:10px;">Smooth</label>
+            <div id="hist-smoothVal" class="mf-val">0.50</div>
+          </div>
+          <input id="hist-smooth" type="range" min="0" max="1" step="0.01" value="0.50" style="width:100%; height:3px;" />
+        </div>
+      </div>
+      <div class="hist-btn-col">
+        <button id="btnHistSave">Save Snapshot</button>
+        <button id="btnHistClear" style="color:#c0392b; border-color:#c0392b;">Clear All</button>
+      </div>
+    </div>
+  </div>
+
   <div class="content-wrapper">
     <h2>Physikalischer Hintergrund</h2>
     <p>
@@ -206,6 +267,7 @@
   </div>
 
   <script src="engine.js"></script>
+  <script src="histogram.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

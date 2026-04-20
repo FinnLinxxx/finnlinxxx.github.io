@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SISI — A photon transport simulator</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<style>
+  html{font-family:Charter,Georgia,"Times New Roman",serif;font-size:18px;line-height:1.6;color:#222;background:#fff;-webkit-font-smoothing:antialiased;}
+  body{margin:0;padding:0;}
+  .column{max-width:640px;margin:0 auto;padding:0 24px;}
+  header.top{padding:30px 0 10px;font-size:15px;color:#999;}
+  header.top a{color:#999;text-decoration:none;}
+  header.top a:hover{color:#1060b0;}
+  h1{font-weight:normal;font-size:40px;line-height:1.1;letter-spacing:-.01em;margin:30px 0 12px;}
+  .subtitle{color:#777;font-size:17px;margin:0 0 4px;}
+  .byline{color:#999;font-size:14px;margin:0 0 48px;}
+  p{margin:0 0 1.1em;}
+  a{color:#1060b0;text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  h2{font-weight:normal;font-size:26px;margin:64px 0 14px;}
+  em{font-style:italic;} strong{font-weight:bold;}
+  code{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:.85em;background:#f3f0e8;padding:1px 5px;border-radius:2px;}
+  .katex-display{margin:24px 0!important;font-size:1.05em;}
+  figure{margin:40px 0;}
+  figure.wide{margin-left:calc(-50vw + 50%);margin-right:calc(-50vw + 50%);max-width:100vw;}
+  figure.wide .inner{max-width:1200px;margin:0 auto;padding:0 24px;}
+  figure.wide figcaption,figure figcaption{max-width:640px;margin:14px auto 0;padding:0 24px;color:#777;font-size:15px;line-height:1.5;font-style:italic;}
+  figcaption b{font-style:normal;color:#444;font-weight:normal;display:block;font-size:13px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px;}
+  svg.diagram{display:block;width:100%;height:auto;background:#fafaf6;border:1px solid #e5e0d5;}
+  /* Simulator styling — roomy, full-width on wide viewports */
+  .sim-wrap{display:flex;flex-direction:column;gap:7px;background:transparent;border:none;overflow:visible;}
+  #simulation-window,#histogram-window{position:relative!important;width:100%!important;max-width:none!important;margin:0!important;min-height:0!important;box-shadow:none!important;background:#fff!important;display:block;font:13px/1.4 "SF Mono",Menlo,Consolas,monospace;color:#222;border:1px solid #e5e0d5!important;border-radius:2px!important;overflow:hidden!important;}
+  #simulation-window{height:min(80vh,820px)!important;}
+  #histogram-window{height:650px!important;display:flex!important;}
+  .sim-hint{border:1px solid #e5e0d5;border-top:none;border-radius:0 0 2px 2px;}
+  #left{position:absolute;inset:0;overflow:hidden;}
+  .mf-box{position:absolute;inset:0;background:#fff;z-index:1;}
+  .mf-canvas{width:100%;height:100%;display:block;background:transparent;touch-action:none;user-select:none;-webkit-user-select:none;}
+  .mf-controls{position:absolute;top:0;right:0;width:300px;max-width:45%;height:100%;background:#f8f7f3;border-left:1px solid #d6d1c8;transition:transform .3s cubic-bezier(.25,1,.5,1);z-index:10;}
+  .mf-controls.ui-minimized{transform:translateX(100%);}
+  #toggleUiBtn{position:absolute;left:-24px;top:50%;transform:translateY(-50%);width:24px;height:48px;border-radius:6px 0 0 6px;border:1px solid #e5e0d5;border-right:none;background:rgba(255,255,255,.97);cursor:pointer;font-size:10px;color:#666;z-index:20;padding:0;display:flex;align-items:center;justify-content:center;}
+  .mf-scroll-area{padding:10px 12px;height:100%;box-sizing:border-box;overflow-y:auto;overflow-x:hidden;font-family:system-ui,-apple-system,sans-serif;}
+  .group-box{border:1px solid #dedad2;border-radius:2px;padding:8px 10px;margin-bottom:8px;background:rgba(255,255,252,.6);}
+  .group-title{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#1060b0;margin-bottom:8px;font-weight:500;}
+  /* Two-line slider rows: label+value on top, slider below */
+  .mf-row{display:flex;flex-direction:column;gap:3px;padding:5px 0;}
+  .mf-row-header{display:flex;justify-content:space-between;align-items:baseline;gap:4px;}
+  .mf-row-header label{color:#666;font-size:10px;text-transform:uppercase;letter-spacing:.05em;line-height:1.2;}
+  .mf-row input[type="range"]{width:100%;margin:0;accent-color:#1060b0;}
+  .mf-val{color:#1060b0;font-size:13px;font-weight:700;white-space:nowrap;}
+  /* Inline rows for checkboxes */
+  .mf-row-check{flex-direction:row;align-items:center;gap:8px;padding:3px 0;}
+  .mf-row-check label{flex:1;color:#444;font-size:11px;text-transform:none;letter-spacing:0;}
+  .mf-row-check .mf-val{font-size:10px;color:#888;font-weight:normal;}
+  .mode-options{display:flex;flex-direction:column;gap:4px;font-size:11px;}
+  .mode-options label{cursor:pointer;color:#444;}
+  input[type="radio"],input[type="checkbox"]{accent-color:#1060b0;}
+  .colors-grid{display:flex;flex-direction:column;gap:4px;}
+  .color-item{border:1px solid #e5e0d5;padding:5px 7px;font-size:10px;display:flex;align-items:center;gap:6px;}
+  .color-item label{color:#666;min-width:38px;flex-shrink:0;font-weight:500;}
+  .rgba-inputs{display:flex;gap:3px;flex:1;min-width:0;}
+  .rgba-inputs input{width:0;flex:1;min-width:0;font-size:10px;border:1px solid #e5e0d5;background:#fff;padding:2px 2px;font-family:"SF Mono",Menlo,monospace;text-align:center;-moz-appearance:textfield;}
+  .rgba-inputs input::-webkit-inner-spin-button,.rgba-inputs input::-webkit-outer-spin-button{display:none;}
+  .sm-btn,.btnRow button,.hist-btn-col button{font-family:"SF Mono",Menlo,monospace;font-size:11px;padding:4px 8px;border:1px solid #222;background:#fff;color:#222;cursor:pointer;border-radius:2px;}
+  .sm-btn:hover,.btnRow button:hover{background:#222;color:#fff;}
+  .btnRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+  .btnRow .primary{background:#1060b0;color:#fff;border-color:#1060b0;}
+  #hist-left{flex:1;position:relative;background:#fff;}
+  #histogram-canvas{width:100%;height:100%;display:block;}
+  #hist-controls{width:240px;padding:10px;background:rgba(250,250,246,.95);border-left:1px solid #e5e0d5;overflow-y:auto;}
+  .hist-btn-col{display:flex;flex-direction:column;gap:4px;margin-top:6px;}
+  .sim-hint{text-align:center;padding:8px;font-size:12px;color:#999;background:#fafaf6;border-top:1px solid #e5e0d5;}
+  @media (max-width:700px){#simulation-window{height:65vh!important;}#histogram-window{height:400px!important;}figure.wide .inner{padding:0;}}
+</style>
+</head>
+<body>
+<div class="column">
+  <header class="top"><a href="../index.html">← Finn Linzer</a></header>
+  <h1>SISI-2D — a photon transport simulator</h1>
+  <p class="subtitle">An interactive 2D Monte Carlo simulation - to uncover Signal Interference from Surface Interactions (SISI)</p>
+  <p class="byline">April 2026</p>
+
+  <p>A terrestrial laser scanner can measure distance by timing a laser pulse and evaluating its round trip to the target. Although this underlying principle applies to both pulse and phase-based systems, this article focuses on the mechanics of pulse-based laser scanners. The implicit assumption is that the pulse reflects off the surface, a clean, sharp event. But most real-world materials are not mirrors. Photons penetrate into the material, scatter around inside, and only then re-emerge. The extra path they travel causes the scanner to report a distance that is systematically too long. How much too long depends on the material's optical properties, the incidence angle, the surface roughness, the wavelength; a bunch of parameters that is difficult to learn about from measurements alone.</p>
+
+  <p>To isolate these effects, I shifted from the macroscopic notion of an energy wave to the quantisation into discrete energy packets. Physically, the laser pulse of the MS60 is a collection of individual photons. Based on the wavelength and pulse energy of the instrument, a single measurement pulse consists of approximately 2.8 billion ($2.8 \cdot 10^9$) photons. In the Monte Carlo simulation, the law of large numbers is exploited: each simulated photon acts on one possible path of the laser–material interaction. The statistical accumulation of all events in the imagined detector reconstructs the expected continuous signal (waveform).</p>
+
+  <p>The modular structure of the simulation environment helps to represent the individual processes of the laser–material interaction. Independent of instruments and their manufacturers, the goal is to reveal the effects that are generally responsible for the distance errors in electronic distance measurement. Beyond distance, the simulation also reconstructs the return intensity, a quantity that carries its own material signature and that is used in recent radiometric research. Analogous to the TLS equation (Wagner 2006), it is necessary to examine the physical processes behind the result in order to develop an understanding of the problem and its solution.</p>
+
+  <p><em>Note:</em> The interactive 2D simulation on this page is intended solely for illustrative purposes. The reference implementation of SISI — a validated C++ Monte Carlo simulator accompanying my dissertation — is published under the GPLv3 licence at <a href="https://github.com/FinnLinxxx/sisi-simulator">github.com/FinnLinxxx/sisi-simulator</a>. Unlike the reference code, this browser-based visualisation shown here makes no claim of physical correctness or completeness.</p>
+
+
+  <h2>Three domains of a photon</h2>
+
+  <p>A photon moves through three domains before it is either absorbed in the material, thrown back toward the photodiode, or is lost forever. The rules by which a photon is created and subsequently traverses the simulation follow strictly the underlying physical order.</p>
+
+  <figure>
+    <img src="ansim.svg" alt="Flowchart of a photon traversing the three domains: Space, Surface, and Volume" style="width:100%;height:auto;background:#fafaf6;border:1px solid #e5e0d5;"/>
+    <figcaption><b>Figure 1</b>A photon moves through three domains: Space, Surface, and Volume, before it is absorbed, detected, or lost.</figcaption>
+
+  </figure>
+
+  <p><strong>Space</strong> describes the transmission path between the instrument and the material surface. The space between sensor and object is treated as a homogeneous medium with a constant refractive index of $n_\text{air} = 1.00028$. Each photon is assigned an individual starting state to simulate the physical extent of the laser pulse: the emission time $t_0$ follows a Gaussian distribution ($t_0 \sim \mathcal{N}(0, \sigma_t^2)$), and the direction vector deviates from the ideal optical axis within a cone defined by the divergence angle, producing the spot size $\sigma_{xy}$ on the surface. After initialisation, the photon moves on a ballistic trajectory until it intersects the surface.</p>
+
+  <p><strong>Surface</strong> is the physical-mathematical boundary that decides whether incoming radiation is reflected or transmitted into the material. This applies reciprocally, both for arriving radiation and for that which is thrown back out of the material (ex. Total Inner Reflection - TIR). The direction in which a photon is reflected or refracted is determined by the microfacet structure. Whether it reflects or refracts is governed by the Fresnel equations, through the material parameters, the angle of incidence, and the polarisation direction.</p>
+
+  <p><strong>Volume</strong> is the material interior. Photons that have entered the solid are strongly influenced by absorption and scattering. The interaction of laser light within matter is primarily determined by the ratio of scattering ($\mu_s$) and absorption ($\mu_a$). A material entirely without scattering (such as glass) would be completely unsuitable for TLS, since no signal from the material interior would reach the photodiode due to the lack of backscattering. When $\mu_s > 0$, the penetrated photons traverse a zigzag path through multiple scattering events.</p>
+
+
+  <h2>At the surface: microfacets and Fresnel</h2>
+
+  <p>A distinction is made between a macroscopic and a microscopic view of the surface. Macroscopically, the incidence angle results from the direction of the laser beam and the orientation of the surface. Microscopically, each photon is considered individually, and its interaction with the surface is described by a local microfacet normal. The microfacets are small, mutually tilted, planar sub-faces that represent the roughness of the surface. Their tilt angle $\gamma$ relative to the macroscopic surface normal $\hat{n}_\text{surf}$ follows a distribution. Empirically assumed as a Gaussian with the variance $\sigma_\text{rough}^2$:</p>
+
+  $$\gamma \sim \mathcal{N}(0,\; \sigma_\text{rough}^2), \qquad \varphi \sim \mathcal{U}(0,\, 2\pi)$$
+
+  <p>At each facet, the Fresnel equations determine the reflectance. For a given polarisation angle $\Psi$:</p>
+
+  $$R(\Psi) = \cos^2(\Psi)\, R_s + \sin^2(\Psi)\, R_p$$
+
+  <p>where $R_s = |r_s|^2$ and $R_p = |r_p|^2$ are the squared magnitudes of the Fresnel coefficients for s- and p-polarised light. The two fractions are interpreted as probability and counter-probability: $R(\Psi)$ is the probability that the photon is directly reflected at the surface, $T(\Psi) = 1 - R(\Psi)$ the probability that it transmits into the other medium. When a photon collides with the surface, a random number $u \sim \mathcal{U}(0,1)$ is drawn  if $u < R(\Psi)$, the photon reflects; otherwise it transmits (and is now inside).</p>
+
+
+
+  <h2>Inside the volume: scattering and absorption</h2>
+
+  <p>Photons moving through matter are influenced by the electric fields and particles within it. This effect is magnitudes stronger in a solid than in the atmosphere. Two coefficients describe what happens: the absorption coefficient $\mu_a$ and the scattering coefficient $\mu_s$, both given in $\text{mm}^{-1}$. Their reciprocals are the mean free paths, the average distance a photon travels before it is absorbed or scattered, respectively. Combined into the total interaction coefficient $\mu_t = \mu_a + \mu_s$, the probability density for the free path length follows an exponential distribution analogous to the Beer–Lambert law:</p>
+
+  $$p(\ell) = \mu_t \, e^{-\mu_t \, \ell}$$
+
+  <p>After the first entry or between two events, most free path lengths are relatively short. Longer, unaffected stretches are rarer but distort the mean considerably. At each interaction event, the photon is either absorbed (with probability $\mu_a / \mu_t$) or scattered into a new direction. The new direction is sampled from the Henyey–Greenstein phase function with anisotropy parameter $g$:</p>
+
+  $$p(\cos\theta) = \frac{1 - g^2}{\bigl(1 + g^2 - 2g\cos\theta\bigr)^{3/2}}$$
+
+  <p>The factor $g \in [-1, 1]$ says how much a photon remembers its previous direction: $g = 0$ means isotropic scattering, $g > 0$ forward-scattering (common in biological tissue and wet wood), and $g < 0$ preferential backscattering. Because a high $g$ means each individual scattering event barely deflects the photon, many more events are needed before the direction is fully randomised. This coupling between $\mu_s$ and $g$ is captured by the reduced scattering coefficient $\mu_s' = \mu_s(1 - g)$, — two materials with different $\mu_s$ and $g$ but the same $\mu_s'$ end up looking very similar in terms of diffuse transport.</p>
+
+  <p>Absorption, by contrast, does not affect the travel time. Absorbed photons are simply lost for detection. So absorption is mainly a question of signal strength, while scattering is what causes the distance error. Each scattered photon accumulates a total path length inside the material as the sum of its individual free path segments: $s_\text{mat} = \ell_1 + \ell_2 + \cdots + \ell_n$. Because light travels slower in the material than in air ($c/n_\text{mat}$ instead of $c/n_\text{air}$), the scanner, which assumes the photon travelled through air the entire time, interprets this extra time as additional distance. The systematic distance error for a photon with material path length $s_\text{mat}$ is:</p>
+
+  $$\Delta s = s_\text{mat} \cdot (n_\text{mat} - n_\text{air})$$
+
+
+  <h2>The simulator</h2>
+
+  <p>The interactive simulation below implements the desribed above into a 2D Monte Carlo pipeline. Drag the emitter, change the sliders, and watch what happens. Three modes are available: <strong>Laserscanner</strong> sends a Gaussian beam onto a rough surface (the realistic measurement scenario). <strong>Material Impulse</strong> uses a Dirac pulse ($\sigma_{xy} = \sigma_t = 0$) with forced 100% transmission, isolating the pure material response from surface effects. <strong>Patterson</strong> places an isotropic point source at depth $z_0 = 1/\mu_s'$ inside the material, which can be checked against the <a href="https://opg.optica.org/ao/fulltext.cfm?uri=ao-28-12-2331">analytical solution</a> by Patterson et al. (1989).</p>
+
+  <figure class="wide">
+    <div class="inner">
+      <div class="sim-wrap">
+        <div id="simulation-window">
+          <div id="left">
+            <div class="mf-box"><canvas id="mf-view" class="mf-canvas" width="1600" height="1200" aria-label="Simulation View"></canvas></div>
+            <div id="uiContainer" class="mf-controls">
+              <button id="toggleUiBtn" title="Toggle Menu">▶</button>
+              <div class="mf-scroll-area">
+                <div class="group-box" id="mode-select-group"><div class="group-title">Mode</div><div class="mode-options"><label><input type="radio" name="simMode" value="laserscanner" checked/> Laserscanner</label><label><input type="radio" name="simMode" value="material_impulse"/> Material Impulse</label><label><input type="radio" name="simMode" value="patterson"/> Patterson</label></div></div>
+                <div class="group-box"><div class="group-title">Space &amp; Source</div>
+                  <div class="mf-row"><div class="mf-row-header"><label for="mf-speed">Speed</label><div id="mf-speedVal" class="mf-val">500 px/s</div></div><input id="mf-speed" type="range" min="10" max="2000" step="1" value="500"/></div>
+                  <div class="mf-row"><div class="mf-row-header"><label for="mf-count">Photons</label><div id="mf-countVal" class="mf-val">400</div></div><input id="mf-count" type="range" min="1" max="10000" step="1" value="400"/></div>
+                  <div class="mf-row mf-row-check"><label for="mf-autoStop">Auto-Stop</label><input id="mf-autoStop" type="checkbox"/><input id="mf-stopTime" type="number" step="0.1" min="0.1" value="1.8" style="width:44px;border:1px solid #dedad2;text-align:center;font-size:11px;"/><span style="font-size:11px;color:#666;">s</span></div>
+                  <div class="mf-row"><div class="mf-row-header"><label for="mf-radius">Point Size</label><div id="mf-radiusVal" class="mf-val">5.5 px</div></div><input id="mf-radius" type="range" min="0.5" max="20" step="0.1" value="5.5"/></div>
+                  <div class="mf-row" id="row-sigOrtho"><div class="mf-row-header"><label for="mf-sigOrtho">Spot σ<sub>xy</sub></label><div id="mf-sigOrthoVal" class="mf-val">14 px</div></div><input id="mf-sigOrtho" type="range" min="0" max="120" step="1" value="14"/></div>
+                  <div class="mf-row" id="row-sigPara"><div class="mf-row-header"><label for="mf-sigPara">Pulse σ<sub>t</sub></label><div id="mf-sigParaVal" class="mf-val">0 px</div></div><input id="mf-sigPara" type="range" min="0" max="120" step="1" value="0"/></div>
+                </div>
+                <div class="group-box"><div class="group-title">Volume (Material)</div>
+                  <div class="mf-row"><div class="mf-row-header"><label for="mf-n">Refr. Index n</label><div id="mf-nVal" class="mf-val">1.40</div></div><input id="mf-n" type="range" min="1.05" max="3.00" step="0.01" value="1.40"/></div>
+                  <div class="mf-row"><div class="mf-row-header"><label for="mf-a">Absorption µₐ</label><div id="mf-aVal" class="mf-val">0.32</div></div><input id="mf-a" type="range" min="0" max="100" step="0.1" value="50"/></div>
+                  <div class="mf-row"><div class="mf-row-header"><label for="mf-s">Scattering µₛ</label><div id="mf-sVal" class="mf-val">1.00</div></div><input id="mf-s" type="range" min="0" max="100" step="0.1" value="65"/></div>
+                  <div class="mf-row"><div class="mf-row-header"><label for="mf-hg">Anisotropy g</label><div id="mf-hgVal" class="mf-val">0</div></div><input id="mf-hg" type="range" min="-0.95" max="0.95" step="0.01" value="0"/></div>
+                  <div class="mf-row mf-row-check"><label for="mf-useFresnel">Fresnel Eq.</label><input id="mf-useFresnel" type="checkbox" checked/><div id="mf-useFresnelVal" class="mf-val">On</div></div>
+                </div>
+                <div class="group-box"><div class="group-title">Surface</div>
+                  <div class="mf-row"><div class="mf-row-header"><label for="mf-rough">Roughness σ<sub>rough</sub></label><div id="mf-roughVal" class="mf-val">0.37</div></div><input id="mf-rough" type="range" min="0" max="1" step="0.01" value="0.37"/></div>
+                  <div class="mf-row"><div class="mf-row-header"><label for="mf-facetRes">Facet Density</label><div id="mf-facetResVal" class="mf-val">—</div></div><input id="mf-facetRes" type="range" min="0" max="1" step="0.01" value="0.07"/></div>
+
+                  <div class="mf-row" id="row-rhoM" style="display:none;"><div class="mf-row-header"><label for="mf-rhoM">Detector ρ</label><div id="mf-rhoMVal" class="mf-val">80 px</div></div><input id="mf-rhoM" type="range" min="0" max="400" step="1" value="80"/></div>
+                </div>
+                <div class="group-box"><div class="group-title">View &amp; Filter</div>
+                  <div class="mf-row"><div class="mf-row-header"><label for="mf-zoom">Zoom</label><div id="mf-zoomVal" class="mf-val">1.00×</div></div><input id="mf-zoom" type="range" min="1" max="6" step="0.01" value="1"/></div>
+                  <div class="mf-row mf-row-check"><label for="mf-geoToggle">Overlay</label><input id="mf-geoToggle" type="checkbox" checked/><div id="mf-geoVal" class="mf-val">On</div></div>
+                  <div class="mf-row mf-row-check"><label for="mf-showRed">Reflection</label><input id="mf-showRed" type="checkbox" checked/><div id="mf-showRedVal" class="mf-val">On</div></div>
+                  <div class="mf-row mf-row-check"><label>SSS</label><label style="font-size:11px;"><input id="mf-showSSS" type="checkbox" checked/>Show</label><label style="font-size:11px;"><input id="mf-hideReentry" type="checkbox"/>Hide Re-entry</label></div>
+                </div>
+                <div class="group-box full-width"><div class="colors-grid">
+                  <div class="color-item"><label>Material</label><div class="rgba-inputs"><input type="number" id="c-mat-r" value="235"><input type="number" id="c-mat-g" value="235"><input type="number" id="c-mat-b" value="235"><input type="number" id="c-mat-a" value="1" step="0.1"></div><button id="btnSetMat" class="sm-btn">Set</button></div>
+                  <div class="color-item"><label>Air</label><div class="rgba-inputs"><input type="number" id="c-air-r" value="255"><input type="number" id="c-air-g" value="255"><input type="number" id="c-air-b" value="255"><input type="number" id="c-air-a" value="1" step="0.1"></div><button id="btnSetAir" class="sm-btn">Set</button></div>
+                  <div class="color-item"><label>Overlay</label><div class="rgba-inputs"><input type="number" id="c-fit-r" value="16"><input type="number" id="c-fit-g" value="96"><input type="number" id="c-fit-b" value="176"><input type="number" id="c-fit-a" value="0.8" step="0.1"></div><button id="btnSetFit" class="sm-btn">Set</button></div>
+                  <div class="color-item"><label>SSS</label><div class="rgba-inputs"><input type="number" id="c-sss-r" value="100"><input type="number" id="c-sss-g" value="100"><input type="number" id="c-sss-b" value="100"><input type="number" id="c-sss-a" value="0.75" step="0.05"></div><button id="btnSetSSS" class="sm-btn">Set</button></div>
+                </div></div>
+                <div class="btnRow">
+                  <button id="btnPlay" class="primary">⏸︎ Pause</button>
+                  <button id="btnSnapshot">📷 HD</button>
+                  <button id="btnSvg">✒️ SVG</button>
+                  <button id="btnReset">Reset</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="histogram-window">
+          <div id="hist-left"><canvas id="histogram-canvas" width="1600" height="600"></canvas></div>
+          <div id="hist-controls">
+            <div class="group-box"><div class="group-title">Detector</div><div class="mf-row mf-row-check"><label for="mf-showDet">Activate</label><input id="mf-showDet" type="checkbox"/><div id="mf-showDetVal" class="mf-val">Off</div></div><div class="mf-row"><div class="mf-row-header"><label for="mf-detWidth">Det. Width</label><div id="mf-detWidthVal" class="mf-val">200 px</div></div><input id="mf-detWidth" type="range" min="10" max="800" step="1" value="200"/></div></div>
+            <div class="group-box"><div class="group-title">Chart</div>
+              <div id="histogram-stats" style="font-size:10px;color:#999;padding:2px 0;"></div>
+              <div class="mode-options" style="margin:2px 0 4px;"><label style="font-size:10px;"><input type="radio" name="histMode" value="accumulate" checked/>Accumulate</label><label style="font-size:10px;"><input type="radio" name="histMode" value="timeline"/>Timeline</label></div>
+              <div class="mf-row" style="padding:2px 0;"><div class="mf-row-header"><label for="mf-binSize">Bin Size</label><div id="mf-binSizeVal" class="mf-val">20</div></div><input id="mf-binSize" type="range" min="0" max="50" step="1" value="20"/></div>
+              <div class="mf-row mf-row-check"><label for="hist-showSpline">Spline</label><input id="hist-showSpline" type="checkbox" checked/><div id="hist-showSplineVal" class="mf-val">On</div></div>
+              <div class="mf-row mf-row-check"><label for="hist-combined">Combined</label><input id="hist-combined" type="checkbox"/><div id="hist-combinedVal" class="mf-val">Off</div></div>
+              <div class="mf-row mf-row-check"><label for="hist-normalize">Normalize (area=1)</label><input id="hist-normalize" type="checkbox"/><div id="hist-normalizeVal" class="mf-val">Off</div></div>
+              <div class="mf-row" style="padding:2px 0;"><div class="mf-row-header"><label for="hist-smooth">Smooth</label><div id="hist-smoothVal" class="mf-val">0.50</div></div><input id="hist-smooth" type="range" min="0" max="1" step="0.01" value="0.50"/></div>
+            </div>
+            <div class="hist-btn-col"><button id="btnHistSave">Save Snapshot</button><button id="btnHistClear">Clear</button></div>
+          </div>
+        </div>
+        <div class="sim-hint">Space to pause · R to reset</div>
+      </div>
+    </div>
+    <figcaption><b>Figure 2</b>Interactive 2D visualisation of the photon transport process, intended to build intuition for the full 3D <a href="https://github.com/FinnLinxxx/sisi-simulator">SISI implementation</a>. The histogram collects photons that re-emerge at the top surface, binned by their total path length. Press Space to pause, R to reset.</figcaption>
+  </figure>
+
+
+
+  <h2>Parameters</h2>
+
+  <p>The refractive index $n$ appears in three distinct places: the Fresnel coefficients at the boundary, the refraction angle (Snell), and the propagation speed $c/n$ inside the material. Glass sits around 1.5, water at 1.33, concrete somewhere between 1.5 and 1.7. A higher $n$ means more reflection at the surface and a slower photon inside, both amplify the distance error.</p>
+
+  <p>The two volume coefficients $\mu_a$ and $\mu_s$ are best understood together. $\mu_a$ is derived from the imaginary part $k$ of the complex refractive index ($\mu_a = 4\pi k / \lambda_0$) and removes photons from the simulation, a high value weakens the return signal. $\mu_s$, by contrast, depends on the microscopic structure of the material: grain boundaries, density fluctuations, optical inhomogeneities. It does not kill photons but redirects them. What matters for the distance error is their ratio: when $\mu_s \gg \mu_a$ (high albedo $\mu_s/\mu_t$), photons survive enough scattering events to accumulate a long zigzag path before escaping. When absorption dominates, most photons die before they scatter back out.</p>
+
+  <p>The anisotropy $g$ modifies what "a scattering event" actually means. At $g = 0$ each event randomises the direction completely. At $g = 0.85$ — typical for dry wood — the photon barely changes course at each event, so many more events are needed before the beam is fully diffuse. Together with $\mu_s$, this defines the reduced scattering coefficient $\mu_s' = \mu_s(1-g)$.</p>
+
+  <p>The surface roughness $\sigma_\text{rough}$ and the beam parameters $\sigma_{xy}$, $\sigma_t$ shape what happens before the photon enters the material. $\sigma_\text{rough}$ is the standard deviation of the microfacet tilt distribution, at zero the surface is a mirror, at higher values the reflected beam fans out and more photons transmit into the volume. $\sigma_{xy}$ defines the Gaussian spot size on the surface, $\sigma_t$ the pulse length. Typical TLS pulses extend about one metre in time (nanosecond pulse width), while the material-induced distance shifts lie in the sub-millimetre to millimetre range, picosecond-scale shifts that are too small to distort the pulse shape but large enough to bias the peak position.</p>
+
+
+  <h2>Conclusion</h2>
+
+  <p>The distance errors in terrestrial laser scanning are not artefacts of the measurement process, they are a physical consequence of photons entering the material. How far they penetrate, how often they scatter, and whether they make it back out depends on $\mu_s$, $\mu_a$, $g$, $n$, $\sigma_\text{rough}$, and the incidence angle. The Monte Carlo simulation traces these paths one by one, without needing to know anything about the instrument. Consequently, the insights derived from this simulation stay inherently instrument-independent - thus meeting one of the core goals of the dissertation.</p>
+
+  <p>The full SISI simulator is at <a href="https://github.com/FinnLinxxx/sisi-simulator">github.com/FinnLinxxx/sisi-simulator</a> (GPLv3, C++11, YAML-configured). If you work with laser scanning data (or in photonics or in material science) and want to test how your material behaves - try it out.</p>
+
+  <p style="margin-top:64px;"><a href="../index.html">← back to writing</a></p>
+</div>
+
+<script src="../mikrofacetten-sim/svg-exporter.js"></script>
+<script src="../mikrofacetten-sim/engine.js"></script>
+<script src="../mikrofacetten-sim/histogram.js"></script>
+<script src="../mikrofacetten-sim/app.js"></script>
+</body>
+</html>
